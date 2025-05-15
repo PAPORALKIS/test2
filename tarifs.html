@@ -1,97 +1,74 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Tarifs - Papo Rénov</title>
-  <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <title>Tarifs - Paporalkis</title>
+  <link rel="stylesheet" href="style.css" />
   <style>
-    .tarifs-section {
-      background: url('img/logo.png') no-repeat center center;
-      background-size: 30%;
-      background-attachment: fixed;
-      padding: 60px 20px;
-      min-height: 90vh;
-    }
-
     .tarifs-container {
-      background-color: #ffffffdd;
-      padding: 40px;
-      border-radius: 12px;
       max-width: 900px;
-      margin: auto;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+      margin: 0 auto;
+      padding: 40px 20px;
+      background-color: #fdfdfd;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    .tarifs-container h2 {
+    .tarifs-container h1 {
       text-align: center;
       color: #003366;
       margin-bottom: 30px;
     }
 
-    table {
+    .tarifs-table {
       width: 100%;
       border-collapse: collapse;
+      margin-bottom: 30px;
+    }
+
+    .tarifs-table th,
+    .tarifs-table td {
+      border: 1px solid #ccc;
+      padding: 10px;
       text-align: left;
     }
 
-    table th, table td {
-      padding: 15px;
-      border-bottom: 1px solid #ccc;
+    .tarifs-table th {
+      background-color: #eaeaea;
+      font-weight: bold;
     }
 
-    table th {
-      background-color: #003366;
-      color: white;
-    }
-
-    table tr:hover {
-      background-color: #f1f1f1;
-    }
-
-    .mention {
-      margin-top: 30px;
+    .highlight-phone {
       text-align: center;
-      font-size: 16px;
+      font-size: 1.8em;
+      font-weight: bold;
       color: #003366;
+      margin-top: 30px;
     }
 
     .devis-link {
-      display: inline-block;
-      margin-top: 15px;
+      display: block;
+      margin-top: 20px;
+      text-align: center;
+    }
+
+    .devis-link a {
       background-color: #00bfff;
       color: white;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 12px 24px;
       text-decoration: none;
+      border-radius: 5px;
       font-weight: bold;
-      transition: background-color 0.3s ease;
     }
 
-    .devis-link:hover {
-      background-color: #0099cc;
-    }
-
-    @media (max-width: 600px) {
-      table, table th, table td {
-        font-size: 14px;
-        padding: 10px;
-      }
-
-      .tarifs-container {
-        padding: 20px;
-      }
-
-      .devis-link {
-        width: 100%;
-        display: block;
-      }
+    .devis-link a:hover {
+      background-color: #009acd;
     }
   </style>
 </head>
 <body>
   <header>
     <div class="logo">
-      <img src="img/logo.png" alt="Logo Paporalkis">
+      <img src="img/logo.png" alt="Logo Paporalkis" />
     </div>
     <nav>
       <ul>
@@ -105,46 +82,55 @@
     </nav>
   </header>
 
-  <section class="tarifs-section">
-    <div class="tarifs-container">
-      <h2>Tarifs des prestations</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>Prestation</th>
-            <th>Prix indicatif</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Montage de meubles, étagères</td>
-            <td>à partir de 25 €</td>
-          </tr>
-          <tr>
-            <td>Pose de tringles, rideaux, tableaux</td>
-            <td>à partir de 20 €</td>
-          </tr>
-          <tr>
-            <td>Peinture & petits travaux muraux</td>
-            <td>à partir de 50 €</td>
-          </tr>
-          <tr>
-            <td>Entretien extérieur, nettoyage</td>
-            <td>à partir de 30 €</td>
-          </tr>
-          <tr>
-            <td>Petite électricité / plomberie</td>
-            <td>sur devis</td>
-          </tr>
-        </tbody>
-      </table>
+  <main class="tarifs-container">
+    <h1>Nos Prestations et Tarifs</h1>
 
-      <div class="mention">
-        Tarifs indicatifs – demande de devis gratuite et rapide<br>
-        <a class="devis-link" href="devis.html">Faire une demande de devis</a>
-      </div>
+    <table class="tarifs-table">
+      <tr>
+        <th>Prestation</th>
+        <th>Tarif</th>
+      </tr>
+      <tr>
+        <td>Montage de meuble en kit</td>
+        <td>25€/meuble</td>
+      </tr>
+      <tr>
+        <td>Pose ampoule, cadre...</td>
+        <td>15€/heure</td>
+      </tr>
+      <tr>
+        <td>Pose de moustiquaire</td>
+        <td>20€/fenêtre</td>
+      </tr>
+      <tr>
+        <td>Peinture</td>
+        <td>8€/m²</td>
+      </tr>
+      <tr>
+        <td>Tonte / Engraissage</td>
+        <td>20€/heure</td>
+      </tr>
+    </table>
+
+    <h3>Prestations sur devis :</h3>
+    <ul>
+      <li>Création, vente et pose de cuisine</li>
+      <li>Pose de meuble de douche, faïence</li>
+      <li>Isolation mur et plafond</li>
+      <li>Tonte / Taille haie / Désherbage</li>
+      <li>Pose de terrasse en pierre</li>
+      <li>Pergolas, grillage, allées, nettoyage</li>
+    </ul>
+
+    <div class="highlight-phone">
+      Pour plus d'informations : <br />
+      <strong>0671702999</strong>
     </div>
-  </section>
+
+    <div class="devis-link">
+      <a href="devis.html">Demander un devis en ligne</a>
+    </div>
+  </main>
 
   <footer>
     <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
