@@ -4,35 +4,9 @@
   <meta charset="UTF-8">
   <title>Planning - Papo Rénov</title>
   <link rel="stylesheet" href="style.css">
-  <style>
-    .planning-section {
-      background: url('img/logo.png') no-repeat center center;
-      background-size: 25%;
-      background-attachment: fixed;
-      padding: 60px 20px;
-      min-height: 90vh;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-    }
-
-    .planning-container {
-      background-color: #ffffffcc;
-      padding: 30px;
-      border-radius: 10px;
-      max-width: 1000px;
-      width: 100%;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
-
-    .planning-container h3 {
-      margin-bottom: 20px;
-      color: #003366;
-    }
-  </style>
 </head>
 <body>
+
   <header>
     <div class="logo">
       <img src="img/logo.png" alt="Logo Paporalkis">
@@ -49,16 +23,35 @@
     </nav>
   </header>
 
-  <section class="planning-section">
-    <div class="planning-container">
-      <h3>Mon planning - Google Agenda</h3>
-      <iframe src="https://calendar.google.com/calendar/embed?src=5c6cd788aa45ac9e85ee8f8f00bf3496a96aaec75d9bfe016fba5ddf04c29869%40group.calendar.google.com&ctz=Europe%2FParis"
-              style="border:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+  <main class="form-section">
+    <div class="overlay">
+      <h1>Planning</h1>
+      <p>Consultez mes disponibilités ci-dessous :</p>
+      <iframe src="https://calendar.google.com/calendar/embed?src=5c6cd788aa45ac9e85ee8f8f00bf3496a96aaec75d9bfe016fba5ddf04c29869%40group.calendar.google.com&ctz=Europe%2FParis" style="border: 0; width: 100%; height: 600px;" frameborder="0" scrolling="no"></iframe>
+
+      <h2 style="margin-top: 40px;">Réserver une date</h2>
+      <form action="https://formspree.io/f/your-form-id" method="POST">
+        <label for="name">Nom :</label><br>
+        <input type="text" name="name" required><br><br>
+
+        <label for="email">Email :</label><br>
+        <input type="email" name="email" required><br><br>
+
+        <label for="date">Date souhaitée :</label><br>
+        <input type="date" name="date" required><br><br>
+
+        <label for="message">Message complémentaire :</label><br>
+        <textarea name="message" rows="4" placeholder="Précisez vos besoins..."></textarea><br><br>
+
+        <button type="submit" class="cta-button">Envoyer la demande</button>
+      </form>
+      <p style="font-size: 0.9em; color: #666;">* Vous recevrez une réponse de confirmation par e-mail.</p>
     </div>
-  </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
   </footer>
+
 </body>
 </html>
