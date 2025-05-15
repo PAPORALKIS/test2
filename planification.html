@@ -1,29 +1,61 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Planning</title>
-  <link rel="stylesheet" href="/papo-renov/style.css" />
+  <meta charset="UTF-8">
+  <title>Planning - Papo Rénov</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .planning-section {
+      background: url('img/logo.png') no-repeat center center;
+      background-size: 25%;
+      background-attachment: fixed;
+      padding: 60px 20px;
+      min-height: 90vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .planning-container {
+      background-color: #ffffffcc;
+      padding: 30px;
+      border-radius: 10px;
+      max-width: 1000px;
+      width: 100%;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    .planning-container h3 {
+      margin-bottom: 20px;
+      color: #003366;
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img src="/papo-renov/logo.png" alt="Logo Paporalkis" />
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo Paporalkis">
+    </div>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
         <li><a href="devis.html">Demande de devis</a></li>
         <li><a href="realisations.html">Mes réalisations</a></li>
         <li><a href="tarifs.html">Tarifs</a></li>
-        <li><a href="planning.html">Planning</a></li>
+        <li><a href="planning.html" class="active">Planning</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main>
-    <h1>Planning</h1>
-    <p>Calendrier des disponibilités à venir. Merci de me contacter pour réserver une date.</p>
-  </main>
+  <section class="planning-section">
+    <div class="planning-container">
+      <h3>Mon planning - Google Agenda</h3>
+      <iframe src="https://calendar.google.com/calendar/embed?src=5c6cd788aa45ac9e85ee8f8f00bf3496a96aaec75d9bfe016fba5ddf04c29869%40group.calendar.google.com&ctz=Europe%2FParis"
+              style="border:0" width="100%" height="600" frameborder="0" scrolling="no"></iframe>
+    </div>
+  </section>
 
   <footer>
     <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
