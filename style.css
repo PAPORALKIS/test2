@@ -46,12 +46,15 @@ nav a.active {
   position: relative;
   color: white;
   text-align: center;
+  z-index: 1;
 }
 
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 40px;
   border-radius: 10px;
+  z-index: 5;
+  position: relative;
 }
 
 .highlight {
