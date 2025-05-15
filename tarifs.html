@@ -1,29 +1,117 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <title>Tarifs</title>
-  <link rel="stylesheet" href="/papo-renov/style.css" />
+  <meta charset="UTF-8">
+  <title>Tarifs - Papo Rénov</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .tarifs-section {
+      background: url('img/logo.png') no-repeat center center;
+      background-size: 30%;
+      background-attachment: fixed;
+      padding: 60px 20px;
+      min-height: 90vh;
+    }
+
+    .tarifs-container {
+      background-color: #ffffffdd;
+      padding: 40px;
+      border-radius: 12px;
+      max-width: 900px;
+      margin: auto;
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .tarifs-container h2 {
+      text-align: center;
+      color: #003366;
+      margin-bottom: 30px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    table th, table td {
+      padding: 15px;
+      border-bottom: 1px solid #ccc;
+    }
+
+    table th {
+      background-color: #003366;
+      color: white;
+    }
+
+    table tr:hover {
+      background-color: #f1f1f1;
+    }
+
+    @media (max-width: 600px) {
+      table, table th, table td {
+        font-size: 14px;
+        padding: 10px;
+      }
+
+      .tarifs-container {
+        padding: 20px;
+      }
+    }
+  </style>
 </head>
 <body>
   <header>
-    <img src="/papo-renov/logo.png" alt="Logo Paporalkis" />
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo Paporalkis">
+    </div>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
         <li><a href="devis.html">Demande de devis</a></li>
         <li><a href="realisations.html">Mes réalisations</a></li>
-        <li><a href="tarifs.html">Tarifs</a></li>
+        <li><a href="tarifs.html" class="active">Tarifs</a></li>
         <li><a href="planning.html">Planning</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
   </header>
 
-  <main>
-    <h1>Tarifs</h1>
-    <p>Tarifs indicatifs selon le type de prestation. Contactez-moi pour un devis précis.</p>
-  </main>
+  <section class="tarifs-section">
+    <div class="tarifs-container">
+      <h2>Tarifs des prestations</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Prestation</th>
+            <th>Prix indicatif</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Montage de meubles, étagères</td>
+            <td>à partir de 25 €</td>
+          </tr>
+          <tr>
+            <td>Pose de tringles, rideaux, tableaux</td>
+            <td>à partir de 20 €</td>
+          </tr>
+          <tr>
+            <td>Peinture & petits travaux muraux</td>
+            <td>à partir de 50 €</td>
+          </tr>
+          <tr>
+            <td>Entretien extérieur, nettoyage</td>
+            <td>à partir de 30 €</td>
+          </tr>
+          <tr>
+            <td>Petite électricité / plomberie</td>
+            <td>sur devis</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
   <footer>
     <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
