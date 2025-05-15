@@ -132,3 +132,48 @@ footer {
     max-width: 250px;
   }
 }
+.form-section {
+  padding: 50px;
+  background-color: rgba(255, 255, 255, 0.85);
+  background-blend-mode: lighten;
+}
+
+form {
+  max-width: 600px;
+  margin: auto;
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+form h2 {
+  text-align: center;
+  color: #003366;
+}
+
+label {
+  display: block;
+  margin: 15px 0;
+  color: #003366;
+}
+
+input, textarea, button {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+}
+
+button {
+  background-color: #00bfff;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0099cc;
+}
