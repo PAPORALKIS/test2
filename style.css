@@ -6,13 +6,16 @@ body {
 }
 
 header {
-  background-color: #ffffffcc;
+  background-color: rgba(255, 255, 255, 0.8);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  position: relative;
-  z-index: 10;
+  padding: 10px 30px;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .logo img {
@@ -22,7 +25,7 @@ header {
 nav ul {
   list-style: none;
   display: flex;
-  gap: 15px;
+  gap: 20px;
   padding: 0;
   margin: 0;
 }
@@ -31,24 +34,28 @@ nav a {
   text-decoration: none;
   color: #003366;
   font-weight: bold;
+  padding: 5px 10px;
+  transition: background-color 0.3s ease;
 }
 
-nav a.active {
-  text-decoration: underline;
+nav a:hover {
+  background-color: #00bfff;
+  color: white;
+  border-radius: 5px;
 }
 
 .hero {
-  margin-top: 80px;
   background-image: url('img/illustration.png');
   background-size: cover;
   background-position: center;
-  height: 90vh;
+  height: 100vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  color: white;
+  padding-top: 100px; /* espace sous le header */
   text-align: center;
+  color: white;
+  position: relative;
 }
 
 .overlay {
@@ -65,12 +72,12 @@ nav a.active {
   margin-top: 20px;
   background-color: #00bfff;
   color: white;
-  padding: 10px 20px;
+  padding: 12px 24px;
   border: none;
   text-decoration: none;
   border-radius: 5px;
   font-weight: bold;
-  transition: background-color 0.3s, transform 0.3s;
+  transition: transform 0.3s ease, background-color 0.3s ease;
 }
 
 .cta-button:hover {
@@ -85,33 +92,19 @@ footer {
   color: white;
 }
 
-/* Responsive Design */
+/* Responsive */
 @media (max-width: 768px) {
-  header {
+  nav ul {
     flex-direction: column;
     gap: 10px;
   }
 
-  nav ul {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .logo img {
-    height: 50px;
-  }
-
-  .hero {
-    height: auto;
-    padding: 60px 20px;
-  }
-
-  .overlay {
-    padding: 20px;
-  }
-
   .cta-button {
     width: 100%;
-    max-width: 300px;
+  }
+
+  header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }
