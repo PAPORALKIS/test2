@@ -177,3 +177,10 @@ button {
 button:hover {
   background-color: #0099cc;
 }
+.page-bg {
+  background-image: url('img/logo.png');
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 30%;
+  background-attachment: fixed;
+}
