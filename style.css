@@ -42,7 +42,6 @@ nav ul li a:hover {
 .hero {
   text-align: center;
   padding: 60px 20px;
-  position: relative;
 }
 
 .hero-img {
@@ -58,12 +57,13 @@ nav ul li a:hover {
 }
 
 .hero-text .highlight {
-  color: #2980b9;
+  color: #2980b9; /* Bleu */
 }
 
 .hero-text p {
   font-size: 1.2em;
   margin: 20px 0;
+  color: #2c3e50; /* Texte bleu foncé au lieu du jaune */
 }
 
 .cta-button {
