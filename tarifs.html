@@ -48,6 +48,29 @@
       background-color: #f1f1f1;
     }
 
+    .mention {
+      margin-top: 30px;
+      text-align: center;
+      font-size: 16px;
+      color: #003366;
+    }
+
+    .devis-link {
+      display: inline-block;
+      margin-top: 15px;
+      background-color: #00bfff;
+      color: white;
+      padding: 10px 20px;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: background-color 0.3s ease;
+    }
+
+    .devis-link:hover {
+      background-color: #0099cc;
+    }
+
     @media (max-width: 600px) {
       table, table th, table td {
         font-size: 14px;
@@ -56,6 +79,11 @@
 
       .tarifs-container {
         padding: 20px;
+      }
+
+      .devis-link {
+        width: 100%;
+        display: block;
       }
     }
   </style>
@@ -110,6 +138,11 @@
           </tr>
         </tbody>
       </table>
+
+      <div class="mention">
+        Tarifs indicatifs – demande de devis gratuite et rapide<br>
+        <a class="devis-link" href="devis.html">Faire une demande de devis</a>
+      </div>
     </div>
   </section>
 
