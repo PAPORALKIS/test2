@@ -7,83 +7,68 @@ body {
 
 header {
   background-color: #ffffffee;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  position: fixed;
-  top: 0;
-  width: 100%;
-  max-width: 1200px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 1000;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  padding: 10px 0;
+  text-align: center;
 }
 
 .logo img {
   height: 60px;
 }
 
-nav ul {
+.menu-centre ul {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin: 0;
   padding: 0;
+  margin: 10px auto;
+  display: inline-flex;
+  gap: 15px;
+  flex-wrap: wrap;
 }
 
-nav a {
+.menu-centre a {
   text-decoration: none;
   color: #003366;
   font-weight: bold;
+  padding: 6px 10px;
   transition: color 0.3s;
-  white-space: nowrap;
 }
 
-nav a:hover {
+.menu-centre a:hover {
   color: #00bfff;
 }
 
-nav a.active {
+.menu-centre a.active {
   text-decoration: underline;
 }
 
 .hero {
   background-image: url('img/illustration.png');
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: cover;
   background-position: center;
-  height: 80vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  text-align: center;
-  padding-top: 120px;
-  position: relative;
+  padding: 20px;
   color: white;
+  text-align: center;
 }
 
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
-  padding: 40px;
+  padding: 30px;
   border-radius: 10px;
   max-width: 90%;
-}
-
-.highlight {
-  color: #00bfff;
 }
 
 .cta-button {
   margin-top: 20px;
   background-color: #00bfff;
   color: white;
-  padding: 12px 24px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 5px;
   text-decoration: none;
+  border-radius: 5px;
   font-weight: bold;
   transition: background-color 0.3s, transform 0.3s;
 }
@@ -102,24 +87,7 @@ footer {
 
 /* Responsive */
 @media (max-width: 768px) {
-  header {
+  .menu-centre ul {
     flex-direction: column;
-    align-items: flex-start;
-  }
-
-  nav ul {
-    flex-direction: column;
-    width: 100%;
-    padding-top: 10px;
-  }
-
-  .hero {
-    height: auto;
-    min-height: 90vh;
-    padding-top: 140px;
-  }
-
-  .overlay {
-    padding: 20px;
   }
 }
