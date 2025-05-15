@@ -1,6 +1,66 @@
+/* Style général */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f7f7f7;
+  color: #222;
+}
 
-body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-header { background: #444; color: white; padding: 10px; }
-nav a { margin: 0 10px; color: white; text-decoration: none; }
-main { padding: 20px; }
-footer { background: #eee; text-align: center; padding: 10px; font-size: 0.9em; }
+header {
+  background-color: #333;
+  color: white;
+  padding: 10px 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+header img {
+  height: 60px;
+  margin-left: 20px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  margin: 0;
+  padding: 0;
+  flex-wrap: wrap;
+}
+
+nav ul li {
+  margin: 0 10px;
+}
+
+nav ul li a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+  padding: 8px 12px;
+  display: block;
+  transition: background-color 0.3s ease;
+}
+
+nav ul li a:hover {
+  background-color: #555;
+  border-radius: 5px;
+}
+
+main {
+  padding: 40px 20px;
+  background-color: white;
+  max-width: 1000px;
+  margin: auto;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+  border-radius: 8px;
+  margin-top: 20px;
+}
+
+footer {
+  background-color: #eee;
+  text-align: center;
+  padding: 15px;
+  margin-top: 40px;
+  font-size: 0.9em;
+}
