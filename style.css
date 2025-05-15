@@ -47,14 +47,15 @@ nav a.active {
   color: white;
   text-align: center;
   z-index: 1;
+  background-color: red;
 }
 
 .overlay {
   background-color: rgba(0, 0, 0, 0.5);
   padding: 40px;
   border-radius: 10px;
-  z-index: 5;
   position: relative;
+  z-index: 2;
 }
 
 .highlight {
