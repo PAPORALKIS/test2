@@ -76,3 +76,7 @@ footer {
   text-align: center;
   padding: 15px 10px;
 }
+.accent {
+  color: #1e5da9; /* même bleu que tes boutons */
+  font-weight: bold;
+}
