@@ -268,7 +268,28 @@ button:hover {
     width: 90%;
     height: auto;
   }
+.image-container {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
+.realisation-image {
+  width: 200px;
+  height: auto;
+  border-radius: 8px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  cursor: pointer;
+  z-index: 1;
+  position: relative;
+}
+
+.realisation-image:hover {
+  transform: scale(1.1) translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
   .image-container {
     flex-wrap: wrap;
   }
