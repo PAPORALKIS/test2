@@ -1,201 +1,170 @@
-<!DOCTYPE html><html lang="fr">
+<!DOCTYPE html>
+<html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <title>Tarifs – Papo Rénov</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Tarifs – Paporalkis</title>
   <link rel="stylesheet" href="style.css" />
   <style>
     body {
       font-family: 'Segoe UI', sans-serif;
-      margin: 0;
-      background-color: #fdf6ef;
-      background-image: url('img/background-texture.jpg');
-      background-size: cover;
+      background: url('img/logo-philigrane.png') no-repeat center center fixed;
+      background-size: 60%;
       background-attachment: fixed;
-      color: #1c1c1c;
-    }header {
-  background-color: #ffffffee;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-}
-
-nav ul {
-  list-style: none;
-  display: flex;
-  gap: 15px;
-  padding: 0;
-}
-
-nav a {
-  text-decoration: none;
-  color: #2b3a42;
-  font-weight: bold;
-  font-size: 1.1em;
-}
-
-nav a.active {
-  text-decoration: underline;
-}
-
-main {
-  padding: 30px;
-}
-
-h1 {
-  text-align: center;
-  color: #003366;
-  font-size: 2.5em;
-  margin-bottom: 10px;
-}
-
-h2 {
-  color: #cc5500;
-  font-size: 1.8em;
-  margin-top: 40px;
-  text-align: center;
-}
-
-.tarifs-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 30px;
-  margin-top: 20px;
-}
-
-.tarif-card {
-  background-color: #ffffffcc;
-  border-radius: 15px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  width: 300px;
-  padding: 20px;
-  text-align: center;
-}
-
-.tarif-card img {
-  height: 60px;
-  margin-bottom: 10px;
-}
-
-.tarif-card h3 {
-  margin-bottom: 10px;
-  color: #2c3e50;
-}
-
-.tarif-card p {
-  font-size: 1.1em;
-}
-
-.devis-section {
-  text-align: center;
-  margin-top: 50px;
-}
-
-.cta-button {
-  background-color: #ff6600;
-  color: white;
-  padding: 12px 24px;
-  border: none;
-  border-radius: 30px;
-  text-decoration: none;
-  font-weight: bold;
-  font-size: 1.1em;
-  margin-top: 20px;
-  display: inline-block;
-}
-
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #003366;
-  color: white;
-  margin-top: 40px;
-}
-
+      opacity: 0.97;
+    }
+    .section {
+      max-width: 1000px;
+      margin: 2rem auto;
+      background-color: rgba(255, 255, 255, 0.95);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    .section img {
+      max-width: 100%;
+      margin-bottom: 1rem;
+      border-radius: 12px;
+    }
+    h2 {
+      text-align: center;
+      color: #003366;
+      font-size: 2rem;
+      margin-top: 0;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 1rem;
+    }
+    th, td {
+      padding: 0.7rem;
+      border: 1px solid #ccc;
+      text-align: left;
+      font-size: 0.95rem;
+    }
+    th {
+      background-color: #003366;
+      color: white;
+    }
+    .pack {
+      background-color: #f4f9ff;
+      border: 2px solid #003366;
+      padding: 1rem;
+      margin: 1.5rem 0;
+      border-radius: 12px;
+    }
+    .pack h3 {
+      margin-top: 0;
+      color: #003366;
+    }
   </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="Logo Paporalkis" height="60">
+
+  <div class="section">
+    <img src="img/renovation.jpg" alt="Travaux rénovation">
+    <h2>Rénovation intérieure</h2>
+    <table>
+      <tr><th>Prestation</th><th>Détail / Unité</th><th>Prix (€)</th><th>Commentaires</th></tr>
+      <tr><td>Peinture murale</td><td>au m²</td><td>12</td><td>Hors préparation</td></tr>
+      <tr><td>Pose de parquet flottant</td><td>au m²</td><td>18</td><td>Sous-couche incluse</td></tr>
+      <tr><td>Montage de meuble</td><td>par meuble</td><td>30</td><td>Meuble standard</td></tr>
+      <tr><td>Installation de placo</td><td>au m²</td><td>25</td><td>Pose sur ossature métallique</td></tr>
+      <tr><td>Isolation murs</td><td>au m²</td><td>22</td><td>Hors pose de placo</td></tr>
+      <tr><td>Isolation plafond</td><td>au m²</td><td>28</td><td>Hors pose de placo</td></tr>
+      <tr><td>Pose de cuisine</td><td>/jour</td><td>À partir de 350</td><td>Sur devis selon projet</td></tr>
+      <tr><td>Pose de dressing</td><td>Par ml</td><td>À partir de 250</td><td>Sur devis selon projet</td></tr>
+      <tr><td>Pose de plinthes</td><td>ml</td><td>5</td><td></td></tr>
+      <tr><td>Pose de faïence murale</td><td>au m²</td><td>30</td><td>Sans fourniture</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <img src="img/quotidien.jpg" alt="Travaux quotidiens">
+    <h2>Travaux du quotidien</h2>
+    <table>
+      <tr><th>Prestation</th><th>Unité</th><th>Prix (€)</th><th>Commentaires</th></tr>
+      <tr><td>Fixation étagères/luminaires etc.</td><td>par unité</td><td>15</td><td>Vis et chevilles incluses</td></tr>
+      <tr><td>Pose de moustiquaires</td><td>par fenêtre</td><td>25</td><td></td></tr>
+      <tr><td>Réparation mur (enduit)</td><td>au m²</td><td>18</td><td>Enduit lissage compris</td></tr>
+      <tr><td>Remplacement joint silicone</td><td>par mètre</td><td>10</td><td></td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <img src="img/exterieur.jpg" alt="Travaux extérieurs">
+    <h2>Extérieur</h2>
+    <table>
+      <tr><th>Prestation</th><th>Unité</th><th>Prix (€)</th><th>Commentaires</th></tr>
+      <tr><td>Tonte de pelouse</td><td>< 200m²</td><td>35–60</td><td></td></tr>
+      <tr><td></td><td>200–500 m²</td><td>50–90</td><td></td></tr>
+      <tr><td></td><td>> 500 m²</td><td>à partir de 90</td><td>Sur devis</td></tr>
+      <tr><td>Taille de haie</td><td>ml</td><td>6</td><td>Hauteur < 2m</td></tr>
+      <tr><td>Débroussaillage</td><td>au m²</td><td>1.2</td><td>Terrain dégagé</td></tr>
+      <tr><td>Pose terrasse bois</td><td>au m²</td><td>50</td><td>Bois exotique ou composite</td></tr>
+      <tr><td>Pose de pergola</td><td>—</td><td>À partir de 600</td><td>Selon modèle</td></tr>
+      <tr><td>Nettoyage haute pression</td><td>au m²</td><td>2</td><td>Allée, façade</td></tr>
+      <tr><td>Plantation massifs</td><td>par m²</td><td>35</td><td>Plantes non incluses</td></tr>
+    </table>
+  </div>
+
+  <div class="section">
+    <img src="img/packs.jpg" alt="Packs rénovation">
+    <h2>Packs</h2>
+
+    <div class="pack">
+      <h3>Pack Rénovation Express – 1 jour</h3>
+      <p><strong>250 €</strong> – Peinture, petits montages, fixations</p>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="devis.html">Demande de devis</a></li>
-        <li><a href="realisations.html">Mes réalisations</a></li>
-        <li><a href="tarifs.html" class="active">Tarifs</a></li>
-        <li><a href="planning.html">Planning</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>  <main>
-    <h1>Nos Tarifs</h1><h2>Entretien & Rénovation Extérieure</h2>
-<div class="tarifs-section">
-  <div class="tarif-card">
-    <img src="img/pelouse.png" alt="pelouse">
-    <h3>Tonte de pelouse</h3>
-    <p>20€/heure</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/haie.png" alt="haie">
-    <h3>Taille de haie</h3>
-    <p>25€/heure</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/debroussaillage.png" alt="debroussaillage">
-    <h3>Débroussaillage</h3>
-    <p>25€/heure</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/terrasse.png" alt="terrasse">
-    <h3>Pose de terrasse sur plots</h3>
-    <p>À partir de 50€/m²</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/pergola.png" alt="pergola">
-    <h3>Pose de pergolas</h3>
-    <p>À partir de 120€/unité</p>
-  </div>
-</div>
+    <div class="pack">
+      <h3>Pack Jardinage Complet – 1/2 journée</h3>
+      <p><strong>140 €</strong> – Tonte, taille, soufflage</p>
+    </div>
+    <div class="pack">
+      <h3>Pack Terrasse + Pergola</h3>
+      <p><strong>Sur devis</strong> – Installation clé en main</p>
+    </div>
+    <div class="pack">
+      <h3>Pack Rénovation pièce (15m²)</h3>
+      <p><strong>600 €</strong> – Peinture + sol + finitions</p>
+    </div>
+    <div class="pack">
+      <h3>Pack Extérieur Entretien</h3>
+      <p><strong>100 €/jour</strong> – Tonte + haie + débroussaillage</p>
+    </div>
+    <div class="pack">
+      <h3>Pack Cuisine Clé en main</h3>
+      <p><strong>Sur devis</strong> – De la conception à l'installation</p>
+    </div>
+    <div class="pack">
+      <h3>Pack Dressing sur-mesure</h3>
+      <p><strong>Sur devis</strong> – Aménagement + pose</p>
+    </div>
 
-<h2>Petit Bricolage & Rénovation Intérieure</h2>
-<div class="tarifs-section">
-  <div class="tarif-card">
-    <img src="img/moustiquaire.png" alt="moustiquaire">
-    <h3>Pose de moustiquaire</h3>
-    <p>50€ (2-3 fenêtres)</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/meuble.png" alt="meuble">
-    <h3>Montage de meuble</h3>
-    <p>25€/meuble</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/peinture.png" alt="peinture">
-    <h3>Peinture intérieure</h3>
-    <p>8€/m²</p>
-  </div>
-  <div class="tarif-card">
-    <img src="img/bricolage.png" alt="bricolage">
-    <h3>Bricolage du quotidien</h3>
-    <p>15€/heure</p>
-  </div>
-</div>
+    <div class="pack">
+      <h3>Pack "RÉNO EXPRESS"</h3>
+      <p><strong>À partir de 790 € TTC</strong><br/>
+        Rafraîchissement des peintures (≤50 m²), nettoyage complet, réparations légères, remise en état extérieur.
+        <br/>Délai : 3 à 5 jours
+      </p>
+    </div>
 
-<div class="devis-section">
-  <h2>Prestations sur devis</h2>
-  <p>
-    Pour les projets plus complexes, nous établissons un devis personnalisé :<br>
-    Cuisine clé en main, dressing, isolation intérieure, cuisine extérieure.
-  </p>
-  <a href="devis.html" class="cta-button">Demander un devis</a>
-</div>
+    <div class="pack">
+      <h3>Pack "RÉNO EXTÉRIEURE"</h3>
+      <p><strong>À partir de 890 € TTC</strong><br/>
+        Tonte, débroussaillage, taille, nettoyage/pose terrasse, pose pergola/voile, éclairage extérieur basique
+      </p>
+    </div>
 
-  </main>  <footer>
-    <p>&copy; 2025 Paporalkis – Tous droits réservés</p>
-  </footer>
+    <div class="pack">
+      <h3>Pack "Cuisine extérieure Cyporex"</h3>
+      <p><strong>À partir de 1490 € TTC</strong> (base 2 m)<br/>
+        Structure en béton cellulaire, plan de travail, BBQ/évier, finitions personnalisées
+      </p>
+    </div>
+
+  </div>
+
 </body>
 </html>
