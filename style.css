@@ -281,21 +281,14 @@ button:hover {
   border-radius: 8px;
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   cursor: pointer;
-  z-index: 1;
   position: relative;
+  z-index: 1;
+  touch-action: manipulation;
 }
 
-.realisation-image:hover {
+.realisation-image:hover,
+.realisation-image:active {
   transform: scale(1.1) translateY(-5px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
   z-index: 2;
-}
-  .image-container {
-    flex-wrap: wrap;
-  }
-
-  .realisation-image {
-    width: 100px;
-    height: 100px;
-  }
 }
