@@ -61,19 +61,75 @@
   </style>
 </head>
 <body>
-<div class="logo">
+<style>
+  header {
+    background-color: white;
+    padding: 15px 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+  }
+
+  .logo img {
+    height: 50px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav ul li a {
+    text-decoration: none;
+    color: #333;
+    font-weight: bold;
+    font-size: 16px;
+  }
+
+  nav ul li a.active {
+    color: #001F3F;
+    border-bottom: 2px solid #001F3F;
+  }
+
+  @media (max-width: 768px) {
+    .header-container {
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    nav ul {
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+  }
+</style>
+
+<header>
+  <div class="header-container">
+    <div class="logo">
       <img src="img/logo.png" alt="Logo Paporalkis">
     </div>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
-        <li><a href="devis.html" class="active">Demande de devis</a></li>
+        <li><a href="devis.html">Demande de devis</a></li>
         <li><a href="realisations.html">Mes réalisations</a></li>
         <li><a href="tarifs.html">Tarifs</a></li>
-        <li><a href="planning.html">Planning</a></li>
+        <li><a href="planning.html" class="active">Planning</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
+  </div>
+</header>
   <div class="section">
     <div style="text-align: center;">
     <img src="img/renovation_interieure.png" alt="Travaux rénovations" style="width: 70px; height: auto;">
