@@ -30,7 +30,6 @@
     </section>
 
     <section class="realisation-gallery">
-
       <div class="card">
         <h3 class="realisation-title">Montage de meuble pour séjour en kit</h3>
         <div class="image-container">
@@ -125,7 +124,7 @@
             <li>Modification du carrelage</li>
             <li>Coffrage placo</li>
             <li>Peinture</li>
-            <li>Pose de la cuisine (hors électroménagers)</li>
+            <li>Pose de la cuisine hors électroménagers</li>
           </ul>
         </div>
       </div>
@@ -133,41 +132,17 @@
       <div class="card">
         <h3 class="realisation-title">Rafraîchissement de pièces</h3>
         <div class="image-container">
-          <img src="img/CHBR0.jpg" alt="chambre 1" class="realisation-image">
-          <img src="img/CHBR1.jpg" alt="chambre 2" class="realisation-image">          
+          <img src="img/CHBR0.jpg" alt="chambre 0" class="realisation-image">
+          <img src="img/CHBR1.jpg" alt="chambre 1" class="realisation-image">          
         </div>
         <div class="description">
           <p>Rafraîchissement de pièces.</p>
         </div>
       </div>
-
+      
     </section>
   </main>
 
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Agrandissement">
-  </div>
-
-  <script>
-    const images = document.querySelectorAll('.realisation-image');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-
-    images.forEach(img => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.style.display = 'flex';
-      });
-    });
-
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-    }
-  </script>
-
-  <footer>
-    <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
-  </footer>
-
-</body>
-</html>
+    <img id="light0
