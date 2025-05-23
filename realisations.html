@@ -41,40 +41,30 @@
           <p>Assemblage complet et installation de meubles décoratifs pour séjour, type kit.</p>
         </div>
       </div>
-    </section>
-  </main>
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox" onclick="closeLightbox()">
-    <img id="lightbox-img" src="" alt="Agrandissement">
-  </div>
-
-  <script>
-    const images = document.querySelectorAll('.realisation-image');
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-
-    images.forEach(img => {
-      img.addEventListener('click', () => {
-        lightboxImg.src = img.src;
-        lightbox.style.display = 'flex';
-      });
-    });
-
-    function closeLightbox() {
-      lightbox.style.display = 'none';
-    }
       <div class="card">
         <h3 class="realisation-title">Isolation d’une buanderie</h3>
         <div class="image-container">
-          <img src="img/Iso1.jpg" alt="meuble 1" class="realisation-image">
-          <img src="img/Iso2.jpg" alt="meuble 2" class="realisation-image">
-          <img src="img/Iso3.jpg" alt="meuble 3" class="realisation-image">
-          <img src="img/Iso4.jpg" alt="meuble 1" class="realisation-image">
-          <img src="img/Iso5.jpg" alt="meuble 2" class="realisation-image">
+          <img src="img/Iso1.jpg" alt="iso 1" class="realisation-image">
+          <img src="img/Iso2.jpg" alt="iso 2" class="realisation-image">
+          <img src="img/Iso3.jpg" alt="iso 3" class="realisation-image">
+          <img src="img/Iso4.jpg" alt="iso 4" class="realisation-image">
+          <img src="img/Iso5.jpg" alt="iso 5" class="realisation-image">
         </div>
         <div class="description">
-          <p>pose de placo sur rail mur et sous pente,isolation par laine de roche,installation électrique,peinture </p>
+          <p>Pose de placo sur rail mur et sous pente, isolation par laine de roche, installation électrique, peinture.</p>
+        </div>
+      </div>
+
+      <!-- Exemple à dupliquer pour ajouter une autre réalisation -->
+      <div class="card">
+        <h3 class="realisation-title">Pose de carrelage dans une salle de bain</h3>
+        <div class="image-container">
+          <img src="img/sdb-carrelage-1.jpg" alt="carrelage 1" class="realisation-image">
+          <img src="img/sdb-carrelage-2.jpg" alt="carrelage 2" class="realisation-image">
+        </div>
+        <div class="description">
+          <p>Préparation du sol, pose de carrelage mural et au sol, finition des joints.</p>
         </div>
       </div>
     </section>
@@ -99,8 +89,8 @@
 
     function closeLightbox() {
       lightbox.style.display = 'none';
-    }I
- </script>
+    }
+  </script>
 
   <footer>
     <p>&copy; 2025 Paporalkis - Tous droits réservés</p>
