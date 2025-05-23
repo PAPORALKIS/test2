@@ -132,6 +132,7 @@ footer {
     max-width: 250px;
   }
 }
+
 .form-section {
   padding: 50px;
   background-color: rgba(255, 255, 255, 0.85);
@@ -177,6 +178,7 @@ button {
 button:hover {
   background-color: #0099cc;
 }
+
 .page-bg {
   background-image: url('img/logo.png');
   background-repeat: no-repeat;
@@ -184,6 +186,7 @@ button:hover {
   background-size: 30%;
   background-attachment: fixed;
 }
+
 /* Réalisations */
 .realisation {
   display: flex;
@@ -258,40 +261,6 @@ button:hover {
   display: block;
 }
 
-/* Responsive pour cartes */
-@media screen and (max-width: 600px) {
-  .realisation {
-    flex-direction: column;
-  }
-
-  .card {
-    width: 90%;
-    height: auto;
-  }
-.image-container {
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-  flex-wrap: wrap;
-}
-
-.realisation-image {
-  width: 200px;
-  height: auto;
-  border-radius: 8px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  z-index: 1;
-  touch-action: manipulation;
-}
-
-.realisation-image:hover,
-.realisation-image:active {
-  transform: scale(2.0) translateY(-15px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
-  z-index: 2;
-}
 /* Section titre des réalisations */
 .titre-section {
   text-align: center;
@@ -311,19 +280,53 @@ button:hover {
   color: #333;
 }
 
-/* Galerie des réalisations */
+/* Ancienne galerie supprimée car remplacée */
+/* Nouvelle disposition moderne */
 .realisation-gallery {
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
+  padding: 40px 20px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.card {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.image-container {
+  flex-wrap: wrap;
+  gap: 10px;
   justify-content: center;
-  padding: 20px;
+}
+
+.realisation-image {
+  width: 90px;
+  height: 90px;
+  object-fit: cover;
+  border-radius: 6px;
+  transition: transform 0.3s ease;
+}
+
+.realisation-image:hover {
+  transform: scale(2.2);
+  z-index: 5;
 }
 
 /* Ajustement mobile */
-@media screen and (max-width: 768px) {
-  .realisation-gallery {
+@media screen and (max-width: 600px) {
+  .realisation {
     flex-direction: column;
-    align-items: center;
+  }
+
+  .card {
+    width: 90%;
+    height: auto;
   }
 }
