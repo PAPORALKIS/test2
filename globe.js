@@ -1,51 +1,53 @@
 console.log("globe.js chargé");
-const canvas = document.getElementById("globeCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio);
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  canvas.clientWidth / canvas.clientHeight,
-  0.1,
-  1000
-);
-camera.position.z = 3;
+window.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById("globeCanvas");
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
 
-const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
-const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
-const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
-scene.add(globe);
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    canvas.clientWidth / canvas.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.z = 3;
 
-function resizeRendererToDisplaySize() {
-  const width = canvas.clientWidth * window.devicePixelRatio;
-  const height = canvas.clientHeight * window.devicePixelRatio;
-  const needResize = canvas.width !== width || canvas.height !== height;
-  if (needResize) {
-    renderer.setSize(width, height, false);
-  }
-  return needResize;
-}
+  const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+  const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
+  const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  scene.add(globe);
 
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (resizeRendererToDisplaySize()) {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
+  function resizeRendererToDisplaySize() {
+    const width = canvas.clientWidth * window.devicePixelRatio;
+    const height = canvas.clientHeight * window.devicePixelRatio;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
   }
 
-  globe.rotation.y += 0.002;
-  globe.rotation.x += 0.001;
+  function animate() {
+    requestAnimationFrame(animate);
 
-  renderer.render(scene, camera);
-}
+    if (resizeRendererToDisplaySize()) {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
 
-animate();
+    globe.rotation.y += 0.002;
+    globe.rotation.x += 0.001;
 
-// Optionnel mais recommandé : recalculer au redimensionnement fenêtre (déclenche animate indirectement)
-window.addEventListener("resize", () => {
-  resizeRendererToDisplaySize();
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    resizeRendererToDisplaySize();
+  });
 });
