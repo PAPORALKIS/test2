@@ -1,5 +1,13 @@
 console.log("globe.js chargé");
 
+const textures = [
+  'img/meuble-laura-1.jpg',
+  'img/Iso2.jpg',
+  'img/ext1.jpg',
+  'img/CUIEXT5.jpg',
+  'img/SDB3.jpg',
+  'img/DRESSMARS1.jpg'
+];
 const canvas = document.getElementById("globeCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 renderer.setPixelRatio(window.devicePixelRatio);
