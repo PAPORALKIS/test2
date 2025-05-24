@@ -1,26 +1,21 @@
-/* ========== RESET & GLOBAL ========== */
+/* RESET & GLOBAL */
 body {
   margin: 0;
   font-family: Arial, sans-serif;
   background-color: #f5f5f5;
   color: #333;
 }
-
-/* ========== HEADER ========== */
 header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #ffffff;
+  background-color: #fff;
   padding: 10px 20px;
   border-bottom: 1px solid #ccc;
 }
-
 .logo img {
   height: 60px;
 }
-
-/* ========== NAVIGATION ========== */
 nav ul {
   list-style: none;
   display: flex;
@@ -28,96 +23,29 @@ nav ul {
   padding: 0;
   margin: 0;
 }
-
 nav ul li a {
   text-decoration: none;
   color: #333;
   font-weight: bold;
   transition: color 0.3s ease;
 }
-
-nav ul li a:hover {
-  color: #00bfff;
-}
-
+nav ul li a:hover,
 nav ul li a.active {
   color: #007bff;
-  font-weight: bold;
 }
 
-/* ========== HERO SECTION ========== */
-.hero {
-  position: relative;
-  background-image: url('img/illustration.png');
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  text-align: center;
-  color: white;
-  z-index: 1;
-  overflow: hidden;
-}
-
-.hero::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1;
-}
-
-.overlay {
-  position: relative;
-  z-index: 2;
-  padding: 40px;
-  background-color: rgba(255, 255, 255, 0.2);
-  border-radius: 10px;
-  backdrop-filter: blur(3px);
-}
-
-/* ========== CTA BUTTON ========== */
-.cta-button {
-  margin-top: 20px;
-  background-color: #00bfff;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  text-decoration: none;
-  border-radius: 5px;
-  font-weight: bold;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  display: inline-block;
-}
-
-.cta-button:hover {
-  background-color: #0099cc;
-  transform: scale(1.05);
-}
-
-/* ========== SECTION TITLES ========== */
 .titre-section {
   text-align: center;
   padding: 30px 10px;
   background-color: rgba(255, 255, 255, 0.85);
   margin-bottom: 20px;
 }
-
 .titre-section h1 {
   font-size: 32px;
   margin-bottom: 10px;
   color: #003366;
 }
 
-.titre-section p {
-  font-size: 16px;
-  color: #333;
-}
-
-/* ========== REALISATIONS ========== */
 .realisation-gallery {
   display: flex;
   flex-wrap: wrap;
@@ -126,7 +54,6 @@ nav ul li a.active {
   max-width: 1200px;
   margin: auto;
 }
-
 .card {
   background: white;
   border-radius: 10px;
@@ -134,23 +61,20 @@ nav ul li a.active {
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   flex: 1 1 calc(50% - 40px);
   transition: transform 0.3s ease-in-out;
+  position: relative;
 }
-
 .card:hover {
   transform: scale(1.05);
 }
-
 .card h3 {
   margin-top: 0;
 }
-
 .image-container {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
   justify-content: center;
 }
-
 .realisation-image {
   width: 100px;
   height: 100px;
@@ -159,12 +83,10 @@ nav ul li a.active {
   cursor: pointer;
   transition: transform 0.3s ease;
 }
-
 .realisation-image:hover {
   transform: scale(2.2);
   z-index: 5;
 }
-
 .description {
   margin-top: 10px;
   display: none;
@@ -178,26 +100,18 @@ nav ul li a.active {
   box-sizing: border-box;
   transition: 0.3s ease;
 }
-
 .card:hover .description {
   display: block;
 }
 
-/* ========== GLOBE SECTION ========== */
-.globe-section {
-  margin-top: 50px;
-  padding: 50px 20px;
-  text-align: center;
-}
-
-#globe-container {
+/* Globe section */
+#globe {
   position: relative;
   width: 100%;
   max-width: 600px;
-  margin: auto;
   height: 400px;
+  margin: 40px auto 80px;
 }
-
 #globeCanvas {
   width: 100%;
   height: 100%;
@@ -205,8 +119,7 @@ nav ul li a.active {
   border-radius: 50%;
   background-color: white;
 }
-
-#logoCenter {
+#center-logo {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -214,134 +127,12 @@ nav ul li a.active {
   pointer-events: none;
   z-index: 10;
 }
-
-#logoCenter img {
+#center-logo img {
   width: 80px;
-  opacity: 0.8;
+  opacity: 0.85;
 }
 
-/* ========== LIGHTBOX ========== */
-.lightbox {
-  position: fixed;
-  display: none;
-  top: 0; left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0,0,0,0.8);
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
-}
-
-.lightbox img {
-  max-width: 90%;
-  max-height: 90%;
-  border-radius: 10px;
-}
-
-.lightbox .close {
-  position: absolute;
-  top: 20px;
-  right: 30px;
-  font-size: 40px;
-  color: white;
-  cursor: pointer;
-}
-
-/* ========== FORM SECTION ========== */
-.form-section {
-  padding: 50px;
-  background-color: rgba(255, 255, 255, 0.85);
-}
-
-form {
-  max-width: 600px;
-  margin: auto;
-  background: white;
-  padding: 30px;
-  border-radius: 10px;
-  box-shadow: 0 0 10px rgba(0,0,0,0.1);
-}
-
-form h2 {
-  text-align: center;
-  color: #003366;
-}
-
-label {
-  display: block;
-  margin: 15px 0;
-  color: #003366;
-}
-
-input, textarea, button {
-  width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-}
-
-button {
-  background-color: #00bfff;
-  color: white;
-  border: none;
-  font-weight: bold;
-  cursor: pointer;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0099cc;
-}
-
-/* ========== PAGE BACKGROUND ========== */
-.page-bg {
-  background-image: url('img/logo.png');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 30%;
-  background-attachment: fixed;
-}
-
-/* ========== FOOTER ========== */
-footer {
-  text-align: center;
-  padding: 20px;
-  background-color: #003366;
-  color: white;
-}
-
-/* ========== RESPONSIVE ========== */
-@media screen and (max-width: 768px) {
-  .hero {
-    min-height: 80vh;
-    padding: 20px;
-  }
-
-  nav ul {
-    flex-direction: column;
-    align-items: center;
-  }
-
-  .cta-button {
-    width: 100%;
-    max-width: 250px;
-  }
-
-  .realisation-gallery {
-    flex-direction: column;
-  }
-
-  .card {
-    flex: 1 1 100%;
-  }
-}
-#globeCanvas {
-  width: 100%;
-  height: 400px; /* ou ce qui convient */
-  display: block;
-  margin: 0 auto;
-}
+/* Lightbox */
 .lightbox {
   display: none;
   position: fixed;
@@ -351,12 +142,11 @@ footer {
   align-items: center;
   z-index: 1000;
 }
-
 .lightbox img {
   max-width: 90%;
   max-height: 90%;
+  border-radius: 10px;
 }
-
 .lightbox .close {
   position: absolute;
   top: 20px;
@@ -364,4 +154,18 @@ footer {
   color: white;
   font-size: 30px;
   cursor: pointer;
+}
+
+/* Responsive */
+@media screen and (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    align-items: center;
+  }
+  .realisation-gallery {
+    flex-direction: column;
+  }
+  .card {
+    flex: 1 1 100%;
+  }
 }
