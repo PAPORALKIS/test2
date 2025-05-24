@@ -45,4 +45,3 @@ function animate() {
 }
 
 animate();
-ajout de globe.js
