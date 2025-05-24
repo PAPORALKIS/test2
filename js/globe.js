@@ -13,20 +13,21 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.z = 4;
 
-// Sphère centrale
 const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
 const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
 const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(globe);
 
-// Images à orbiter autour du globe
+// Liste des images
 const textures = [
   'img/meuble-laura-1.jpg',
   'img/Iso2.jpg',
   'img/ext1.jpg',
   'img/CUIEXT5.jpg',
   'img/SDB3.jpg',
-  'img/DRESSMARS1.jpg'
+  'img/DRESSMARS1.jpg',
+  'img/WC1.jpg',
+  'img/CHBR1.jpg'
 ];
 
 const loader = new THREE.TextureLoader();
@@ -35,12 +36,23 @@ const orbitingImages = [];
 
 textures.forEach((imgSrc, index) => {
   loader.load(imgSrc, texture => {
-    const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true });
-    const geometry = new THREE.PlaneGeometry(0.8, 0.6);
+    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
+    const geometry = new THREE.PlaneGeometry(0.7, 0.5);
     const imageMesh = new THREE.Mesh(geometry, material);
 
+    // Position aléatoire sur la sphère
+    const theta = Math.random() * Math.PI * 2; // longitude
+    const phi = Math.random() * Math.PI; // latitude
+
+    const x = orbitRadius * Math.sin(phi) * Math.cos(theta);
+    const y = orbitRadius * Math.cos(phi);
+    const z = orbitRadius * Math.sin(phi) * Math.sin(theta);
+
+    imageMesh.position.set(x, y, z);
+    imageMesh.lookAt(0, 0, 0);
+
     scene.add(imageMesh);
-    orbitingImages.push({ mesh: imageMesh, angle: (index / textures.length) * Math.PI * 2 });
+    orbitingImages.push({ mesh: imageMesh, theta, phi, speed: 0.002 + Math.random() * 0.003 });
   });
 });
 
@@ -67,12 +79,14 @@ function animate() {
   globe.rotation.y += 0.002;
   globe.rotation.x += 0.001;
 
-  // Rotation des images
-  orbitingImages.forEach((obj, i) => {
-    obj.angle += 0.002;
-    const x = orbitRadius * Math.cos(obj.angle);
-    const y = orbitRadius * Math.sin(obj.angle);
-    obj.mesh.position.set(x, y, 0);
+  orbitingImages.forEach(obj => {
+    obj.theta += obj.speed;
+
+    const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
+    const y = orbitRadius * Math.cos(obj.phi);
+    const z = orbitRadius * Math.sin(obj.phi) * Math.sin(obj.theta);
+
+    obj.mesh.position.set(x, y, z);
     obj.mesh.lookAt(0, 0, 0);
   });
 
