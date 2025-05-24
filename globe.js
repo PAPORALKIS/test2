@@ -1,9 +1,5 @@
 const canvas = document.getElementById("globeCanvas");
-canvas.width = canvas.clientWidth * window.devicePixelRatio;
-canvas.height = canvas.clientHeight * window.devicePixelRatio;
-
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
@@ -20,19 +16,35 @@ const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
 const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
 scene.add(globe);
 
+function resizeRendererToDisplaySize() {
+  const width = canvas.clientWidth * window.devicePixelRatio;
+  const height = canvas.clientHeight * window.devicePixelRatio;
+  const needResize = canvas.width !== width || canvas.height !== height;
+  if (needResize) {
+    renderer.setSize(width, height, false);
+  }
+  return needResize;
+}
+
 function animate() {
   requestAnimationFrame(animate);
+
+  if (resizeRendererToDisplaySize()) {
+    const width = canvas.clientWidth;
+    const height = canvas.clientHeight;
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
+  }
+
   globe.rotation.y += 0.002;
   globe.rotation.x += 0.001;
+
   renderer.render(scene, camera);
 }
 
 animate();
 
+// Optionnel mais recommandé : recalculer au redimensionnement fenêtre (déclenche animate indirectement)
 window.addEventListener("resize", () => {
-  canvas.width = canvas.clientWidth * window.devicePixelRatio;
-  canvas.height = canvas.clientHeight * window.devicePixelRatio;
-  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
-  camera.aspect = canvas.clientWidth / canvas.clientHeight;
-  camera.updateProjectionMatrix();
+  resizeRendererToDisplaySize();
 });
