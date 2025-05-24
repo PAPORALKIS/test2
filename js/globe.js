@@ -1,96 +1,57 @@
+// === AJOUTE CE SCRIPT DANS globe.js ===
+
 console.log("globe.js chargé");
 
-const canvas = document.getElementById("globeCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-renderer.setPixelRatio(window.devicePixelRatio);
+// Charger html2canvas (à ajouter dans le HTML aussi) // <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  canvas.clientWidth / canvas.clientHeight,
-  0.1,
-  1000
-);
-camera.position.z = 4;
+const canvas = document.getElementById("globeCanvas"); const renderer = new THREE.WebGLRenderer({ canvas, alpha: true }); renderer.setPixelRatio(window.devicePixelRatio);
 
-const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
-const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
-const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
-scene.add(globe);
+const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera( 75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000 ); camera.position.z = 5;
 
-// Liste des images
-const textures = [
-  'img/meuble-laura-1.jpg',
-  'img/Iso2.jpg',
-  'img/ext1.jpg',
-  'img/CUIEXT5.jpg',
-  'img/SDB3.jpg',
-  'img/DRESSMARS1.jpg',
-  'img/WC1.jpg',
-  'img/CHBR1.jpg'
-];
+const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32); const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true }); const globe = new THREE.Mesh(sphereGeometry, sphereMaterial); scene.add(globe);
 
-const loader = new THREE.TextureLoader();
-const orbitRadius = 2.2;
-const orbitingImages = [];
+const orbitRadius = 3; const orbitingCards = [];
 
-textures.forEach((imgSrc, index) => {
-  loader.load(imgSrc, texture => {
-    const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-    const geometry = new THREE.PlaneGeometry(0.7, 0.5);
-    const imageMesh = new THREE.Mesh(geometry, material);
+// Capture chaque .card en image avec html2canvas function createCardPlanes() { const cards = document.querySelectorAll(".card"); cards.forEach((card, index) => { html2canvas(card).then(canvasImg => { const texture = new THREE.CanvasTexture(canvasImg); const material = new THREE.MeshBasicMaterial({ map: texture, transparent: true }); const geometry = new THREE.PlaneGeometry(2, 1.5); const mesh = new THREE.Mesh(geometry, material);
 
-    // Position aléatoire sur la sphère
-    const theta = Math.random() * Math.PI * 2; // longitude
-    const phi = Math.random() * Math.PI; // latitude
+const theta = Math.random() * Math.PI * 2;
+  const phi = Math.random() * Math.PI;
 
-    const x = orbitRadius * Math.sin(phi) * Math.cos(theta);
-    const y = orbitRadius * Math.cos(phi);
-    const z = orbitRadius * Math.sin(phi) * Math.sin(theta);
+  const x = orbitRadius * Math.sin(phi) * Math.cos(theta);
+  const y = orbitRadius * Math.cos(phi);
+  const z = orbitRadius * Math.sin(phi) * Math.sin(theta);
 
-    imageMesh.position.set(x, y, z);
-    imageMesh.lookAt(0, 0, 0);
+  mesh.position.set(x, y, z);
+  mesh.lookAt(0, 0, 0);
+  scene.add(mesh);
 
-    scene.add(imageMesh);
-    orbitingImages.push({ mesh: imageMesh, theta, phi, speed: 0.002 + Math.random() * 0.003 });
-  });
+  orbitingCards.push({ mesh, theta, phi, speed: 0.002 + Math.random() * 0.003 });
 });
 
-function resizeRendererToDisplaySize() {
-  const width = canvas.clientWidth * window.devicePixelRatio;
-  const height = canvas.clientHeight * window.devicePixelRatio;
-  const needResize = canvas.width !== width || canvas.height !== height;
-  if (needResize) {
-    renderer.setSize(width, height, false);
-  }
-  return needResize;
-}
+}); }
 
-function animate() {
-  requestAnimationFrame(animate);
+createCardPlanes();
 
-  if (resizeRendererToDisplaySize()) {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-  }
+function resizeRendererToDisplaySize() { const width = canvas.clientWidth * window.devicePixelRatio; const height = canvas.clientHeight * window.devicePixelRatio; const needResize = canvas.width !== width || canvas.height !== height; if (needResize) { renderer.setSize(width, height, false); } return needResize; }
 
-  globe.rotation.y += 0.002;
-  globe.rotation.x += 0.001;
+function animate() { requestAnimationFrame(animate);
 
-  orbitingImages.forEach(obj => {
-    obj.theta += obj.speed;
+if (resizeRendererToDisplaySize()) { const width = canvas.clientWidth; const height = canvas.clientHeight; camera.aspect = width / height; camera.updateProjectionMatrix(); }
 
-    const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
-    const y = orbitRadius * Math.cos(obj.phi);
-    const z = orbitRadius * Math.sin(obj.phi) * Math.sin(obj.theta);
+globe.rotation.y += 0.0015; globe.rotation.x += 0.001;
 
-    obj.mesh.position.set(x, y, z);
-    obj.mesh.lookAt(0, 0, 0);
-  });
+orbitingCards.forEach(obj => { obj.theta += obj.speed;
 
-  renderer.render(scene, camera);
-}
+const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
+const y = orbitRadius * Math.cos(obj.phi);
+const z = orbitRadius * Math.sin(obj.phi) * Math.sin(obj.theta);
+
+obj.mesh.position.set(x, y, z);
+obj.mesh.lookAt(0, 0, 0);
+
+});
+
+renderer.render(scene, camera); }
 
 animate();
+
