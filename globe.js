@@ -1,12 +1,18 @@
 const canvas = document.getElementById("globeCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 canvas.width = canvas.clientWidth * window.devicePixelRatio;
 canvas.height = canvas.clientHeight * window.devicePixelRatio;
+
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  75,
+  canvas.clientWidth / canvas.clientHeight,
+  0.1,
+  1000
+);
 camera.position.z = 3;
 
 const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
@@ -24,9 +30,9 @@ function animate() {
 animate();
 
 window.addEventListener("resize", () => {
-  const width = canvas.clientWidth;
-  const height = canvas.clientHeight;
-  renderer.setSize(width, height);
-  camera.aspect = width / height;
+  canvas.width = canvas.clientWidth * window.devicePixelRatio;
+  canvas.height = canvas.clientHeight * window.devicePixelRatio;
+  renderer.setSize(canvas.clientWidth, canvas.clientHeight);
+  camera.aspect = canvas.clientWidth / canvas.clientHeight;
   camera.updateProjectionMatrix();
 });
