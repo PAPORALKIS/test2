@@ -1,5 +1,7 @@
 const canvas = document.getElementById("globeCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+canvas.width = canvas.clientWidth * window.devicePixelRatio;
+canvas.height = canvas.clientHeight * window.devicePixelRatio;
 renderer.setSize(canvas.clientWidth, canvas.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 
