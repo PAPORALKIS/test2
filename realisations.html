@@ -5,15 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Mes Réalisations</title>
   <link rel="stylesheet" href="style.css" />
-  <!-- Three.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
 </head>
 <body>
 
 <header>
-  <div class="logo">
-    <img src="img/logo.png" alt="Logo" />
-  </div>
+  <div class="logo"><img src="img/logo.png" alt="Logo Paporalkis" /></div>
   <nav>
     <ul>
       <li><a href="index.html">Accueil</a></li>
@@ -39,34 +36,17 @@
   <div class="card">
     <h3>Projet 1</h3>
     <div class="image-container">
-      <img src="img/projet1-1.jpg" alt="Projet 1 image 1" class="realisation-image" />
-      <img src="img/projet1-2.jpg" alt="Projet 1 image 2" class="realisation-image" />
+      <img src="img/projet1.jpg" alt="Projet 1" class="realisation-image" />
     </div>
-    <div class="description">
-      Description du projet 1.
-    </div>
+    <div class="description">Description du projet 1.</div>
   </div>
-
-  <div class="card">
-    <h3>Projet 2</h3>
-    <div class="image-container">
-      <img src="img/projet2-1.jpg" alt="Projet 2 image 1" class="realisation-image" />
-      <img src="img/projet2-2.jpg" alt="Projet 2 image 2" class="realisation-image" />
-    </div>
-    <div class="description">
-      Description du projet 2.
-    </div>
-  </div>
-
-  <!-- Ajoute autant de projets que tu veux -->
 </section>
 
-<!-- Lightbox -->
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="close" onclick="closeLightbox()">×</span>
   <img id="lightbox-img" src="" alt="Agrandissement" />
 </div>
 
-<script src="globe.js"></script>
+<script src="js/globe.js"></script>
 </body>
 </html>
