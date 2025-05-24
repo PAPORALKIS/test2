@@ -3,165 +3,282 @@
 <head>
   <meta charset="UTF-8" />
   <title>Mes réalisations - Papo Rénov</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* RESET & GLOBAL */
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f5f5f5;
+      color: #333;
+    }
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: #fff;
+      padding: 10px 20px;
+      border-bottom: 1px solid #ccc;
+    }
+    .logo img {
+      height: 60px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 15px;
+      padding: 0;
+      margin: 0;
+    }
+    nav ul li a {
+      text-decoration: none;
+      color: #333;
+      font-weight: bold;
+      transition: color 0.3s ease;
+    }
+    nav ul li a:hover,
+    nav ul li a.active {
+      color: #007bff;
+    }
+
+    .titre-section {
+      text-align: center;
+      padding: 30px 10px;
+      background-color: rgba(255, 255, 255, 0.85);
+      margin-bottom: 20px;
+    }
+    .titre-section h1 {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #003366;
+    }
+
+    .realisation-gallery {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .card {
+      background: white;
+      border-radius: 10px;
+      padding: 15px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      flex: 1 1 calc(50% - 40px);
+      transition: transform 0.3s ease-in-out;
+      position: relative;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    .card h3 {
+      margin-top: 0;
+    }
+    .image-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+    }
+    .realisation-image {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+    .realisation-image:hover {
+      transform: scale(2.2);
+      z-index: 5;
+    }
+    .description {
+      margin-top: 10px;
+      display: none;
+      position: absolute;
+      bottom: 0;
+      background-color: rgba(0, 51, 102, 0.85);
+      color: white;
+      width: 100%;
+      padding: 15px;
+      font-size: 14px;
+      box-sizing: border-box;
+      transition: 0.3s ease;
+    }
+    .card:hover .description {
+      display: block;
+    }
+
+    /* Globe section */
+    #globe {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 400px;
+      margin: 40px auto 80px;
+    }
+    #globeCanvas {
+      width: 100%;
+      height: 100%;
+      display: block;
+      border-radius: 50%;
+      background-color: white;
+    }
+    #center-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    #center-logo img {
+      width: 80px;
+      opacity: 0.85;
+    }
+
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .lightbox img {
+      max-width: 90%;
+      max-height: 90%;
+      border-radius: 10px;
+    }
+    .lightbox .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 30px;
+      cursor: pointer;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="Logo Paporalkis" />
+
+<header>
+  <div class="logo"><img src="img/logo.png" alt="Logo Paporalkis"></div>
+  <nav>
+    <ul>
+      <li><a href="index.html">Accueil</a></li>
+      <li><a href="devis.html">Demande de devis</a></li>
+      <li><a href="realisations.html" class="active">Mes réalisations</a></li>
+      <li><a href="tarifs.html">Tarifs</a></li>
+      <li><a href="planning.html">Planning</a></li>
+      <li><a href="contact.html">Contact</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main>
+  <section class="titre-section">
+    <h1>Mes réalisations</h1>
+    <p>Voici quelques exemples de travaux réalisés :</p>
+  </section>
+
+  <section class="realisation-gallery">
+    <div class="card">
+      <h3 class="realisation-title">Montage de meuble pour séjour en kit</h3>
+      <div class="image-container">
+        <img src="img/meuble-laura-1.jpg" alt="meuble 1" class="realisation-image" />
+        <img src="img/meuble-laura-2.jpg" alt="meuble 2" class="realisation-image" />
+        <img src="img/meuble-laura-3.jpg" alt="meuble 3" class="realisation-image" />
+      </div>
+      <div class="description">
+        <p>Assemblage complet et installation de meubles décoratifs pour séjour, type kit.</p>
+      </div>
     </div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="devis.html">Demande de devis</a></li>
-        <li><a href="realisations.html" class="active">Mes réalisations</a></li>
-        <li><a href="tarifs.html">Tarifs</a></li>
-        <li><a href="planning.html">Planning</a></li>
-        <li><a href="contact.html">Contact</a></li>
-      </ul>
-    </nav>
-  </header>
-  <main>
-    <section class="titre-section">
-      <h1>Mes réalisations</h1>
-      <p>Voici quelques exemples de travaux réalisés :</p>
-    </section>
-    <section class="realisation-gallery">
-      <div class="card">
-        <h3 class="realisation-title">Montage de meuble pour séjour en kit</h3>
-        <div class="image-container">
-          <img src="img/meuble-laura-1.jpg" alt="meuble 1" class="realisation-image">
-          <img src="img/meuble-laura-2.jpg" alt="meuble 2" class="realisation-image">
-          <img src="img/meuble-laura-3.jpg" alt="meuble 3" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Assemblage complet et installation de meubles décoratifs pour séjour, type kit.</p>
-        </div>
-      </div>
+    <!-- Ajoute d’autres cards comme nécessaire -->
+  </section>
 
-      <div class="card">
-        <h3 class="realisation-title">Isolation d’une buanderie</h3>
-        <div class="image-container">
-          <img src="img/iso1.jpg" alt="iso 1" class="realisation-image">
-          <img src="img/Iso2.jpg" alt="iso 2" class="realisation-image">
-          <img src="img/Iso3.jpg" alt="iso 3" class="realisation-image">
-          <img src="img/Iso4.jpg" alt="iso 4" class="realisation-image">
-          <img src="img/Iso5.jpg" alt="iso 5" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Pose de placo sur rail mur et sous pente, isolation par laine de roche, installation électrique, peinture.</p>
-        </div>
-      </div>
+  <section id="globe">
+    <div id="center-logo">
+      <img src="img/logo.png" alt="Logo Papo Rénov" />
+    </div>
+    <canvas id="globeCanvas"></canvas>
+  </section>
 
-      <div class="card">
-        <h3 class="realisation-title">Création d'un extérieur de maison</h3>
-        <div class="image-container">
-          <img src="img/ext1.jpg" alt="ext 1" class="realisation-image">
-          <img src="img/ext2.jpg" alt="ext 2" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Installation d'une terrasse en bois sur plots, pose de pergolas, pose de gazon naturel en rouleau, décoration extérieure.</p>
-        </div>
-      </div>
+</main>
 
-      <div class="card">
-        <h3 class="realisation-title">Cuisine extérieure</h3>
-        <div class="image-container">
-          <img src="img/CUIEXT4.jpg" alt="ex 8" class="realisation-image">
-          <img src="img/CUIEXT5.jpg" alt="ex 9" class="realisation-image">
-          <img src="img/CUIEXT6.jpg" alt="ex 7" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Création d'une cuisine extérieure en siporex, emplacement barbecue, création d'un point d'eau.</p>
-        </div>
-      </div>
+<!-- Lightbox -->
+<div id="lightbox" class="lightbox" onclick="closeLightbox()">
+  <span class="close" onclick="closeLightbox()">&times;</span>
+  <img id="lightbox-img" src="" alt="" />
+</div>
 
-      <div class="card">
-        <h3 class="realisation-title">Rénovation salle de bain et WC</h3>
-        <div class="image-container">
-          <img src="img/SDB1.jpg" alt="sdb 1" class="realisation-image">
-          <img src="img/SDB2.jpg" alt="sdb 2" class="realisation-image">
-          <img src="img/SDB3.jpg" alt="sdb 3" class="realisation-image">
-          <img src="img/SDB4.jpg" alt="sdb 4" class="realisation-image">
-          <img src="img/SDB5.jpg" alt="sdb 5" class="realisation-image">
-          <img src="img/WC1.jpg" alt="wc 1" class="realisation-image">
-          <img src="img/WC2.jpg" alt="wc 2" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Rénovation complète d'une salle de bain et d'un WC.</p>
-        </div>
-      </div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+<script>
+  console.log("globe.js chargé");
 
-      <div class="card">
-        <h3 class="realisation-title">Modification d'un espace dressing</h3>
-        <div class="image-container">
-          <img src="img/DRESSMARS1.jpg" alt="dressing 1" class="realisation-image">
-          <img src="img/DRESSMARS2.jpg" alt="dressing 2" class="realisation-image">
-          <img src="img/DRESSMARS3.jpg" alt="dressing 3" class="realisation-image">
-          <img src="img/DRESSMARS4.jpg" alt="dressing 4" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Agrandissement de l'espace dressing avec rénovation en plâtre et placo.</p>
-        </div>
-      </div>
+  const canvas = document.getElementById("globeCanvas");
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
 
-      <div class="card">
-        <h3 class="realisation-title">Rénovation cuisine IKEA</h3>
-        <div class="image-container">
-          <img src="img/CUIMARS1.jpg" alt="cuisine 1" class="realisation-image">
-          <img src="img/CUIMARS2.jpg" alt="cuisine 2" class="realisation-image">
-          <img src="img/CUIMARS3.jpg" alt="cuisine 3" class="realisation-image">
-          <img src="img/CUIMARS4.jpg" alt="cuisine 4" class="realisation-image">
-        </div>
-        <div class="description">
-          <p>Rénovation complète de la pièce :</p>
-          <ul>
-            <li>Démontage de l'ancienne cuisine</li>
-            <li>Déplacement des prises et évacuation</li>
-            <li>Modification du carrelage</li>
-            <li>Coffrage placo</li>
-            <li>Peinture</li>
-            <li>Pose de la cuisine hors électroménagers</li>
-          </ul>
-        </div>
-      </div>
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(
+    75,
+    canvas.clientWidth / canvas.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.z = 3;
 
-      <div class="card">
-        <h3 class="realisation-title">Rafraîchissement de pièces</h3>
-        <div class="image-container">
-          <img src="img/CHBR0.jpg" alt="chambre 0" class="realisation-image">
-          <img src="img/CHBR1.jpg" alt="chambre 1" class="realisation-image">          
-        </div>
-        <div class="description">
-          <p>Rafraîchissement de pièces.</p>
-        </div>
-      </div>
-  <!-- Cartes de réalisations déjà existantes ici -->
-  <!-- ... (inchangé) ... -->
-</section>
+  const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
+  const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
+  const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
+  scene.add(globe);
 
-    <!-- Globe interactif 3D -->
-    <section class="globe-section">
-      <div class="container">
-        <div id="globe">
-          <div id="center-logo">
-            <img src="img/logo.png" alt="Logo Papo Rénov" />
-          </div>
-          <canvas id="globeCanvas"></canvas>
-        </div>
-      </div>
-    </section>
-  </main>
+  function resizeRendererToDisplaySize() {
+    const width = canvas.clientWidth * window.devicePixelRatio;
+    const height = canvas.clientHeight * window.devicePixelRatio;
+    const needResize = canvas.width !== width || canvas.height !== height;
+    if (needResize) {
+      renderer.setSize(width, height, false);
+    }
+    return needResize;
+  }
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox">
-    <span class="close" onclick="closeLightbox()">&times;</span>
-    <img id="lightbox-img" src="" alt="" />
-  </div>
+  function animate() {
+    requestAnimationFrame(animate);
 
-  <!-- Inclusion des scripts dans le bon ordre -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-  <script src="js/globe.js"></script>
-  <script src="script.js"></script>
-</body>
-</html>
+    if (resizeRendererToDisplaySize()) {
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+    }
+
+    globe.rotation.y += 0.002;
+    globe.rotation.x += 0.001;
+
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener("resize", () => {
+    resizeRendererToDisplaySize();
+  });
+
+  // Simple lightbox pour agrandir images
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  document.querySelectorAll(".realisation-image").forEach((img) => {
+    img.addEventListener("click", () => {
+      lightboxImg.src = img.src;
+      lightbox.style.display = "flex";
+    });
+  });
+  function closeLightbox() {
+    lightbox.style.display = "none";
+  }
+  window.closeLightbox = closeLightbox; // exposer à global
