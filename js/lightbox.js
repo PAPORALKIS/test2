@@ -1,32 +1,23 @@
-document.addEventListener("DOMContentLoaded", function () {
-  const zoomables = document.querySelectorAll('.realisation-image');
+document.addEventListener("DOMContentLoaded", () => {
   const lightbox = document.getElementById('lightbox');
   const lightboxImg = document.getElementById('lightbox-img');
   const lightboxDesc = document.getElementById('lightbox-description');
+  const closeBtn = document.getElementById('lightbox-close');
 
-  zoomables.forEach(img => {
-    img.addEventListener('click', (e) => {
-      e.stopPropagation();
-      lightboxImg.src = img.src;
-
-      const card = img.closest('.card');
-      const description = card ? card.querySelector('.description')?.innerHTML : '';
-      lightboxDesc.innerHTML = description;
-
-      lightbox.style.display = 'flex';
-    });
+  window.addEventListener('openLightbox', e => {
+    lightboxImg.src = e.detail.src;
+    lightboxDesc.innerHTML = e.detail.description;
+    lightbox.style.display = 'flex';
   });
 
-  lightbox.addEventListener('click', function () {
-    closeLightbox();
+  closeBtn.addEventListener('click', closeLightbox);
+  lightbox.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
   });
+
+  function closeLightbox() {
+    lightbox.style.display = 'none';
+    lightboxImg.src = '';
+    lightboxDesc.innerHTML = '';
+  }
 });
-
-function closeLightbox() {
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxDesc = document.getElementById('lightbox-description');
-  lightbox.style.display = 'none';
-  lightboxImg.src = '';
-  lightboxDesc.innerHTML = '';
-}
