@@ -13,23 +13,28 @@ const camera = new THREE.PerspectiveCamera(
 );
 camera.position.z = 5;
 
-const sphereGeometry = new THREE.SphereGeometry(1.2, 32, 32);
-const sphereMaterial = new THREE.MeshNormalMaterial({ wireframe: true });
-const globe = new THREE.Mesh(sphereGeometry, sphereMaterial);
+const globe = new THREE.Mesh(
+  new THREE.SphereGeometry(1.2, 32, 32),
+  new THREE.MeshNormalMaterial({ wireframe: true })
+);
 scene.add(globe);
 
 const orbitRadius = 3;
 const orbitingCards = [];
 
+// Fonction pour capturer chaque .card avec html2canvas et les transformer en plans 3D
 function createCardPlanes() {
   const cards = document.querySelectorAll(".card");
-  cards.forEach((card, index) => {
-    html2canvas(card).then(canvasImg => {
+
+  cards.forEach((card) => {
+    html2canvas(card).then((canvasImg) => {
       const texture = new THREE.CanvasTexture(canvasImg);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
-        transparent: true
+        transparent: true,
+        side: THREE.DoubleSide
       });
+
       const geometry = new THREE.PlaneGeometry(2, 1.5);
       const mesh = new THREE.Mesh(geometry, material);
 
@@ -42,21 +47,20 @@ function createCardPlanes() {
 
       mesh.position.set(x, y, z);
       mesh.lookAt(0, 0, 0);
+
       scene.add(mesh);
 
       orbitingCards.push({
         mesh,
         theta,
         phi,
-        speed: 0.002 + Math.random() * 0.003
+        speed: 0.002 + Math.random() * 0.002
       });
     });
   });
 }
 
-window.addEventListener("load", () => {
-  createCardPlanes(); // Lancer seulement après que tout soit chargé
-});
+createCardPlanes();
 
 function resizeRendererToDisplaySize() {
   const width = canvas.clientWidth * window.devicePixelRatio;
@@ -81,7 +85,7 @@ function animate() {
   globe.rotation.y += 0.0015;
   globe.rotation.x += 0.001;
 
-  orbitingCards.forEach(obj => {
+  orbitingCards.forEach((obj) => {
     obj.theta += obj.speed;
 
     const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
