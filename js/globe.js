@@ -18,7 +18,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Liste des images à afficher sur la sphère, remplace avec tes vraies images
   const imagePaths = [
     'img/17482128810553663420141290975132.jpg',
-    'img/logo.png', // exemple, tu peux mettre plusieurs images
+    'img/logo.png',
+    'img/CHBR1.jpg// exemple, tu peux mettre plusieurs images',
     // Ajoute ici d'autres images si tu veux
   ];
 
