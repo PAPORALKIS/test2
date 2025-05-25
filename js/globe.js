@@ -12,7 +12,7 @@ const orbitRadius = 3;
 const orbitingImages = [];
 
 function createImagePlanes() {
-  const images = document.querySelectorAll(".card img");
+  const images = document.querySelectorAll(".realisation-image");
 
   images.forEach((img, index) => {
     html2canvas(img).then(canvasImg => {
