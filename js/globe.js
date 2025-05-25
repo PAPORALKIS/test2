@@ -1,114 +1,68 @@
-console.log("globe.js chargé (version corrigée)");
+import * as THREE from 'three';
 
-const canvas = document.getElementById("globeCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-renderer.setPixelRatio(window.devicePixelRatio);
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('globe-container');
+  const canvas = document.getElementById('globeCanvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
 
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
-camera.position.z = 6;
+  const radius = 3;
+  const imageSize = 0.7;
 
-const orbitRadius = 3;
-const orbitingImages = [];
+  const light = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(light);
 
-function createImagePlanes() {
-  const images = document.querySelectorAll(".card img");
+  const images = Array.from(document.querySelectorAll('.realisation-image'));
+
+  // Fonction pour générer des coordonnées bien espacées
+  function generatePositions(n, radius, minDist) {
+    const positions = [];
+
+    while (positions.length < n && positions.length < 1000) {
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.cos(phi);
+      const z = radius * Math.sin(phi) * Math.sin(theta);
+      const newPos = new THREE.Vector3(x, y, z);
+
+      if (positions.every(p => p.distanceTo(newPos) > minDist)) {
+        positions.push(newPos);
+      }
+    }
+
+    return positions;
+  }
+
+  const positions = generatePositions(images.length, radius, 1.5);
 
   images.forEach((img, index) => {
-    html2canvas(img, {
-      backgroundColor: null,
-      scale: 2,
-      useCORS: true
-    }).then(canvasImg => {
-      const texture = new THREE.CanvasTexture(canvasImg);
-      const material = new THREE.MeshBasicMaterial({
-        map: texture,
-        transparent: true,
-        side: THREE.DoubleSide,
-      });
-
-      const geometry = new THREE.PlaneGeometry(1.2, 0.9);
-      const mesh = new THREE.Mesh(geometry, material);
-
-      const theta = (index / images.length) * Math.PI * 2;
-      const phi = Math.acos(1 - 2 * (index + 0.5) / images.length);
-
-      const x = orbitRadius * Math.sin(phi) * Math.cos(theta);
-      const y = orbitRadius * Math.cos(phi);
-      const z = orbitRadius * Math.sin(phi) * Math.sin(theta);
-
-      mesh.position.set(x, y, z);
-      mesh.lookAt(0, 0, 0);
-      mesh.userData.imgSrc = img.src;
-
-      mesh.cursor = "pointer";
-      scene.add(mesh);
-
-      orbitingImages.push({
-        mesh,
-        theta,
-        phi,
-        speed: 0.0015 + Math.random() * 0.001
-      });
+    html2canvas(img).then(canvas => {
+      const texture = new THREE.CanvasTexture(canvas);
+      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(imageSize, imageSize, 1);
+      sprite.position.copy(positions[index]);
+      scene.add(sprite);
     });
+    img.style.display = 'none'; // cacher les images HTML
   });
-}
 
-window.addEventListener("load", () => {
-  createImagePlanes();
-});
+  camera.position.z = 8;
 
-function resizeRendererToDisplaySize() {
-  const width = canvas.clientWidth * window.devicePixelRatio;
-  const height = canvas.clientHeight * window.devicePixelRatio;
-  const needResize = canvas.width !== width || canvas.height !== height;
-  if (needResize) {
-    renderer.setSize(width, height, false);
+  function animate() {
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.003;
+    renderer.render(scene, camera);
   }
-  return needResize;
-}
 
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
+  animate();
 
-function onClick(event) {
-  const rect = canvas.getBoundingClientRect();
-  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-
-  raycaster.setFromCamera(mouse, camera);
-  const intersects = raycaster.intersectObjects(orbitingImages.map(i => i.mesh));
-
-  if (intersects.length > 0) {
-    const clicked = intersects[0].object;
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
-    lightboxImg.src = clicked.userData.imgSrc;
-    lightbox.style.display = "flex";
-  }
-}
-canvas.addEventListener("click", onClick);
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  if (resizeRendererToDisplaySize()) {
-    const width = canvas.clientWidth;
-    const height = canvas.clientHeight;
-    camera.aspect = width / height;
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-  }
-
-  orbitingImages.forEach((obj) => {
-    obj.theta += obj.speed;
-    const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
-    const y = orbitRadius * Math.cos(obj.phi);
-    const z = orbitRadius * Math.sin(obj.phi) * Math.sin(obj.theta);
-    obj.mesh.position.set(x, y, z);
-    obj.mesh.lookAt(0, 0, 0);
+    renderer.setSize(container.clientWidth, container.clientHeight);
   });
-
-  renderer.render(scene, camera);
-}
-
-animate();
+});
