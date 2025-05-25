@@ -50,20 +50,8 @@ function createImagePlanes() {
   });
 }
 
-window.addEventListener("DOMContentLoaded", () => {
-  const imgs = document.querySelectorAll(".card img");
-  let loaded = 0;
-  imgs.forEach(img => {
-    if (img.complete) {
-      loaded++;
-    } else {
-      img.addEventListener("load", () => {
-        loaded++;
-        if (loaded === imgs.length) createImagePlanes();
-      });
-    }
-  });
-  if (loaded === imgs.length) createImagePlanes();
+window.addEventListener("load", () => {
+  createImagePlanes();
 });
 
 function resizeRendererToDisplaySize() {
