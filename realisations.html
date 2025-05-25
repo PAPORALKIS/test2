@@ -24,7 +24,16 @@
   <h1>Mes Réalisations</h1>
   <p>Découvrez mes projets présentés sur un globe interactif.</p>
 </section>
-
+  
+<section class="globe-section">
+  <div id="globe">
+    <canvas id="globeCanvas"></canvas>
+    <div id="center-logo">
+      <img src="img/logo.png" alt="Logo au centre" />
+    </div>
+  </div>
+</section>
+  
     <section class="realisation-gallery">
       <div class="card">
         <h3 class="realisation-title">Montage de meuble pour séjour en kit</h3>
@@ -135,12 +144,6 @@
           <p>Rafraîchissement de pièces.</p>
         </div>
       </div>
-<div id="globe">
-  <canvas id="globeCanvas"></canvas>
-  <div id="center-logo">
-    <img src="img/logo.png" alt="Logo au centre" />
-  </div>
-</div>
 
 </section>
 
@@ -148,13 +151,9 @@
   <span class="close" onclick="closeLightbox()">×</span>
   <img id="lightbox-img" src="" alt="Agrandissement" />
 </div>
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+<script src="js/globe.js"></script>
 
-<script src="js/globe.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"><
-/script>
-<script src="js/globe.js"></script>
-  <script
-  src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min
-  .js"></script>
 </body>
 </html>
