@@ -6,10 +6,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
-
-  // IMPORTANT pour mobiles/tablettes : régler le pixel ratio
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.setSize(container.clientWidth, container.clientHeight, false);
+  renderer.setSize(container.clientWidth, container.clientHeight);
 
   const radius = 3;
   const imageSize = 0.7;
@@ -17,55 +15,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const light = new THREE.AmbientLight(0xffffff, 1);
   scene.add(light);
 
-  const images = Array.from(document.querySelectorAll('.realisation-image'));
-
-  // Fonction pour générer des positions espacées sur la sphère
-  function generatePositions(n, radius, minDist) {
-    const positions = [];
-
-    while (positions.length < n && positions.length < 1000) {
-      const theta = Math.random() * 2 * Math.PI;
-      const phi = Math.acos(2 * Math.random() - 1);
-      const x = radius * Math.sin(phi) * Math.cos(theta);
-      const y = radius * Math.cos(phi);
-      const z = radius * Math.sin(phi) * Math.sin(theta);
-      const newPos = new THREE.Vector3(x, y, z);
-
-      if (positions.every(p => p.distanceTo(newPos) > minDist)) {
-        positions.push(newPos);
-      }
-    }
-
-    return positions;
-  }
-
-  const positions = generatePositions(images.length, radius, 1.5);
-
-  // ----- TEST POINT 3 : afficher une sprite simple avec texture fixe -----
-
-  /*
-  // COMMENTE la boucle html2canvas pour isoler le problème
-  images.forEach((img, index) => {
-    console.log('Capture image:', img.src);  // POINT 2 : debug console
-    html2canvas(img).then(canvas => {
-      const texture = new THREE.CanvasTexture(canvas);
-      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-      const sprite = new THREE.Sprite(material);
-      sprite.scale.set(imageSize, imageSize, 1);
-      sprite.position.copy(positions[index]);
-      scene.add(sprite);
-    });
-    img.style.display = 'none'; // cacher les images HTML
-  });
-  */
-
-  // TEST SIMPLE avec texture fixe (remplace 'path/to/test-image.png' par une vraie image)
   const textureLoader = new THREE.TextureLoader();
-  textureLoader.load('images/test-image.png', texture => {
+  textureLoader.load('img/17482128810553663420141290975132.jpg', texture => {
     const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(imageSize, imageSize, 1);
-    sprite.position.set(1, 1, 0);
+    sprite.position.set(0, 0, 0); // position au centre
     scene.add(sprite);
   });
 
@@ -82,6 +37,6 @@ document.addEventListener('DOMContentLoaded', () => {
   window.addEventListener('resize', () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize(container.clientWidth, container.clientHeight, false);
+    renderer.setSize(container.clientWidth, container.clientHeight);
   });
 });
