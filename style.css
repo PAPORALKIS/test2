@@ -1,3 +1,119 @@
+/* Styles globaux et du site */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #222;
+}
+
+header .logo img {
+  height: 40px;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 20px;
+  margin: 0;
+  padding: 0;
+}
+
+nav a {
+  color: white;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+nav a.active,
+nav a:hover {
+  text-decoration: underline;
+}
+
+.titre-section {
+  text-align: center;
+  margin: 30px 20px;
+}
+
+.realisation-gallery {
+  max-width: 1200px;
+  margin: 0 auto 100px;
+  padding: 0 20px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 30px;
+  justify-content: center;
+}
+
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
+  padding: 15px;
+  width: 280px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.realisation-title {
+  margin-top: 0;
+  font-size: 1.2em;
+  margin-bottom: 10px;
+}
+
+.image-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  margin-bottom: 10px;
+}
+
+.realisation-image {
+  width: calc(33% - 4px);
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.realisation-image:hover {
+  transform: scale(1.1);
+}
+
+/* Lightbox */
+.lightbox {
+  display: none;
+  position: fixed;
+  z-index: 10000;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.85);
+  justify-content: center;
+  align-items: center;
+}
+
+.lightbox img {
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+}
+
+.lightbox .close {
+  position: fixed;
+  top: 20px;
+  right: 30px;
+  font-size: 2rem;
+  color: white;
+  cursor: pointer;
+  user-select: none;
+}
+
+/* Globe container styles */
 #globe-container {
   position: relative;
   width: 100%;
