@@ -147,3 +147,7 @@ nav a:hover {
 .realisation-gallery {
   display: none;
 }
+
+.card {
+  display: none;
+}
