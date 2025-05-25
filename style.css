@@ -1,4 +1,3 @@
-/* Styles globaux et du site */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
@@ -42,48 +41,36 @@ nav a:hover {
   margin: 30px 20px;
 }
 
-.realisation-gallery {
-  max-width: 1200px;
-  margin: 0 auto 100px;
-  padding: 0 20px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 30px;
-  justify-content: center;
+/* Mosaïque 3D (réalisations sphériques) */
+#globe-container {
+  position: relative;
+  width: 100%;
+  max-width: 600px;
+  height: 500px;
+  margin: 40px auto 80px;
 }
 
-.card {
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgb(0 0 0 / 0.1);
-  padding: 15px;
-  width: 280px;
-  cursor: pointer;
-  user-select: none;
+#globeCanvas {
+  width: 100%;
+  height: 500px;
+  display: block;
+  margin: auto;
+  border-radius: 50%;
+  background-color: transparent;
 }
 
-.realisation-title {
-  margin-top: 0;
-  font-size: 1.2em;
-  margin-bottom: 10px;
+#logoCenter {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10;
 }
 
-.image-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 5px;
-  margin-bottom: 10px;
-}
-
-.realisation-image {
-  width: calc(33% - 4px);
-  border-radius: 5px;
-  cursor: pointer;
-  transition: transform 0.3s ease;
-}
-
-.realisation-image:hover {
-  transform: scale(1.1);
+#logoCenter img {
+  width: 80px;
+  opacity: 0.8;
 }
 
 /* Lightbox */
@@ -113,41 +100,10 @@ nav a:hover {
   user-select: none;
 }
 
-/* Globe container styles */
-#globe-container {
-  position: relative;
-  width: 100%;
-  max-width: 600px;
-  height: 500px;
-  margin: 40px auto 80px;
-}
-
-#globeCanvas {
-  width: 100%;
-  height: 500px;
-  display: block;
-  margin: auto;
-  border-radius: 50%;
-  background-color: white;
-}
-
-#logoCenter {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 10;
-}
-
-#logoCenter img {
-  width: 80px;
-  opacity: 0.8;
-}
+/* Cache la galerie mais la garde accessible au DOM pour html2canvas */
 .realisation-gallery {
-  display: none;
-}
-
-.card {
-  display: none;
+  position: absolute;
+  top: -9999px;
+  left: -9999px;
+  visibility: hidden;
 }
