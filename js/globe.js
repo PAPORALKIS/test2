@@ -1,4 +1,4 @@
-console.log("globe.js chargé (sans globe)");
+console.log("globe.js chargé (version corrigée)");
 
 const canvas = document.getElementById("globeCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
@@ -12,10 +12,14 @@ const orbitRadius = 3;
 const orbitingImages = [];
 
 function createImagePlanes() {
-  const images = document.querySelectorAll(".realisation-image");
+  const images = document.querySelectorAll(".card img");
 
   images.forEach((img, index) => {
-    html2canvas(img).then(canvasImg => {
+    html2canvas(img, {
+      backgroundColor: null,
+      scale: 2,
+      useCORS: true
+    }).then(canvasImg => {
       const texture = new THREE.CanvasTexture(canvasImg);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
