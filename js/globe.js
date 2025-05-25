@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   const textureLoader = new THREE.TextureLoader();
 
-  textureLoader.load('img/17482128810553663420141290975132.jpg', (texture) => {
+  textureLoader.load('img/CUIEXT1.jpg', (texture) => {
     const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
     const sprite = new THREE.Sprite(material);
     sprite.scale.set(2, 2, 1);
