@@ -102,7 +102,7 @@
 
 <div class="lightbox" id="lightbox" onclick="closeLightbox()">
   <span class="close" onclick="closeLightbox()">×</span>
-  <div class="lightbox-content">
+  <div class="lightbox-content" onclick="event.stopPropagation()">
     <img id="lightbox-img" src="" alt="Agrandissement" />
     <div id="lightbox-description"></div>
   </div>
