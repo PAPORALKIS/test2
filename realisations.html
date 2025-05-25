@@ -1,16 +1,14 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Réalisations</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>Mes Réalisations</title>
+  <link rel="stylesheet" href="style.css">
+  <script type="module" src="js/globe.js" defer></script>
 </head>
 <body>
   <header>
-    <div class="logo">
-      <img src="img/logo.png" alt="Logo" />
-    </div>
+    <div class="logo"><img src="img/logo.png" alt="Logo"></div>
     <nav>
       <ul>
         <li><a href="index.html">Accueil</a></li>
@@ -19,28 +17,29 @@
     </nav>
   </header>
 
-  <h2 class="titre-section">Mes Réalisations</h2>
+  <h1 class="titre-section">Mes Réalisations</h1>
 
   <div id="globe-container">
     <canvas id="globeCanvas"></canvas>
-    <div id="logoCenter"><img src="img/logo.png" alt="Logo central" /></div>
+    <div id="logoCenter">
+      <img src="img/logo.png" alt="Logo central">
+    </div>
   </div>
 
+  <!-- Galerie invisible (mais images chargées dans le DOM) -->
   <div class="realisation-gallery">
-    <img src="img/17482128810553663420141290975132.jpg" class="realisation-image" alt="Réalisation test" data-description="Ma superbe réalisation test">
+    <img class="realisation-image" src="img/17482128810553663420141290975132.jpg" data-description="Projet cuisine">
+    <img class="realisation-image" src="img/image2.jpg" data-description="Projet salle de bain">
+    <img class="realisation-image" src="img/image3.jpg" data-description="Projet terrasse">
   </div>
 
+  <!-- Lightbox -->
   <div id="lightbox" class="lightbox">
     <div class="lightbox-content">
       <img id="lightbox-img" src="" alt="">
       <div id="lightbox-description"></div>
     </div>
-    <span id="lightbox-close" class="close">&times;</span>
+    <div class="close" id="lightbox-close">&times;</div>
   </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-  <script src="js/globe.js"></script>
-  <script src="js/lightbox.js"></script>
 </body>
 </html>
