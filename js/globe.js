@@ -1,45 +1,33 @@
-console.log("globe.js chargé");
+console.log("globe.js chargé (sans globe)");
 
 const canvas = document.getElementById("globeCanvas");
 const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(
-  75,
-  canvas.clientWidth / canvas.clientHeight,
-  0.1,
-  1000
-);
-camera.position.z = 5;
-
-const globe = new THREE.Mesh(
-  new THREE.SphereGeometry(1.2, 32, 32),
-  new THREE.MeshNormalMaterial({ wireframe: true })
-);
-scene.add(globe);
+const camera = new THREE.PerspectiveCamera(75, canvas.clientWidth / canvas.clientHeight, 0.1, 1000);
+camera.position.z = 6;
 
 const orbitRadius = 3;
-const orbitingCards = [];
+const orbitingImages = [];
 
-// Fonction pour capturer chaque .card avec html2canvas et les transformer en plans 3D
-function createCardPlanes() {
-  const cards = document.querySelectorAll(".card");
+function createImagePlanes() {
+  const images = document.querySelectorAll(".card img");
 
-  cards.forEach((card) => {
-    html2canvas(card).then((canvasImg) => {
+  images.forEach((img, index) => {
+    html2canvas(img).then(canvasImg => {
       const texture = new THREE.CanvasTexture(canvasImg);
       const material = new THREE.MeshBasicMaterial({
         map: texture,
         transparent: true,
-        side: THREE.DoubleSide
+        side: THREE.DoubleSide,
       });
 
-      const geometry = new THREE.PlaneGeometry(2, 1.5);
+      const geometry = new THREE.PlaneGeometry(1.2, 0.9);
       const mesh = new THREE.Mesh(geometry, material);
 
-      const theta = Math.random() * Math.PI * 2;
-      const phi = Math.random() * Math.PI;
+      const theta = (index / images.length) * Math.PI * 2;
+      const phi = Math.acos(1 - 2 * (index + 0.5) / images.length);
 
       const x = orbitRadius * Math.sin(phi) * Math.cos(theta);
       const y = orbitRadius * Math.cos(phi);
@@ -47,35 +35,35 @@ function createCardPlanes() {
 
       mesh.position.set(x, y, z);
       mesh.lookAt(0, 0, 0);
+      mesh.userData.imgSrc = img.src;
 
+      mesh.cursor = "pointer";
       scene.add(mesh);
 
-      orbitingCards.push({
+      orbitingImages.push({
         mesh,
         theta,
         phi,
-        speed: 0.002 + Math.random() * 0.002
+        speed: 0.0015 + Math.random() * 0.001
       });
     });
   });
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  const images = document.querySelectorAll(".card img");
+  const imgs = document.querySelectorAll(".card img");
   let loaded = 0;
-
-  images.forEach(img => {
+  imgs.forEach(img => {
     if (img.complete) {
       loaded++;
     } else {
       img.addEventListener("load", () => {
         loaded++;
-        if (loaded === images.length) createCardPlanes();
+        if (loaded === imgs.length) createImagePlanes();
       });
     }
   });
-
-  if (loaded === images.length) createCardPlanes();
+  if (loaded === imgs.length) createImagePlanes();
 });
 
 function resizeRendererToDisplaySize() {
@@ -88,6 +76,27 @@ function resizeRendererToDisplaySize() {
   return needResize;
 }
 
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+
+function onClick(event) {
+  const rect = canvas.getBoundingClientRect();
+  mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+  raycaster.setFromCamera(mouse, camera);
+  const intersects = raycaster.intersectObjects(orbitingImages.map(i => i.mesh));
+
+  if (intersects.length > 0) {
+    const clicked = intersects[0].object;
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightbox-img");
+    lightboxImg.src = clicked.userData.imgSrc;
+    lightbox.style.display = "flex";
+  }
+}
+canvas.addEventListener("click", onClick);
+
 function animate() {
   requestAnimationFrame(animate);
 
@@ -98,16 +107,11 @@ function animate() {
     camera.updateProjectionMatrix();
   }
 
-  globe.rotation.y += 0.0015;
-  globe.rotation.x += 0.001;
-
-  orbitingCards.forEach((obj) => {
+  orbitingImages.forEach((obj) => {
     obj.theta += obj.speed;
-
     const x = orbitRadius * Math.sin(obj.phi) * Math.cos(obj.theta);
     const y = orbitRadius * Math.cos(obj.phi);
     const z = orbitRadius * Math.sin(obj.phi) * Math.sin(obj.theta);
-
     obj.mesh.position.set(x, y, z);
     obj.mesh.lookAt(0, 0, 0);
   });
