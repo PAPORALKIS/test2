@@ -1,24 +1,87 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const lightbox = document.getElementById('lightbox');
-  const lightboxImg = document.getElementById('lightbox-img');
-  const lightboxDesc = document.getElementById('lightbox-description');
-  const closeBtn = document.getElementById('lightbox-close');
+import * as THREE from 'three';
 
-  // Ouvrir lightbox sur event personnalisé
-  window.addEventListener('openLightbox', e => {
-    lightboxImg.src = e.detail.src;
-    lightboxDesc.innerHTML = e.detail.description;
-    lightbox.style.display = 'flex';
-  });
+document.addEventListener('DOMContentLoaded', () => {
+  const container = document.getElementById('globe-container');
+  const canvas = document.getElementById('globeCanvas');
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
 
-  closeBtn.addEventListener('click', closeLightbox);
-  lightbox.addEventListener('click', (e) => {
-    if (e.target === lightbox) closeLightbox();
-  });
+  // IMPORTANT pour mobiles/tablettes : régler le pixel ratio
+  renderer.setPixelRatio(window.devicePixelRatio);
+  renderer.setSize(container.clientWidth, container.clientHeight, false);
 
-  function closeLightbox() {
-    lightbox.style.display = 'none';
-    lightboxImg.src = '';
-    lightboxDesc.innerHTML = '';
+  const radius = 3;
+  const imageSize = 0.7;
+
+  const light = new THREE.AmbientLight(0xffffff, 1);
+  scene.add(light);
+
+  const images = Array.from(document.querySelectorAll('.realisation-image'));
+
+  // Fonction pour générer des positions espacées sur la sphère
+  function generatePositions(n, radius, minDist) {
+    const positions = [];
+
+    while (positions.length < n && positions.length < 1000) {
+      const theta = Math.random() * 2 * Math.PI;
+      const phi = Math.acos(2 * Math.random() - 1);
+      const x = radius * Math.sin(phi) * Math.cos(theta);
+      const y = radius * Math.cos(phi);
+      const z = radius * Math.sin(phi) * Math.sin(theta);
+      const newPos = new THREE.Vector3(x, y, z);
+
+      if (positions.every(p => p.distanceTo(newPos) > minDist)) {
+        positions.push(newPos);
+      }
+    }
+
+    return positions;
   }
+
+  const positions = generatePositions(images.length, radius, 1.5);
+
+  // ----- TEST POINT 3 : afficher une sprite simple avec texture fixe -----
+
+  /*
+  // COMMENTE la boucle html2canvas pour isoler le problème
+  images.forEach((img, index) => {
+    console.log('Capture image:', img.src);  // POINT 2 : debug console
+    html2canvas(img).then(canvas => {
+      const texture = new THREE.CanvasTexture(canvas);
+      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(imageSize, imageSize, 1);
+      sprite.position.copy(positions[index]);
+      scene.add(sprite);
+    });
+    img.style.display = 'none'; // cacher les images HTML
+  });
+  */
+
+  // TEST SIMPLE avec texture fixe (remplace 'path/to/test-image.png' par une vraie image)
+  const textureLoader = new THREE.TextureLoader();
+  textureLoader.load('images/test-image.png', texture => {
+    const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+    const sprite = new THREE.Sprite(material);
+    sprite.scale.set(imageSize, imageSize, 1);
+    sprite.position.set(1, 1, 0);
+    scene.add(sprite);
+  });
+
+  camera.position.z = 8;
+
+  function animate() {
+    requestAnimationFrame(animate);
+    scene.rotation.y += 0.003;
+    renderer.render(scene, camera);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight, false);
+  });
 });
