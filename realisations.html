@@ -2,44 +2,82 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8">
-  <title>Mes Réalisations</title>
-  <link rel="stylesheet" href="style.css">
-  <script type="module" src="js/globe.js" defer></script>
+  <title>Test Sprite Image</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+    }
+    #globe-container {
+      width: 100%;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
+    }
+    #globeCanvas {
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+    #logoCenter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 10;
+      pointer-events: none;
+    }
+    #logoCenter img {
+      width: 80px;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
-  <header>
-    <div class="logo"><img src="img/logo.png" alt="Logo"></div>
-    <nav>
-      <ul>
-        <li><a href="index.html">Accueil</a></li>
-        <li><a href="realisations.html" class="active">Réalisations</a></li>
-      </ul>
-    </nav>
-  </header>
-
-  <h1 class="titre-section">Mes Réalisations</h1>
-
   <div id="globe-container">
     <canvas id="globeCanvas"></canvas>
-    <div id="logoCenter">
-      <img src="img/logo.png" alt="Logo central">
-    </div>
+    <div id="logoCenter"><img src="img/logo.png" alt="logo"></div>
   </div>
 
-  <!-- Galerie invisible (mais images chargées dans le DOM) -->
-  <div class="realisation-gallery">
-    <img class="realisation-image" src="img/17482128810553663420141290975132.jpg" data-description="Projet cuisine">
-    <img class="realisation-image" src="img/image2.jpg" data-description="Projet salle de bain">
-    <img class="realisation-image" src="img/image3.jpg" data-description="Projet terrasse">
-  </div>
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.157.0/build/three.module.js';
 
-  <!-- Lightbox -->
-  <div id="lightbox" class="lightbox">
-    <div class="lightbox-content">
-      <img id="lightbox-img" src="" alt="">
-      <div id="lightbox-description"></div>
-    </div>
-    <div class="close" id="lightbox-close">&times;</div>
-  </div>
+    const container = document.getElementById('globe-container');
+    const canvas = document.getElementById('globeCanvas');
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(container.clientWidth, container.clientHeight);
+
+    const light = new THREE.AmbientLight(0xffffff, 1);
+    scene.add(light);
+
+    const textureLoader = new THREE.TextureLoader();
+    textureLoader.load('img/17482128810553663420141290975132.jpg', (texture) => {
+      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
+      const sprite = new THREE.Sprite(material);
+      sprite.scale.set(1, 1, 1);
+      sprite.position.set(0, 0, 0);
+      scene.add(sprite);
+    }, undefined, (err) => {
+      console.error("Erreur de chargement image :", err);
+    });
+
+    camera.position.z = 5;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      renderer.render(scene, camera);
+    }
+
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = container.clientWidth / container.clientHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(container.clientWidth, container.clientHeight);
+    });
+  </script>
 </body>
 </html>
