@@ -60,7 +60,23 @@ function createCardPlanes() {
   });
 }
 
-createCardPlanes();
+window.addEventListener("DOMContentLoaded", () => {
+  const images = document.querySelectorAll(".card img");
+  let loaded = 0;
+
+  images.forEach(img => {
+    if (img.complete) {
+      loaded++;
+    } else {
+      img.addEventListener("load", () => {
+        loaded++;
+        if (loaded === images.length) createCardPlanes();
+      });
+    }
+  });
+
+  if (loaded === images.length) createCardPlanes();
+});
 
 function resizeRendererToDisplaySize() {
   const width = canvas.clientWidth * window.devicePixelRatio;
