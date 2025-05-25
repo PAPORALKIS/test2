@@ -15,8 +15,11 @@ document.addEventListener('DOMContentLoaded', () => {
   scene.add(light);
 
   const images = Array.from(document.querySelectorAll('.realisation-image'));
+  const sprites = [];
 
-  // Fonction pour générer des coordonnées bien espacées
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
   function generatePositions(n, radius, minDist) {
     const positions = [];
 
@@ -45,9 +48,18 @@ document.addEventListener('DOMContentLoaded', () => {
       const sprite = new THREE.Sprite(material);
       sprite.scale.set(imageSize, imageSize, 1);
       sprite.position.copy(positions[index]);
+
+      // Association à l'image HTML d'origine
+      sprite.userData = {
+        originalImg: img,
+        description: img.closest('.card')?.querySelector('.description')?.innerHTML || ''
+      };
+
+      sprites.push(sprite);
       scene.add(sprite);
     });
-    img.style.display = 'none'; // cacher les images HTML
+
+    img.style.display = 'none'; // on cache les originaux
   });
 
   camera.position.z = 8;
@@ -64,5 +76,27 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+
+  // Gestion des clics
+  canvas.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(sprites);
+
+    if (intersects.length > 0) {
+      const sprite = intersects[0].object;
+      const lightbox = document.getElementById('lightbox');
+      const lightboxImg = document.getElementById('lightbox-img');
+      const lightboxDesc = document.getElementById('lightbox-description');
+
+      // On utilise l'image d'origine pour la source complète (non compressée par html2canvas)
+      lightboxImg.src = sprite.userData.originalImg.src;
+      lightboxDesc.innerHTML = sprite.userData.description;
+      lightbox.style.display = 'flex';
+    }
   });
 });
