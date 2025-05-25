@@ -1,7 +1,7 @@
 console.log("globe.js chargé");
 
 const canvas = document.getElementById("globeCanvas");
-const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
 renderer.setPixelRatio(window.devicePixelRatio);
 
 const scene = new THREE.Scene();
