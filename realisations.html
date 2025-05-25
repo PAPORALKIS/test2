@@ -18,7 +18,7 @@
     document.body.appendChild(renderer.domElement);
 
     const loader = new THREE.TextureLoader();
-    loader.load('cuiext1.jpg', function(texture) {
+    loader.load('CUIEXT1.jpg', function(texture) {
       const material = new THREE.SpriteMaterial({ map: texture });
       const sprite = new THREE.Sprite(material);
       sprite.scale.set(2, 2, 1);
