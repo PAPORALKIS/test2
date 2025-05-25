@@ -126,8 +126,8 @@ nav a:hover {
 
 /* Cache la galerie mais la garde accessible au DOM pour html2canvas */
 .realisation-gallery {
-  position: absolute;
-  top: -9999px;
-  left: -9999px;
-  visibility: hidden;
+  position: static !important;
+  top: auto !important;
+  left: auto !important;
+  visibility: visible !important;
 }
