@@ -16,9 +16,10 @@ document.addEventListener("DOMContentLoaded", function () {
     lightboxImg.src = '';
   });
 });
-document.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape' && lightbox.style.display === 'flex') {
-    lightbox.style.display = 'none';
-    lightboxImg.src = '';
-  }
-});
+
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxImg = document.getElementById('lightbox-img');
+  lightbox.style.display = 'none';
+  lightboxImg.src = '';
+}
