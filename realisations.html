@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <title>Test Sprite</title>
-  <style>
-    body { margin: 0; }
-    canvas { display: block; }
-  </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réalisations 3D</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-  <script>
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
-    const renderer = new THREE.WebGLRenderer({ alpha: true });
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    document.body.appendChild(renderer.domElement);
+  <header>
+    <div class="logo">
+      <img src="img/logo.png" alt="Logo" />
+    </div>
+    <nav>
+      <ul>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="realisations.html" class="active">Réalisations</a></li>
+      </ul>
+    </nav>
+  </header>
 
-    const loader = new THREE.TextureLoader();
-    loader.load('CUIEXT1.jpg', function(texture) {
-      const material = new THREE.SpriteMaterial({ map: texture });
-      const sprite = new THREE.Sprite(material);
-      sprite.scale.set(2, 2, 1);
-      scene.add(sprite);
-      animate();
-    });
+  <h2 class="titre-section">Mes réalisations</h2>
 
-    camera.position.z = 5;
+  <div id="globe-container">
+    <canvas id="globeCanvas"></canvas>
+    <div id="logoCenter">
+      <img src="img/logo.png" alt="Logo central">
+    </div>
+  </div>
 
-    function animate() {
-      requestAnimationFrame(animate);
-      renderer.render(scene, camera);
-    }
-  </script>
+  <div class="realisation-gallery">
+    <img class="realisation-image" src="img/17482128810553663420141290975132.jpg" alt="Image 1" />
+    <img class="realisation-image" src="img/image2.jpg" alt="Image 2" />
+    <img class="realisation-image" src="img/image3.jpg" alt="Image 3" />
+    <!-- Ajoute autant d'images que tu veux ici -->
+  </div>
+
+  <script type="module" src="js/globe.js"></script>
 </body>
 </html>
