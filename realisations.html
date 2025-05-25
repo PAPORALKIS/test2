@@ -2,8 +2,8 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Test Globe Three.js</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Réalisations</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -13,23 +13,34 @@
     </div>
     <nav>
       <ul>
-        <li><a href="#" class="active">Réalisations</a></li>
-        <li><a href="#">Autres</a></li>
+        <li><a href="index.html">Accueil</a></li>
+        <li><a href="realisations.html" class="active">Réalisations</a></li>
       </ul>
     </nav>
   </header>
 
-  <section>
-    <h1 class="titre-section">Test Globe Three.js avec Sprite</h1>
+  <h2 class="titre-section">Mes Réalisations</h2>
 
-    <div id="globe-container">
-      <canvas id="globeCanvas"></canvas>
-      <div id="logoCenter">
-        <img src="img/logo.png" alt="Logo Centre" />
-      </div>
+  <div id="globe-container">
+    <canvas id="globeCanvas"></canvas>
+    <div id="logoCenter"><img src="img/logo.png" alt="Logo central" /></div>
+  </div>
+
+  <div class="realisation-gallery">
+    <img src="img/17482128810553663420141290975132.jpg" class="realisation-image" alt="Réalisation test" data-description="Ma superbe réalisation test">
+  </div>
+
+  <div id="lightbox" class="lightbox">
+    <div class="lightbox-content">
+      <img id="lightbox-img" src="" alt="">
+      <div id="lightbox-description"></div>
     </div>
-  </section>
+    <span id="lightbox-close" class="close">&times;</span>
+  </div>
 
-  <script type="module" src="js/globe.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="js/globe.js"></script>
+  <script src="js/lightbox.js"></script>
 </body>
 </html>
