@@ -3,16 +3,129 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mes Réalisations</title>
-  <link rel="stylesheet" href="style.css" />
-  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-  <script src="js/globe.js" defer></script>
-  <script src="js/lightbox.js" defer></script>
+  <title>Réalisations - Globe 3D</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0; padding: 0;
+      background-color: #f9f9f9;
+    }
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px 20px;
+      background-color: #222;
+    }
+    header .logo img {
+      height: 40px;
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 20px;
+      margin: 0; padding: 0;
+    }
+    nav a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+    nav a.active,
+    nav a:hover {
+      text-decoration: underline;
+    }
+    .titre-section {
+      text-align: center;
+      margin: 30px 20px;
+    }
+    /* Globe container */
+    #globe-container {
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      height: 500px;
+      margin: 40px auto 80px;
+    }
+    #globeCanvas {
+      width: 100%;
+      height: 500px;
+      display: block;
+      margin: auto;
+      border-radius: 50%;
+      background-color: transparent;
+    }
+    #logoCenter {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 10;
+    }
+    #logoCenter img {
+      width: 80px;
+      opacity: 0.8;
+    }
+    /* Lightbox */
+    .lightbox {
+      display: none;
+      position: fixed;
+      z-index: 10000;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.85);
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+      box-sizing: border-box;
+    }
+    .lightbox .lightbox-content {
+      background: white;
+      border-radius: 10px;
+      max-width: 90%;
+      max-height: 90%;
+      overflow: auto;
+      padding: 20px;
+      box-shadow: 0 0 30px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+    .lightbox img#lightbox-img {
+      max-width: 100%;
+      max-height: 70vh;
+      border-radius: 10px;
+      object-fit: contain;
+    }
+    #lightbox-description {
+      color: #222;
+      font-size: 1rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+    .lightbox .close {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 2rem;
+      color: white;
+      cursor: pointer;
+      user-select: none;
+    }
+    /* Cache la galerie mais garde accessible au DOM */
+    .realisation-gallery {
+      position: absolute;
+      top: -9999px;
+      left: -9999px;
+      visibility: hidden;
+    }
+  </style>
 </head>
 <body>
+
 <header>
-  <div class="logo"><img src="img/logo.png" alt="Logo Paporalkis" /></div>
+  <div class="logo"><img src="img/logo.png" alt="Logo" /></div>
   <nav>
     <ul>
       <li><a href="index.html">Accueil</a></li>
@@ -22,91 +135,46 @@
   </nav>
 </header>
 
-<section class="titre-section">
-  <h1>Mes Réalisations</h1>
-  <p>Découvrez mes projets en orbite autour de mon logo, sans globe.</p>
-</section>
+<h1 class="titre-section">Mes Réalisations</h1>
 
-<section class="globe-section">
-  <div id="globe-container">
-    <canvas id="globeCanvas"></canvas>
-    <div id="logoCenter">
-      <img src="img/logo.png" alt="Logo au centre" />
-    </div>
-  </div>
-</section>
-
-<section class="realisation-gallery">
-
-  <div class="card">
-    <h3 class="realisation-title">Montage de meuble pour séjour en kit</h3>
-    <div class="image-container">
-      <img src="img/meuble-laura-1.jpg" alt="meuble 1" class="realisation-image" />
-      <img src="img/meuble-laura-2.jpg" alt="meuble 2" class="realisation-image" />
-      <img src="img/meuble-laura-3.jpg" alt="meuble 3" class="realisation-image" />
-    </div>
-    <div class="description">
-      <p>Assemblage complet et installation de meubles décoratifs pour séjour, type kit.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3 class="realisation-title">Installation d’une verrière intérieure</h3>
-    <div class="image-container">
-      <img src="img/verriere-1.jpg" alt="verrière 1" class="realisation-image" />
-      <img src="img/verriere-2.jpg" alt="verrière 2" class="realisation-image" />
-      <img src="img/verriere-3.jpg" alt="verrière 3" class="realisation-image" />
-    </div>
-    <div class="description">
-      <p>Pose d’une verrière intérieure en métal sur mesure pour cloisonner une pièce sans perdre la lumière.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3 class="realisation-title">Peinture et rénovation d’une chambre</h3>
-    <div class="image-container">
-      <img src="img/chambre-1.jpg" alt="chambre 1" class="realisation-image" />
-      <img src="img/chambre-2.jpg" alt="chambre 2" class="realisation-image" />
-      <img src="img/chambre-3.jpg" alt="chambre 3" class="realisation-image" />
-    </div>
-    <div class="description">
-      <p>Reprise des murs, peinture neuve et décoration complète d’une chambre d’enfant.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3 class="realisation-title">Pose de carrelage dans une salle de bain</h3>
-    <div class="image-container">
-      <img src="img/salledebain-1.jpg" alt="salle de bain 1" class="realisation-image" />
-      <img src="img/salledebain-2.jpg" alt="salle de bain 2" class="realisation-image" />
-      <img src="img/salledebain-3.jpg" alt="salle de bain 3" class="realisation-image" />
-    </div>
-    <div class="description">
-      <p>Installation de carrelage mural et sol avec jointures fines pour une finition soignée.</p>
-    </div>
-  </div>
-
-  <div class="card">
-    <h3 class="realisation-title">Installation électrique et éclairage LED</h3>
-    <div class="image-container">
-      <img src="img/electricite-1.jpg" alt="électricité 1" class="realisation-image" />
-      <img src="img/electricite-2.jpg" alt="électricité 2" class="realisation-image" />
-      <img src="img/electricite-3.jpg" alt="électricité 3" class="realisation-image" />
-    </div>
-    <div class="description">
-      <p>Mise en place d’un circuit électrique et intégration d’éclairages LED encastrés.</p>
-    </div>
-  </div>
-
-</section>
-
-<div class="lightbox" id="lightbox" onclick="closeLightbox()">
-  <span class="close" onclick="closeLightbox()">×</span>
-  <div class="lightbox-content" onclick="event.stopPropagation()">
-    <img id="lightbox-img" src="" alt="Agrandissement" />
-    <div id="lightbox-description"></div>
+<div id="globe-container">
+  <canvas id="globeCanvas"></canvas>
+  <div id="logoCenter">
+    <img src="img/logo.png" alt="Logo central" />
   </div>
 </div>
+
+<!-- Galerie cachée pour html2canvas -->
+<div class="realisation-gallery">
+  <div class="card">
+    <img class="realisation-image" src="img/CHBR0.jpg" alt="Chambre 0" />
+    <div class="description">Description de la chambre 0</div>
+  </div>
+  <div class="card">
+    <img class="realisation-image" src="img/CUIEXT.jpg" alt="Cuisine extérieure" />
+    <div class="description">Cuisine extérieure rénovée</div>
+  </div>
+  <div class="card">
+    <img class="realisation-image" src="img/DRESSMARS1.jpg" alt="Dressing Mars 1" />
+    <div class="description">Dressing Mars, projet 1</div>
+  </div>
+  <!-- Ajoute d’autres blocs similaires ici -->
+</div>
+
+<!-- Lightbox -->
+<div class="lightbox" id="lightbox">
+  <div class="lightbox-content">
+    <img id="lightbox-img" src="" alt="Image agrandie" />
+    <div id="lightbox-description"></div>
+  </div>
+  <div class="close" id="lightbox-close">&times;</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script type="module" src="js/globe.js"></script>
+<script src="js/lightbox.js"></script>
 
 </body>
 </html>
