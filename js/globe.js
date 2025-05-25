@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
   const renderer = new THREE.WebGLRenderer({ canvas, alpha: true });
+
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(container.clientWidth, container.clientHeight, false);
 
@@ -19,7 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function generatePositions(n, radius, minDist) {
     const positions = [];
-
     while (positions.length < n && positions.length < 1000) {
       const theta = Math.random() * 2 * Math.PI;
       const phi = Math.acos(2 * Math.random() - 1);
@@ -32,19 +32,18 @@ document.addEventListener('DOMContentLoaded', () => {
         positions.push(newPos);
       }
     }
-
     return positions;
   }
 
   const positions = generatePositions(images.length, radius, 1.5);
+  const textureLoader = new THREE.TextureLoader();
 
   images.forEach((img, index) => {
-    html2canvas(img).then(canvas => {
-      const texture = new THREE.CanvasTexture(canvas);
+    textureLoader.load(img.src, texture => {
       const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
       const sprite = new THREE.Sprite(material);
       sprite.scale.set(imageSize, imageSize, 1);
-      const pos = positions[index].clone().multiplyScalar(1.05); // éloigner du centre
+      const pos = positions[index].clone().multiplyScalar(1.05);
       sprite.position.copy(pos);
       sprite.userData = {
         src: img.src,
@@ -63,23 +62,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
   camera.position.z = 8;
 
-  const raycaster = new THREE.Raycaster();
-  const mouse = new THREE.Vector2();
-
-  function onClick(event) {
-    const rect = renderer.domElement.getBoundingClientRect();
-    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
-    raycaster.setFromCamera(mouse, camera);
-    const intersects = raycaster.intersectObjects(scene.children);
-    if (intersects.length > 0) {
-      const obj = intersects[0].object;
-      if (obj.onClick) obj.onClick();
-    }
-  }
-
-  renderer.domElement.addEventListener('click', onClick);
-
   function animate() {
     requestAnimationFrame(animate);
     scene.rotation.y += 0.003;
@@ -92,5 +74,21 @@ document.addEventListener('DOMContentLoaded', () => {
     camera.aspect = container.clientWidth / container.clientHeight;
     camera.updateProjectionMatrix();
     renderer.setSize(container.clientWidth, container.clientHeight, false);
+  });
+
+  // Gestion du clic sur les sprites
+  const raycaster = new THREE.Raycaster();
+  const mouse = new THREE.Vector2();
+
+  canvas.addEventListener('click', (event) => {
+    const rect = canvas.getBoundingClientRect();
+    mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+    raycaster.setFromCamera(mouse, camera);
+    const intersects = raycaster.intersectObjects(scene.children);
+    for (let i = 0; i < intersects.length; i++) {
+      const object = intersects[i].object;
+      if (object.onClick) object.onClick();
+    }
   });
 });
