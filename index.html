@@ -2,34 +2,73 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,
-initial-scale=1.0" />
-  <title>Accueil - Papo Renov</title>
-  <meta name="description" content="Bienvenue chez Papo Renov, votre spécialiste de la rénovation intérieure. Découvrez nos services et réalisations." />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Papo Renov</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+  <link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
 </head>
 <body>
   <header>
-    <img src="logo.png" alt="Logo Papo Renov" class="logo" />
+    <div class="logo">
+      <img src="logo.png" alt="Logo Papo Renov" />
+    </div>
     <nav>
       <ul>
-        <li><a href="index.html">Accueil</a></li>
+        <li><a href="index.html" class="active">Accueil</a></li>
         <li><a href="realisations.html">Réalisations</a></li>
         <li><a href="tarifs.html">Tarifs</a></li>
-        <li><a href="planning.html">Planning</a></li>
-        <li><a href="devis.html">Demande de devis</a></li>
         <li><a href="contact.html">Contact</a></li>
       </ul>
     </nav>
+    <div class="burger" onclick="toggleMenu()">☰</div>
   </header>
 
-  <main>
+  <section class="titre-section" data-aos="fade-down">
     <h1>Bienvenue chez Papo Renov</h1>
-    <p>Spécialiste de la rénovation intérieure depuis plus de 10 ans.</p>
-  </main>
+    <p>Votre expert en rénovation intérieure et extérieure</p>
+  </section>
 
-  <footer>
-    <p>&copy; 2025 Papo Renov - Tous droits réservés</p>
-  </footer>
+  <section class="realisation-gallery">
+    <div class="card" data-aos="fade-up">
+      <div class="image-container">
+        <img src="img/DRRS1.jpg" alt="Réalisation 1" class="realisation-image" />
+        <img src="img/ESS3.jpg" alt="Réalisation 2" class="realisation-image" />
+      </div>
+      <div class="description">
+        <p>Transformation complète d'une salle de bain moderne.</p>
+      </div>
+    </div>
+    <!-- Ajoute d'autres cartes ici -->
+  </section>
+
+  <div class="lightbox" id="lightbox">
+    <span class="close" onclick="closeLightbox()">&times;</span>
+    <img id="lightbox-img" src="" alt="Agrandissement" />
+  </div>
+
+  <script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+  <script>
+    AOS.init({ duration: 800, once: true });
+
+    function toggleMenu() {
+      document.querySelector('nav ul').classList.toggle('active');
+    }
+
+    const images = document.querySelectorAll('.realisation-image');
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+
+    images.forEach(img => {
+      img.addEventListener('click', () => {
+        lightbox.style.display = 'flex';
+        lightboxImg.src = img.src;
+      });
+    });
+
+    function closeLightbox() {
+      lightbox.style.display = 'none';
+    }
+  </script>
 </body>
 </html>
