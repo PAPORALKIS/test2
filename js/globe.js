@@ -7,7 +7,7 @@ renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
 
-// Lumière
+// Lumière ambiante
 const light = new THREE.AmbientLight(0xffffff);
 scene.add(light);
 
@@ -20,7 +20,7 @@ scene.add(logoSprite);
 
 camera.position.z = 6;
 
-// Fonction pour créer les sprites
+// Fonction pour créer les sprites des images
 function createSprites(imagePaths) {
   const textureLoader = new THREE.TextureLoader();
   const radius = 2.5;
