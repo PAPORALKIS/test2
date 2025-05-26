@@ -1,9 +1,10 @@
-
+/* Base */
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: #f5f5f5;
   color: #333;
+  scroll-behavior: smooth;
 }
 header {
   display: flex;
@@ -12,65 +13,195 @@ header {
   background-color: #fff;
   padding: 10px 20px;
   border-bottom: 1px solid #ccc;
+  position: sticky;
+  top: 0;
+  z-index: 999;
 }
-.logo img { height: 60px; }
+.logo img {
+  height: 60px;
+}
 nav ul {
   list-style: none;
   display: flex;
-  gap: 15px;
-  padding: 0; margin: 0;
+  gap: 20px;
+  padding: 0;
+  margin: 0;
 }
 nav ul li a {
-  text-decoration: none; color: #333; font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  font-weight: 600;
+  transition: color 0.3s ease;
 }
-nav ul li a:hover, nav ul li a.active { color: #007bff; }
+nav ul li a:hover,
+nav ul li a.active {
+  color: #007bff;
+}
+.burger {
+  display: none;
+  font-size: 30px;
+  cursor: pointer;
+}
+@media (max-width: 768px) {
+  nav ul {
+    flex-direction: column;
+    background: white;
+    position: absolute;
+    top: 70px;
+    right: 0;
+    width: 200px;
+    display: none;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.2);
+  }
+  nav ul.active {
+    display: flex;
+  }
+  .burger {
+    display: block;
+  }
+}
+
+/* Section titres */
 .titre-section {
-  text-align: center; padding: 30px 10px; background: rgba(255,255,255,0.85); margin-bottom: 20px;
+  text-align: center;
+  padding: 40px 15px;
+  background: linear-gradient(135deg, #ffffff 0%, #e9e9e9 100%);
+  margin-bottom: 30px;
+  border-bottom: 2px solid #007bff20;
 }
+.titre-section h1 {
+  margin: 0;
+  font-size: 32px;
+  font-weight: 600;
+}
+.titre-section p {
+  font-size: 16px;
+  color: #555;
+}
+
+/* Galerie */
 .realisation-gallery {
-  display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; max-width: 1200px; margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 .card {
-  background: white; border-radius: 10px; padding: 15px;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  flex: 1 1 calc(50% - 40px); transition: transform 0.3s;
+  background: white;
+  border-radius: 10px;
+  padding: 15px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  flex: 1 1 calc(50% - 40px);
   position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-.card:hover { transform: scale(1.05); }
-.image-container { display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 15px rgba(0,0,0,0.15);
+}
+.image-container {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
 .realisation-image {
-  width: 100px; height: 100px; object-fit: cover; border-radius: 5px;
-  cursor: pointer; transition: transform 0.3s ease;
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: transform 0.3s ease, z-index 0.3s ease;
 }
-.realisation-image:hover { transform: scale(2.2); z-index: 5; }
+.realisation-image:hover {
+  transform: scale(2.2);
+  z-index: 5;
+}
 .description {
-  margin-top: 10px; display: none; position: absolute; bottom: 0;
-  background: rgba(0,51,102,0.85); color: white; width: 100%;
-  padding: 15px; font-size: 14px; box-sizing: border-box;
+  margin-top: 10px;
+  display: none;
+  position: absolute;
+  bottom: 0;
+  background: rgba(0,51,102,0.85);
+  color: white;
+  width: 100%;
+  padding: 15px;
+  font-size: 14px;
+  box-sizing: border-box;
 }
-.card:hover .description { display: block; }
-#globe {
-  position: relative; width: 100%; max-width: 600px; height: 400px;
-  margin: 40px auto 80px;
+.card:hover .description {
+  display: block;
 }
-#globeCanvas {
-  width: 100%; height: 100%; display: block;
-  border-radius: 50%; background-color: white;
-}
-#center-logo {
-  position: absolute; top: 50%; left: 50%;
-  transform: translate(-50%, -50%); pointer-events: none;
-  z-index: 10;
-}
-#center-logo img { width: 80px; opacity: 0.85; }
+
+/* Lightbox */
 .lightbox {
-  display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-  background: rgba(0,0,0,0.8); justify-content: center; align-items: center;
+  display: none;
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  justify-content: center;
+  align-items: center;
   z-index: 1000;
+  animation: fadeIn 0.3s ease;
 }
 .lightbox img {
-  max-width: 90%; max-height: 90%; border-radius: 10px;
+  max-width: 90%;
+  max-height: 90%;
+  border-radius: 10px;
+  animation: zoomIn 0.3s ease;
 }
 .lightbox .close {
-  position: absolute; top: 20px; right: 30px; color: white; font-size: 30px; cursor: pointer;
+  position: absolute;
+  top: 20px;
+  right: 30px;
+  color: white;
+  font-size: 30px;
+  cursor: pointer;
+}
+
+/* Formulaire */
+.contact-form {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+}
+form {
+  display: flex;
+  flex-direction: column;
+}
+form label {
+  margin-top: 10px;
+}
+form input,
+form textarea {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+form button {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+form button:hover {
+  background-color: #0056b3;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  from { opacity: 0; } to { opacity: 1; }
+}
+@keyframes zoomIn {
+  from { transform: scale(0.7); } to { transform: scale(1); }
 }
