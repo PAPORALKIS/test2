@@ -1,79 +1,32 @@
-import * as THREE from 'https://cdn.skypack.dev/three';
+// Initialisation de la scène, caméra et rendu const container = document.getElementById("globe-container"); const scene = new THREE.Scene(); const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000); const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true }); renderer.setSize(container.clientWidth, container.clientHeight); renderer.setPixelRatio(window.devicePixelRatio); container.appendChild(renderer.domElement);
 
-const container = document.getElementById('globe-container');
-const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
-camera.position.z = 5;
+// Lumière const light = new THREE.AmbientLight(0xffffff); scene.add(light);
 
-const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
-renderer.setSize(container.clientWidth, container.clientHeight);
-renderer.setPixelRatio(window.devicePixelRatio);
-container.appendChild(renderer.domElement);
+// Logo central const logoTexture = new THREE.TextureLoader().load("img/logo.png"); const logoMaterial = new THREE.SpriteMaterial({ map: logoTexture }); const logoSprite = new THREE.Sprite(logoMaterial); logoSprite.scale.set(1.5, 1.5, 1); scene.add(logoSprite);
 
-// Lumière
-const light = new THREE.AmbientLight(0xffffff);
-scene.add(light);
+camera.position.z = 6;
 
-// Chargement du logo central
-const loader = new THREE.TextureLoader();
-loader.load('img/logo.png', (texture) => {
-  const logoMaterial = new THREE.SpriteMaterial({ map: texture, transparent: true });
-  const logo = new THREE.Sprite(logoMaterial);
-  logo.scale.set(1.5, 1.5, 1);
-  logo.position.set(0, 0, 0);
-  scene.add(logo);
+// Fonction pour créer les sprites function createSprites(imagePaths) { const textureLoader = new THREE.TextureLoader(); const radius = 2.5; const imageSize = 1; const total = imagePaths.length;
+
+imagePaths.forEach((path, index) => { textureLoader.load(path, texture => { const material = new THREE.SpriteMaterial({ map: texture, transparent: true }); const sprite = new THREE.Sprite(material);
+
+const theta = Math.acos(-1 + (2 * index) / total);
+  const phi = Math.sqrt(total * Math.PI) * theta;
+
+  const x = radius * Math.cos(phi) * Math.sin(theta);
+  const y = radius * Math.sin(phi) * Math.sin(theta);
+  const z = radius * Math.cos(theta);
+
+  sprite.position.set(x, y, z);
+  sprite.scale.set(imageSize, imageSize, 1);
+  scene.add(sprite);
 });
 
-// Fonction pour créer les sprites en sphère
-function createSprites(imagePaths) {
-  const textureLoader = new THREE.TextureLoader();
-  const radius = 3;
-  const imageSize = 1;
-  const total = imagePaths.length;
+}); }
 
-  imagePaths.forEach((path, index) => {
-    textureLoader.load(path, (texture) => {
-      const material = new THREE.SpriteMaterial({ map: texture, transparent: true });
-      const sprite = new THREE.Sprite(material);
+// Charger les images depuis le fichier JSON fetch("img/images.json") .then(response => response.json()) .then(images => { const imagePaths = images.map(name => img/${name}); createSprites(imagePaths); }) .catch(error => { console.error("Erreur de chargement des images :", error); });
 
-      const theta = Math.acos(-1 + (2 * index) / total);
-      const phi = Math.sqrt(total * Math.PI) * theta;
+// Animation function animate() { requestAnimationFrame(animate); scene.rotation.y += 0.002; renderer.render(scene, camera); } animate();
 
-      const x = radius * Math.cos(phi) * Math.sin(theta);
-      const y = radius * Math.sin(phi) * Math.sin(theta);
-      const z = radius * Math.cos(theta);
+// Gestion du redimensionnement window.addEventListener("resize", () => { camera.aspect = container.clientWidth / container.clientHeight; camera.updateProjectionMatrix(); renderer.setSize(container.clientWidth, container.clientHeight); });
 
-      sprite.position.set(x, y, z);
-      sprite.scale.set(imageSize, imageSize, 1);
-      scene.add(sprite);
-    });
-  });
-}
-
-// Chargement dynamique des images depuis le fichier JSON
-fetch('img/images.json')
-  .then(response => response.json())
-  .then(images => {
-    const imagePaths = images
-      .filter(name => name !== 'logo.png') // On évite de remettre le logo
-      .map(name => `img/${name}`);
-    createSprites(imagePaths);
-  })
-  .catch(error => {
-    console.error('Erreur de chargement des images :', error);
-  });
-
-// Animation
-function animate() {
-  requestAnimationFrame(animate);
-  scene.rotation.y += 0.0015;
-  renderer.render(scene, camera);
-}
-animate();
-
-// Redimensionnement responsive
-window.addEventListener('resize', () => {
-  camera.aspect = container.clientWidth / container.clientHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
-});
