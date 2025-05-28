@@ -36,7 +36,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
 // rotation vitesse
-controls.autoRotateSpeed = 10;
+controls.autoRotateSpeed = 6;
 
 const loader = new THREE.TextureLoader();
 
