@@ -43,6 +43,25 @@ const loader = new THREE.TextureLoader();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
+// 🔄 Calcul adaptatif de la taille et du rayon selon l'écran
+function getResponsiveValues() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+
+  if (window.innerWidth < 768) {
+    return isPortrait
+      ? { radius: 10, imageSize: 1.5 }
+      : { radius: 12, imageSize: 2 };
+  } else if (window.innerWidth < 1200) {
+    return isPortrait
+      ? { radius: 18, imageSize: 2.5 }
+      : { radius: 22, imageSize: 3 };
+  } else {
+    return { radius: 25, imageSize: 3.5 };
+  }
+}
+
+const { radius, imageSize } = getResponsiveValues();
+
 // Données images avec groupes et textes associés
 const imagesData = [
   { url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
@@ -62,14 +81,14 @@ imagesData.forEach((imgData) => {
   loader.load(imgData.url, (texture) => {
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
     // diametre globe
-    const geometry = new THREE.PlaneGeometry(3, 3);
+    const geometry = new THREE.PlaneGeometry(imageSize, imageSize);
     const plane = new THREE.Mesh(geometry, material);
 
     // Position sur sphère radius 3.5 (plus petit)
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
     // taille du globe
-    const radius = 25;
+    
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
