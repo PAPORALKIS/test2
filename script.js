@@ -35,7 +35,8 @@ document.getElementById('container').appendChild(renderer.domElement);
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
-controls.autoRotateSpeed = 3;
+// rotation vitesse
+controls.autoRotateSpeed = 15;
 
 const loader = new THREE.TextureLoader();
 
@@ -60,13 +61,15 @@ const planes = [];
 imagesData.forEach((imgData) => {
   loader.load(imgData.url, (texture) => {
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-    const geometry = new THREE.PlaneGeometry(1.5, 1.5);
+    // diametre globe
+    const geometry = new THREE.PlaneGeometry(3, 3);
     const plane = new THREE.Mesh(geometry, material);
 
     // Position sur sphère radius 3.5 (plus petit)
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
-    const radius = 3.5;
+    // taille du globe
+    const radius = 1;
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
