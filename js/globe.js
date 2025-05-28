@@ -66,8 +66,23 @@ function animate() {
 animate();
 
 // Gestion du redimensionnement
-window.addEventListener("resize", () => {
-  camera.aspect = container.clientWidth / container.clientHeight;
+window.addEventListener('resize', () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight;
+  camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  renderer.setSize(container.clientWidth, container.clientHeight);
+
+  // Réajuste la position de la caméra selon la taille d’écran
+  if (width < 768) {
+    // Smartphone
+    camera.position.set(0, 0, 18);
+  } else if (width < 1024) {
+    // Tablette
+    camera.position.set(0, 0, 22);
+  } else {
+    // Ordinateur
+    camera.position.set(0, 0, 25);
+  }
+
+  renderer.setSize(width, height);
 });
