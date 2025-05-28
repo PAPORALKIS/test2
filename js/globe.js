@@ -1,7 +1,19 @@
 // Initialisation de la scène, caméra et rendu
 const container = document.getElementById("globe-container");
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
+
+// Caméra adaptative selon écran
+const width = container.clientWidth;
+const height = container.clientHeight;
+const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
+
+if (width < 768) {
+  camera.position.set(0, 0, 18); // smartphone
+} else if (width < 1024) {
+  camera.position.set(0, 0, 22); // tablette
+} else {
+  camera.position.set(0, 0, 25); // desktop
+}
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
