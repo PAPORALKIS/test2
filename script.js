@@ -44,14 +44,14 @@ const mouse = new THREE.Vector2();
 
 // Données images avec groupes et textes associés
 const imagesData = [
-  { url: 'https://picsum.photos/id/1011/256/256', text: 'Image 1 - Description', group: 'A' },
-  { url: 'https://picsum.photos/id/1025/256/256', text: 'Image 2 - Description', group: 'A' },
-  { url: 'https://picsum.photos/id/1035/256/256', text: 'Image 3 - Description', group: 'B' },
-  { url: 'https://picsum.photos/id/1041/256/256', text: 'Image 4 - Description', group: 'B' },
-  { url: 'https://picsum.photos/id/1060/256/256', text: 'Image 5 - Description', group: 'C' },
-  { url: 'https://picsum.photos/id/1074/256/256', text: 'Image 6 - Description', group: 'C' },
-  { url: 'https://picsum.photos/id/1084/256/256', text: 'Image 7 - Description', group: null },
-  { url: 'https://picsum.photos/id/1081/256/256', text: 'Image 8 - Description', group: null },
+  { url: 'img/cuisine_exterieure_cyporex.jpg', text: 'Image 1 - Description', group: 'A' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 2 - Description', group: 'A' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 3 - Description', group: 'B' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 4 - Description', group: 'B' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 5 - Description', group: 'C' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 6 - Description', group: 'C' },
+  { url: 'img/CUIEXT.jpg', text: 'Image 7 - Description', group: null },
+  { url: 'img/CUIEXT.jpg', text: 'Image 8 - Description', group: null },
 ];
 
 // Pour garder les planes et données associés
