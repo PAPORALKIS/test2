@@ -45,40 +45,15 @@ const mouse = new THREE.Vector2();
 
 // Données images avec groupes et textes associés
 const imagesData = [
- { url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
-  { url: '../img/CHBR1.jpg', text: 'Image 2 - Description', group: 'A' },
+  { url: '../img/cuisine_exterieure_cyporex.jpg', text: 'Image 1 - Description', group: 'A' },
+  { url: '../img/CUIEXT.jpg', text: 'Image 2 - Description', group: 'A' },
   { url: '../img/CUIEXT.jpg', text: 'Image 3 - Description', group: 'B' },
-  { url: '../img/CUIEXT1.jpg', text: 'Image 4 - Description', group: 'B' },
-  { url: '../img/CUIEXT2.jpg', text: 'Image 5 - Description', group: 'C' },
-  { url: '../img/CUIEXT3.jpg', text: 'Image 6 - Description', group: 'C' },
-  { url: '../img/CUIEXT4.jpg', text: 'Image 7 - Description', group: null },
-  { url: '../img/CUIEXT5.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/CUIEXT6.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/CUIMARS1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/CUIMARS2.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/CUIMARS3.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/CUIMARS4.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso2.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso3.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso4.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso5.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso6.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/SDB1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/SDB2.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/SDB3.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/SDB4.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/SDB5.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/WC1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/WC2.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../cuisine_exterieure_cyporex.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/ext1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/ext2.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/exterieur.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../img/Iso1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../meuble-laura-1.jpg', text: 'Image 8 - Description', group: null },
-  { url: '../meuble-laura-2.jpg', text: 'Image 8 - Description', group: null },
+  { url: '../img/CUIEXT.jpg', text: 'Image 4 - Description', group: 'B' },
+  { url: '../img/CUIEXT.jpg', text: 'Image 5 - Description', group: 'C' },
+  { url: '../img/CUIEXT.jpg', text: 'Image 6 - Description', group: 'C' },
+  { url: '../img/CUIEXT.jpg', text: 'Image 7 - Description', group: null },
+  { url: '../img/CUIEXT.jpg', text: 'Image 8 - Description', group: null },
 ];
-
 
 // Pour garder les planes et données associés
 const planes = [];
@@ -94,7 +69,7 @@ imagesData.forEach((imgData) => {
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
     // taille du globe
-    const radius = 1;
+    const radius = 25;
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
