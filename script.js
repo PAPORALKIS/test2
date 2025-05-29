@@ -44,7 +44,7 @@ const mouse = new THREE.Vector2();
 
 // Données images avec groupes et textes associés
 const imagesData = [
- url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
+ { url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
   { url: '../img/CHBR1.jpg', text: 'Image 2 - Description', group: 'A' },
   { url: '../img/CUIEXT.jpg', text: 'Image 3 - Description', group: 'B' },
   { url: '../img/CUIEXT1.jpg', text: 'Image 4 - Description', group: 'B' },
