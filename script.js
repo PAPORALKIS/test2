@@ -68,7 +68,7 @@ const plane = new THREE.Mesh(geometry, material);
 const phi = Math.acos(2 * Math.random() - 1);  
 const theta = 2 * Math.PI * Math.random();  
 // taille du globe  
-const radius = 1;  
+const radius = 25;  
 const x = radius * Math.sin(phi) * Math.cos(theta);  
 const y = radius * Math.sin(phi) * Math.sin(theta);  
 const z = radius * Math.cos(phi);  
