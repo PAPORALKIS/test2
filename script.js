@@ -36,7 +36,7 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
 // rotation vitesse
-controls.autoRotateSpeed = 15;
+controls.autoRotateSpeed = 8;
 
 const loader = new THREE.TextureLoader();
 
@@ -93,7 +93,7 @@ imagesData.forEach((imgData) => {
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
     // taille du globe
-    const radius = 25;
+    const radius = 10;
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
