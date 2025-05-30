@@ -1,4 +1,4 @@
-/* fen principale */
+fen principale
 * {
   margin: 0;
   padding: 0;
@@ -13,7 +13,7 @@
   position: relative;
   top: 0;
   left: 0;
-  margin-top: 60px; /* Correction: PX → px */
+  margin-top: 60PX;
 }
 
 canvas {
@@ -22,7 +22,6 @@ canvas {
   left: 0;
   pointer-events: auto;
   z-index: 0;
-  display: block; /* Ajouté ici (doublon supprimé plus bas) */
 }
 
 /* vue du caroussel */
@@ -54,8 +53,8 @@ canvas {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 65vw; /* Correction: VW → vw */
-  height: 90vw; /* Correction: VW → vw */
+  width: 65VW;
+  height: 90VW;
   gap: 10px;
 }
 
@@ -84,18 +83,33 @@ canvas {
   margin-top: 10px;
 }
 
-/* Doublon de styles — fusionné ci-dessus, bloc suivant supprimé pour éviter les conflits
-  * {
-  #container { ... }
-  canvas { ... }
-  #preview { ... }
-  #close-preview { ... }
-  #carousel-container { ... }
-  etc...
-} */
+  #container {
 
-/* ne pas voir la barre sous les images */
+  #prev-btn, #next-btn {
+    background: transparent;
+    border: none;
+    font-size: 2rem;
+    color: white;
+    cursor: pointer;
+    user-select: none;
+  }
+  #carousel-slide {
+    flex-grow: 1;
+    text-align: center;
+  }
+  #carousel-slide img {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    user-select: none;
+  }
+  #carousel-slide p {
+    margin-top: 10px;
+  }
+
+/* ne pas voir la barre sous les images  */
 #carousel-track {
+  /* ... existant ... */
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none;  /* IE 10+ */
 }
