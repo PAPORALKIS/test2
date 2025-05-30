@@ -16,8 +16,6 @@
 //     lightboxImg.src = '';
 //   });
 // });
-
-
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -30,10 +28,25 @@ function getResponsiveRadius() {
   return 6;
 }
 
-// Repositionne toutes les images avec le bon rayon
+// Taille des plans responsive selon l'écran
+function getResponsivePlaneSize() {
+  const width = window.innerWidth;
+  if (width < 480) return 1.5;
+  if (width < 768) return 2;
+  if (width < 1024) return 2.5;
+  return 3;
+}
+
+// Repositionne toutes les images avec le bon rayon et redimensionne les plans
 function updatePositions() {
   const radius = getResponsiveRadius();
+  const planeSize = getResponsivePlaneSize();
   planes.forEach(({ mesh }) => {
+    // Changer la géométrie pour adapter la taille de l'image
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.PlaneGeometry(planeSize, planeSize);
+
+    // Repositionnement sur la sphère
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
     const x = radius * Math.sin(phi) * Math.cos(theta);
@@ -65,7 +78,6 @@ const loader = new THREE.TextureLoader();
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
-// Données images avec groupes et textes associés
 const imagesData = [
   { url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
   { url: '../img/CHBR1.jpg', text: 'Image 2 - Description', group: 'A' },
@@ -103,11 +115,10 @@ const imagesData = [
 
 const planes = [];
 
-// Création des meshes et positionnement initial
 imagesData.forEach((imgData) => {
   loader.load(imgData.url, (texture) => {
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-    const geometry = new THREE.PlaneGeometry(3, 3); // taille image
+    const geometry = new THREE.PlaneGeometry(getResponsivePlaneSize(), getResponsivePlaneSize()); // taille responsive
     const plane = new THREE.Mesh(geometry, material);
 
     const phi = Math.acos(2 * Math.random() - 1);
@@ -122,6 +133,11 @@ imagesData.forEach((imgData) => {
 
     scene.add(plane);
     planes.push({ mesh: plane, data: imgData });
+
+    // Appeler updatePositions seulement quand toutes les images sont chargées
+    if (planes.length === imagesData.length) {
+      updatePositions();
+    }
   });
 });
 
@@ -188,7 +204,7 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  updatePositions(); // 👈 repositionnement responsive
+  updatePositions(); // 👈 repositionnement responsive et redimensionnement des images
 });
 
 animate();
