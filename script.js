@@ -22,10 +22,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
-  if (width < 480) return 2;
-  if (width < 768) return 3;
+  if (width < 480) return 0,5;
+  if (width < 768) return 0,75;
   if (width < 1024) return 4;
-  return 5;
+  return 1;
 }
 
 // Taille des plans responsive selon l'écran
