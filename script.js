@@ -22,8 +22,8 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
-  if (width < 480) return 0,5;
-  if (width < 768) return 0,75;
+  if (width < 480) return 0.5;
+  if (width < 768) return 0.75;
   if (width < 1024) return 4;
   return 1;
 }
@@ -189,8 +189,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.style.display = 'flex';
-  document.getElementById('container').style.filter = 'blur(5px)';
+  preview.classList.remove('show);
+  document.body.style.overlow = 'auto';
 }
 
 function showImage(index) {
