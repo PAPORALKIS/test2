@@ -21,6 +21,14 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+function getResponsiveRadius() {
+  const width = window.innerWidth;
+  if (width < 480) return 3;
+  if (width < 768) return 4;
+  if (width < 1024) return 5;
+  return 6;
+}
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 10);
@@ -93,7 +101,7 @@ imagesData.forEach((imgData) => {
     const phi = Math.acos(2 * Math.random() - 1);
     const theta = 2 * Math.PI * Math.random();
     // taille du globe
-    const radius = 5;
+    const radius = getResponsiveRadius();
     const x = radius * Math.sin(phi) * Math.cos(theta);
     const y = radius * Math.sin(phi) * Math.sin(theta);
     const z = radius * Math.cos(phi);
