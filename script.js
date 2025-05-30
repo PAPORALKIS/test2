@@ -29,6 +29,20 @@ function getResponsiveRadius() {
   return 6;
 }
 
+// Repositionne toutes les images avec le bon rayon
+function updatePositions() {
+  const radius = getResponsiveRadius();
+  planes.forEach(({ mesh }) => {
+    const phi = Math.acos(2 * Math.random() - 1);
+    const theta = 2 * Math.PI * Math.random();
+    const x = radius * Math.sin(phi) * Math.cos(theta);
+    const y = radius * Math.sin(phi) * Math.sin(theta);
+    const z = radius * Math.cos(phi);
+    mesh.position.set(x, y, z);
+    mesh.lookAt(0, 0, 0);
+  });
+}
+
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
 camera.position.set(0, 0, 10);
@@ -208,8 +222,9 @@ function animate() {
 window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-  renderer.setSize(window.innerWidth * 0.65, window.innerHeight);
+  updatePositions(); // 👈 repositionne les images
 });
 
 animate();
