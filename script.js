@@ -16,6 +16,7 @@
 //     lightboxImg.src = '';
 //   });
 // });
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -189,8 +190,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.style.display= 'flex';
-  document.body.style.overflow = 'auto';
+  preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
+  document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
 }
 
 function showImage(index) {
