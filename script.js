@@ -1,6 +1,26 @@
+// document.addEventListener("DOMContentLoaded", function () {
+//   const zoomables = document.querySelectorAll('.realisation-image');
+//   const lightbox = document.getElementById('lightbox');
+//   const lightboxImg = document.getElementById('lightbox-img');
+
+//   zoomables.forEach(img => {
+//     img.addEventListener('click', (e) => {
+//       e.stopPropagation();
+//       lightboxImg.src = img.src;
+//       lightbox.style.display = 'flex';
+//     });
+//   });
+
+//   lightbox.addEventListener('click', function () {
+//     lightbox.style.display = 'none';
+//     lightboxImg.src = '';
+//   });
+// });
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
+// Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
   if (width < 480) return 0.5;
@@ -9,6 +29,7 @@ function getResponsiveRadius() {
   return 1;
 }
 
+// Taille des plans responsive selon l'écran
 function getResponsivePlaneSize() {
   const width = window.innerWidth;
   if (width < 480) return 1.5;
@@ -17,10 +38,11 @@ function getResponsivePlaneSize() {
   return 3;
 }
 
+// Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
   const points = [];
   const offset = 2 / numPoints;
-  const increment = Math.PI * (3 - Math.sqrt(5));
+  const increment = Math.PI * (3 - Math.sqrt(5)); // angle d'or
 
   for (let i = 0; i < numPoints; i++) {
     const y = ((i * offset) - 1) + (offset / 2);
@@ -28,6 +50,7 @@ function generatePointsOnSphere(numPoints, radius) {
     const phi = i * increment;
     const x = Math.cos(phi) * r;
     const z = Math.sin(phi) * r;
+
     points.push(new THREE.Vector3(x * radius, y * radius, z * radius));
   }
 
@@ -37,24 +60,26 @@ function generatePointsOnSphere(numPoints, radius) {
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   60,
-  window.innerWidth / (window.innerHeight - 60),
+  window.innerWidth / (window.innerHeight - 60), // 👈 tenir compte barre nav de 60px
   0.1,
   1000
 );
 camera.position.set(0, 1, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight - 60);
+renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x0a0f2c);
+renderer.setClearColor(0x0a0f2c); // fond bleu foncé
+
 document.getElementById('container').appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
-controls.autoRotateSpeed = 3;
+controls.autoRotateSpeed = 3; // vitesse de rotation
 
 const loader = new THREE.TextureLoader();
+
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
@@ -94,17 +119,23 @@ const imagesData = [
 ];
 
 const planes = [];
+
+// On prépare d'abord tous les points sur la sphère pour éviter chevauchements
 let spherePoints = [];
 
 function updatePositions() {
   const radius = getResponsiveRadius();
   const planeSize = getResponsivePlaneSize();
+
+  // recalculer points uniformes à chaque repositionnement
   spherePoints = generatePointsOnSphere(planes.length, radius);
 
   planes.forEach(({ mesh }, i) => {
     mesh.geometry.dispose();
     mesh.geometry = new THREE.PlaneGeometry(planeSize, planeSize);
-    mesh.position.copy(spherePoints[i]);
+
+    const pos = spherePoints[i];
+    mesh.position.copy(pos);
     mesh.lookAt(0, 0, 0);
   });
 }
@@ -114,28 +145,37 @@ imagesData.forEach((imgData) => {
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
     const geometry = new THREE.PlaneGeometry(getResponsivePlaneSize(), getResponsivePlaneSize());
     const plane = new THREE.Mesh(geometry, material);
+
+    // On va assigner la position dans updatePositions() plus tard
+    plane.position.set(0, 0, 0);
     scene.add(plane);
     planes.push({ mesh: plane, data: imgData });
-    if (planes.length === imagesData.length) updatePositions();
+
+    if (planes.length === imagesData.length) {
+      updatePositions();
+    }
   });
 });
 
+// Clic pour ouvrir preview
 function onMouseClick(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
   const intersects = raycaster.intersectObjects(planes.map(p => p.mesh));
+
   if (intersects.length > 0) {
     const clickedMesh = intersects[0].object;
     const clickedData = planes.find(p => p.mesh === clickedMesh).data;
     const groupKey = clickedData.group;
-    const groupImages = groupKey ? imagesData.filter(img => img.group === groupKey) : [clickedData];
+    let groupImages = groupKey ? imagesData.filter(img => img.group === groupKey) : [clickedData];
     openPreview(groupImages);
   }
 }
 
 window.addEventListener('click', onMouseClick);
 
+// Gestion du carrousel preview
 const preview = document.getElementById('preview');
 const carouselImage = document.getElementById('carousel-image');
 const carouselText = document.getElementById('carousel-text');
@@ -150,8 +190,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.style.display = 'flex';
-  document.body.style.overflow = 'auto';
+  preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
+  document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
 }
 
 function showImage(index) {
@@ -169,6 +209,7 @@ closePreviewBtn.addEventListener('click', () => {
   document.getElementById('container').style.filter = 'none';
 });
 
+// Animation & mise à jour
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
@@ -179,7 +220,7 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / (window.innerHeight - 60);
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight - 60);
-  updatePositions();
+  updatePositions(); // repositionnement responsive et redimensionnement des images
 });
 
-animate();
+animate()
