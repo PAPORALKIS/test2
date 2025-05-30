@@ -85,16 +85,6 @@ canvas {
 
   * {
 
-  #container {
-    width: 65vw;
-    height: 100vh;
-    background: #0a1435; /* bleu foncé */
-    position: fixed;
-    top: 0;
-    left: 0;
-    transition: transform 0.5s ease;
-    overflow: hidden;
-  }
   canvas {
     display: block;
   }
