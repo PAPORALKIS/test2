@@ -3,6 +3,8 @@ const container = document.getElementById("globe-container");
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(75, container.clientWidth / container.clientHeight, 0.1, 1000);
 const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+const navHeight = 60;
+renderer.setSize(container.clientWidth, container.clientHeight - navHeight);
 renderer.setSize(container.clientWidth, container.clientHeight);
 renderer.setPixelRatio(window.devicePixelRatio);
 container.appendChild(renderer.domElement);
@@ -68,9 +70,21 @@ animate();
 // Gestion du redimensionnement
 window.addEventListener('resize', () => {
   const width = window.innerWidth;
-  const height = window.innerHeight;
+  const navHeight = 60;
+  const height = window.innerHeight - navHeight;
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+  
+  if (width < 768) {
+    camera.position.set(0, 0, 18);
+  } else if (width < 1024) {
+    camera.position.set(0, 0, 22);
+  } else {
+    camera.position.set(0, 0, 25);
+  }
+
+  renderer.setSize(width, height);
+});
 
   // Réajuste la position de la caméra selon la taille d’écran
   if (width < 768) {
