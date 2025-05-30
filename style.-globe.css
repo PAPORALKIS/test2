@@ -82,31 +82,6 @@ canvas {
 #carousel-slide p {
   margin-top: 10px;
 }
-
-  #container {
-
-  #prev-btn, #next-btn {
-    background: transparent;
-    border: none;
-    font-size: 2rem;
-    color: white;
-    cursor: pointer;
-    user-select: none;
-  }
-  #carousel-slide {
-    flex-grow: 1;
-    text-align: center;
-  }
-  #carousel-slide img {
-    max-width: 100%;
-    max-height: 70vh;
-    border-radius: 10px;
-    user-select: none;
-  }
-  #carousel-slide p {
-    margin-top: 10px;
-  }
-
 /* ne pas voir la barre sous les images  */
 #carousel-track {
   /* ... existant ... */
