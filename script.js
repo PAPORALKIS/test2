@@ -189,8 +189,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.classList.remove('show);
-  document.body.style.overlow = 'auto';
+  preview.style.display= 'flex';
+  document.body.style.overflow = 'auto';
 }
 
 function showImage(index) {
