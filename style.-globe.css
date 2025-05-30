@@ -8,9 +8,9 @@ fen principale
 
 #container {
   width: 100vw;
-  height: 100vh;
+  height: height: calc(100vh - 60px); /* Soustrait la hauteur de la barre */
   background: radial-gradient(circle at center, #0d0d1a 0%, #000 100%);
-  position: fixed;
+  position: relative;
   top: 0;
   left: 0;
 }
