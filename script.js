@@ -37,41 +37,45 @@ function getResponsivePlaneSize() {
   return 3;
 }
 
-// Repositionne toutes les images avec le bon rayon et redimensionne les plans
-function updatePositions() {
-  const radius = getResponsiveRadius();
-  const planeSize = getResponsivePlaneSize();
-  planes.forEach(({ mesh }) => {
-    // Changer la géométrie pour adapter la taille de l'image
-    mesh.geometry.dispose();
-    mesh.geometry = new THREE.PlaneGeometry(planeSize, planeSize);
+// Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
+function generatePointsOnSphere(numPoints, radius) {
+  const points = [];
+  const offset = 2 / numPoints;
+  const increment = Math.PI * (3 - Math.sqrt(5)); // angle d'or
 
-    // Repositionnement sur la sphère
-    const phi = Math.acos(2 * Math.random() - 1);
-    const theta = 2 * Math.PI * Math.random();
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-    mesh.position.set(x, y, z);
-    mesh.lookAt(0, 0, 0);
-  });
+  for (let i = 0; i < numPoints; i++) {
+    const y = ((i * offset) - 1) + (offset / 2);
+    const r = Math.sqrt(1 - y * y);
+    const phi = i * increment;
+    const x = Math.cos(phi) * r;
+    const z = Math.sin(phi) * r;
+
+    points.push(new THREE.Vector3(x * radius, y * radius, z * radius));
+  }
+
+  return points;
 }
 
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
+const camera = new THREE.PerspectiveCamera(
+  60,
+  window.innerWidth / (window.innerHeight - 60), // 👈 tenir compte barre nav de 60px
+  0.1,
+  1000
+);
 camera.position.set(0, 0, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x0a0f2c); // 👈 fond bleu foncé
+renderer.setClearColor(0x0a0f2c); // fond bleu foncé
 
 document.getElementById('container').appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
-controls.autoRotateSpeed = 3; // 👈 vitesse de rotation
+controls.autoRotateSpeed = 3; // vitesse de rotation
 
 const loader = new THREE.TextureLoader();
 
@@ -115,26 +119,37 @@ const imagesData = [
 
 const planes = [];
 
+// On prépare d'abord tous les points sur la sphère pour éviter chevauchements
+let spherePoints = [];
+
+function updatePositions() {
+  const radius = getResponsiveRadius();
+  const planeSize = getResponsivePlaneSize();
+
+  // recalculer points uniformes à chaque repositionnement
+  spherePoints = generatePointsOnSphere(planes.length, radius);
+
+  planes.forEach(({ mesh }, i) => {
+    mesh.geometry.dispose();
+    mesh.geometry = new THREE.PlaneGeometry(planeSize, planeSize);
+
+    const pos = spherePoints[i];
+    mesh.position.copy(pos);
+    mesh.lookAt(0, 0, 0);
+  });
+}
+
 imagesData.forEach((imgData) => {
   loader.load(imgData.url, (texture) => {
     const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-    const geometry = new THREE.PlaneGeometry(getResponsivePlaneSize(), getResponsivePlaneSize()); // taille responsive
+    const geometry = new THREE.PlaneGeometry(getResponsivePlaneSize(), getResponsivePlaneSize());
     const plane = new THREE.Mesh(geometry, material);
 
-    const phi = Math.acos(2 * Math.random() - 1);
-    const theta = 2 * Math.PI * Math.random();
-    const radius = getResponsiveRadius();
-    const x = radius * Math.sin(phi) * Math.cos(theta);
-    const y = radius * Math.sin(phi) * Math.sin(theta);
-    const z = radius * Math.cos(phi);
-
-    plane.position.set(x, y, z);
-    plane.lookAt(0, 0, 0);
-
+    // On va assigner la position dans updatePositions() plus tard
+    plane.position.set(0, 0, 0);
     scene.add(plane);
     planes.push({ mesh: plane, data: imgData });
 
-    // Appeler updatePositions seulement quand toutes les images sont chargées
     if (planes.length === imagesData.length) {
       updatePositions();
     }
@@ -201,10 +216,10 @@ function animate() {
 }
 
 window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.aspect = window.innerWidth / (window.innerHeight - 60);
   camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  updatePositions(); // 👈 repositionnement responsive et redimensionnement des images
+  renderer.setSize(window.innerWidth, window.innerHeight - 60);
+  updatePositions(); // repositionnement responsive et redimensionnement des images
 });
 
 animate();
