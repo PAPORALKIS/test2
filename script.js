@@ -22,10 +22,10 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
-  if (width < 480) return 3;
-  if (width < 768) return 4;
-  if (width < 1024) return 5;
-  return 6;
+  if (width < 480) return 2;
+  if (width < 768) return 3;
+  if (width < 1024) return 4;
+  return 5;
 }
 
 // Taille des plans responsive selon l'écran
@@ -63,7 +63,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 0, 10);
+camera.position.set(0, 1, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
