@@ -74,9 +74,10 @@ window.addEventListener('resize', () => {
   const width = window.innerWidth;
   const navHeight = 60;
   const height = window.innerHeight - navHeight;
+
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
-  
+
   if (width < 768) {
     camera.position.set(0, 0, 18);
   } else if (width < 1024) {
