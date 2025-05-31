@@ -72,7 +72,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 1, 10);
+camera.position.set(0, 1, 30);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
@@ -244,6 +244,7 @@ window.addEventListener("orientationchange", () => {
   setTimeout(() => {
     updatePositions();
     camera.aspect = window.innerWidth / (window.innerHeight - 60);
+    
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight - 60);
   }, 300);
@@ -260,11 +261,11 @@ window.addEventListener("orientationchange", () => {
 
   // Ajuster la position caméra selon la largeur (comme dans getCameraDistance)
   if (width < 768) {
-    camera.position.set(0, 0, 18);
+    camera.position.set(0, 0, 40);
   } else if (width < 1024) {
-    camera.position.set(0, 0, 22);
+    camera.position.set(0, 0, 45);
   } else {
-    camera.position.set(0, 0, 25);
+    camera.position.set(0, 0, 50);
   }
 });
 });
