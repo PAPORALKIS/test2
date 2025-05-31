@@ -299,5 +299,3 @@ renderer.render(scene, camera);
 animate();
 window.dispatchEvent(new Event('resize'));
 
-COMMENT GERE LA DISTANCE DE LA CAMERA ?
-
