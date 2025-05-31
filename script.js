@@ -59,10 +59,6 @@ function updateCameraPosition() {
   controls.update();
 }
 
-  camera.position.set(0, 0, distance);
-  controls.target.set(0, 0, 0);
-  controls.update();
-}
 // Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
   const points = [];
@@ -113,7 +109,6 @@ function getCameraDistance() {
 controls.addEventListener('end', () => {
   // Quand l'utilisateur arrête la manipulation (rotation par exemple),
   // on repositionne la caméra devant le globe (axe Z positif)
-  camera.position.set(0, 0, dist);
   controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
   controls.update();
 
@@ -121,15 +116,17 @@ let autoRotateTimeout;
 
 controls.addEventListener('start', () => {
   controls.autoRotate = false;
-  clearTimeout(autoRotateTimeout); // évite les doublons
+  clearTimeout(autoRotateTimeout);
 });
 
 controls.addEventListener('end', () => {
-  // Relancer autoRotate après 5 secondes d'inactivité
+  // Repositionner caméra après interaction
+  updateCameraPosition();
+
+  // Relancer auto-rotation après délai
   autoRotateTimeout = setTimeout(() => {
     controls.autoRotate = true;
-  }, 50); // délai configurable
-});  
+  }, 5000); // ⏱️ configurable
 });
 
 const loader = new THREE.TextureLoader();
@@ -192,7 +189,7 @@ function updatePositions() {
     mesh.lookAt(0, 0, 0);
   });
 
-  camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
+  updateCameraPosition(); // ajuste zoom selon globe
 }
 
 imagesData.forEach((imgData) => {
@@ -274,14 +271,8 @@ window.addEventListener('resize', () => {
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
   updatePositions();
+  updateCameraPosition();
 
-  if (width < 768) {
-    camera.position.set(0, 0, 30);
-  } else if (width < 1024) {
-    camera.position.set(0, 0, 30);
-  } else {
-    camera.position.set(0, 0, 30);
-  }
 });
 
 // Animation
