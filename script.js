@@ -261,13 +261,12 @@ window.addEventListener("orientationchange", () => {
 
   // Ajuster la position caméra selon la largeur (comme dans getCameraDistance)
   if (width < 768) {
-    camera.position.set(0, 0, 40);
+    camera.position.set(0, 0, 100);
   } else if (width < 1024) {
-    camera.position.set(0, 0, 45);
+    camera.position.set(0, 0, 125);
   } else {
-    camera.position.set(0, 0, 50);
+    camera.position.set(0, 0, 150);
   }
-});
 });
 
 animate()
