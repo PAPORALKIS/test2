@@ -45,7 +45,25 @@ function getResponsivePlaneSize() {
   if (width < 1024) return 2.5;
   return 3;
 }
+function updateCameraPosition() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const baseRadius = getAdaptiveRadius(planes.length);
+  let distance;
 
+  if (isPortrait) {
+    if (window.innerWidth < 480) distance = baseRadius + 10;
+    else if (window.innerWidth < 768) distance = baseRadius + 8;
+    else distance = baseRadius + 6;
+  } else {
+    if (window.innerWidth < 768) distance = baseRadius + 8;
+    else if (window.innerWidth < 1024) distance = baseRadius + 6;
+    else distance = baseRadius + 5;
+  }
+
+  camera.position.set(0, 0, distance);
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
 // Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
   const points = [];
@@ -99,6 +117,20 @@ controls.addEventListener('end', () => {
   camera.position.set(0, 0, dist);
   controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
   controls.update();
+
+let autoRotateTimeout;
+
+controls.addEventListener('start', () => {
+  controls.autoRotate = false;
+  clearTimeout(autoRotateTimeout); // évite les doublons
+});
+
+controls.addEventListener('end', () => {
+  // Relancer autoRotate après 5 secondes d'inactivité
+  autoRotateTimeout = setTimeout(() => {
+    controls.autoRotate = true;
+  }, 50); // délai configurable
+});  
 });
 
 const loader = new THREE.TextureLoader();
