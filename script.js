@@ -45,7 +45,20 @@ function getResponsivePlaneSize() {
   if (width < 1024) return 2.5;
   return 3;
 }
+function getCameraDistance() {
+  const width = window.innerWidth;
+  if (width < 768) return 18;
+  if (width < 1024) return 22;
+  return 25;
+}
 
+controls.addEventListener('end', () => {
+  const dist = getCameraDistance();
+  camera.position.set(0, 0, dist);
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+                          
 // Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
   const points = [];
@@ -85,6 +98,14 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 3; // vitesse de rotation
+
+controls.addEventListener('end', () => {
+  // Quand l'utilisateur arrête la manipulation (rotation par exemple),
+  // on repositionne la caméra devant le globe (axe Z positif)
+  camera.position.set(0, 0, 25);
+  controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
+  controls.update();
+});
 
 const loader = new THREE.TextureLoader();
 
