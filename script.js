@@ -225,11 +225,13 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / (window.innerHeight - 60);
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight - 60);
-  updatePositions(); // repositionnement responsive et redimensionnement des images
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    updatePositions();
+    camera.aspect = window.innerWidth / (window.innerHeight - 60);
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight - 60);
+  }, 300);
 });
 
 animate()
