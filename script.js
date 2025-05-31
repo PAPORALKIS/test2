@@ -94,6 +94,20 @@ function getCameraDistance() {
 }
 
 controls.addEventListener('end', () => {
+  
+let autoRotateTimeout;
+
+controls.addEventListener('start', () => {
+  controls.autoRotate = false;
+  clearTimeout(autoRotateTimeout); // évite les doublons
+});
+
+controls.addEventListener('end', () => {
+  // Relancer autoRotate après 5 secondes d'inactivité
+  autoRotateTimeout = setTimeout(() => {
+    controls.autoRotate = true;
+  }, 5000); // délai configurable
+});
   // Quand l'utilisateur arrête la manipulation (rotation par exemple),
   // on repositionne la caméra devant le globe (axe Z positif)
   camera.position.set(0, 0, dist);
@@ -242,8 +256,10 @@ window.addEventListener('resize', () => {
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
+  
   updatePositions();
-
+  updatecameraPosition();
+  
   if (width < 768) {
     camera.position.set(0, 0, 25);
   } else if (width < 1024) {
@@ -251,6 +267,27 @@ window.addEventListener('resize', () => {
   } else {
     camera.position.set(0, 0, 25);
   }
+  
+function updateCameraPosition() {
+  const isPortrait = window.innerHeight > window.innerWidth;
+  const baseRadius = getAdaptiveRadius(planes.length);
+  let distance;
+
+  if (isPortrait) {
+    if (window.innerWidth < 480) distance = baseRadius + 10;
+    else if (window.innerWidth < 768) distance = baseRadius + 8;
+    else distance = baseRadius + 6;
+  } else {
+    if (window.innerWidth < 768) distance = baseRadius + 8;
+    else if (window.innerWidth < 1024) distance = baseRadius + 6;
+    else distance = baseRadius + 5;
+  }
+
+  camera.position.set(0, 0, distance);
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
+  
 });
 
 // Animation
@@ -262,4 +299,5 @@ function animate() {
 
 // ✅ Lancement initial
 animate();
+updateCameraPosition();
 window.dispatchEvent(new Event('resize'));
