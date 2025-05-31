@@ -247,6 +247,26 @@ window.addEventListener("orientationchange", () => {
     camera.updateProjectionMatrix();
     renderer.setSize(window.innerWidth, window.innerHeight - 60);
   }, 300);
+
+  window.addEventListener('resize', () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight - 60; // barre nav 60px
+
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+
+  updatePositions();
+
+  // Ajuster la position caméra selon la largeur (comme dans getCameraDistance)
+  if (width < 768) {
+    camera.position.set(0, 0, 18);
+  } else if (width < 1024) {
+    camera.position.set(0, 0, 22);
+  } else {
+    camera.position.set(0, 0, 25);
+  }
+});
 });
 
 animate()
