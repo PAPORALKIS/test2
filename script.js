@@ -51,12 +51,12 @@ const baseRadius = getAdaptiveRadius(planes.length);
 let distance;
 
 if (isPortrait) {
-if (window.innerWidth < 480) distance = baseRadius + 10;
-else if (window.innerWidth < 768) distance = baseRadius + 8;
-else distance = baseRadius + 6;
+if (window.innerWidth < 480) distance = baseRadius + 30;
+else if (window.innerWidth < 768) distance = baseRadius + 30;
+else distance = baseRadius + 30;
 } else {
-if (window.innerWidth < 768) distance = baseRadius + 8;
-else if (window.innerWidth < 1024) distance = baseRadius + 6;
+if (window.innerWidth < 768) distance = baseRadius + 30;
+else if (window.innerWidth < 1024) distance = baseRadius + 30;
 else distance = baseRadius + 5;
 }
 
