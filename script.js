@@ -1,3 +1,22 @@
+// document.addEventListener("DOMContentLoaded", function () {
+//   const zoomables = document.querySelectorAll('.realisation-image');
+//   const lightbox = document.getElementById('lightbox');
+//   const lightboxImg = document.getElementById('lightbox-img');
+
+//   zoomables.forEach(img => {
+//     img.addEventListener('click', (e) => {
+//       e.stopPropagation();
+//       lightboxImg.src = img.src;
+//       lightbox.style.display = 'flex';
+//     });
+//   });
+
+//   lightbox.addEventListener('click', function () {
+//     lightbox.style.display = 'none';
+//     lightboxImg.src = '';
+//   });
+// });
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
@@ -27,11 +46,11 @@ function getResponsivePlaneSize() {
   return 3;
 }
 
-// Génération des points sur une sphère (Fibonacci)
+// Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
   const points = [];
   const offset = 2 / numPoints;
-  const increment = Math.PI * (3 - Math.sqrt(5));
+  const increment = Math.PI * (3 - Math.sqrt(5)); // angle d'or
 
   for (let i = 0; i < numPoints; i++) {
     const y = ((i * offset) - 1) + (offset / 2);
@@ -49,49 +68,30 @@ function generatePointsOnSphere(numPoints, radius) {
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(
   60,
-  window.innerWidth / (window.innerHeight - 60),
+  window.innerWidth / (window.innerHeight - 60), // 👈 tenir compte barre nav de 60px
   0.1,
   1000
 );
-
-// Position initiale caméra
 camera.position.set(0, 1, 10);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.setSize(window.innerWidth, window.innerHeight - 60);
+renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
 renderer.setPixelRatio(window.devicePixelRatio);
-renderer.setClearColor(0x0a0f2c);
+renderer.setClearColor(0x0a0f2c); // fond bleu foncé
 
 document.getElementById('container').appendChild(renderer.domElement);
 
 const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
-controls.autoRotateSpeed = 3;
-
-// Fonction pour la distance caméra responsive
-function getCameraDistance() {
-  const width = window.innerWidth;
-  if (width < 768) return 18;
-  if (width < 1024) return 22;
-  return 25;
-}
-
-// Reset caméra à la fin de l'interaction
-controls.addEventListener('end', () => {
-  const dist = getCameraDistance();
-  camera.position.set(0, 0, dist);
-  controls.target.set(0, 0, 0);
-  camera.lookAt(controls.target);
-  controls.update();
-});
+controls.autoRotateSpeed = 3; // vitesse de rotation
 
 const loader = new THREE.TextureLoader();
+
 const raycaster = new THREE.Raycaster();
 const mouse = new THREE.Vector2();
 
 const imagesData = [
-  // tes données images (inchangées)
   { url: '../img/CHBR0.jpg', text: 'Image 0 - Description', group: 'A' },
   { url: '../img/CHBR1.jpg', text: 'Image 2 - Description', group: 'A' },
   { url: '../img/CUIEXT.jpg', text: 'Image 3 - Description', group: 'B' },
@@ -127,6 +127,8 @@ const imagesData = [
 ];
 
 const planes = [];
+
+// On prépare d'abord tous les points sur la sphère pour éviter chevauchements
 let spherePoints = [];
 
 function updatePositions() {
@@ -144,7 +146,7 @@ function updatePositions() {
     mesh.lookAt(0, 0, 0);
   });
 
-  camera.position.set(0, 0, radius + 4);
+  camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
 }
 
 imagesData.forEach((imgData) => {
@@ -153,6 +155,7 @@ imagesData.forEach((imgData) => {
     const geometry = new THREE.PlaneGeometry(getResponsivePlaneSize(), getResponsivePlaneSize());
     const plane = new THREE.Mesh(geometry, material);
 
+    // On va assigner la position dans updatePositions() plus tard
     plane.position.set(0, 0, 0);
     scene.add(plane);
     planes.push({ mesh: plane, data: imgData });
@@ -163,6 +166,7 @@ imagesData.forEach((imgData) => {
   });
 });
 
+// Clic pour ouvrir preview
 function onMouseClick(event) {
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
   mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
@@ -180,6 +184,7 @@ function onMouseClick(event) {
 
 window.addEventListener('click', onMouseClick);
 
+// Gestion du carrousel preview
 const preview = document.getElementById('preview');
 const carouselImage = document.getElementById('carousel-image');
 const carouselText = document.getElementById('carousel-text');
@@ -194,8 +199,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.style.display = 'flex';
-  document.body.style.overflow = 'auto';
+  preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
+  document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
 }
 
 function showImage(index) {
@@ -205,3 +210,28 @@ function showImage(index) {
   carouselImage.src = currentGroup[index].url;
   carouselText.textContent = currentGroup[index].text;
 }
+
+prevBtn.addEventListener('click', () => showImage(currentIndex - 1));
+nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
+closePreviewBtn.addEventListener('click', () => {
+  preview.style.display = 'none';
+  document.getElementById('container').style.filter = 'none';
+});
+
+// Animation & mise à jour
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+window.addEventListener("orientationchange", () => {
+  setTimeout(() => {
+    updatePositions();
+    camera.aspect = window.innerWidth / (window.innerHeight - 60);
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight - 60);
+  }, 300);
+});
+
+animate()
