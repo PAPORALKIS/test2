@@ -245,11 +245,11 @@ window.addEventListener('resize', () => {
   updatePositions();
 
   if (width < 768) {
-    camera.position.set(0, 0, 80);
+    camera.position.set(0, 0, 30);
   } else if (width < 1024) {
-    camera.position.set(0, 0, 85);
+    camera.position.set(0, 0, 30);
   } else {
-    camera.position.set(0, 0, 88);
+    camera.position.set(0, 0, 30);
   }
 });
 
