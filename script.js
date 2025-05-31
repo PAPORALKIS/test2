@@ -23,10 +23,18 @@ import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 // Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
-  if (width < 480) return 0.5;
-  if (width < 768) return 0.75;
-  if (width < 1024) return 4;
-  return 1;
+  const height = window.innerHeight;
+  const minDim = Math.min(width, height);
+
+  if (minDim < 480) return 2.5;
+  if (minDim < 768) return 3.5;
+  if (minDim < 1024) return 4.5;
+  return 5.5;
+}
+
+function getAdaptiveRadius(numImages) {
+  let base = getResponsiveRadius();
+  return base + Math.log(numImages); // pour éviter les chevauchements
 }
 
 // Taille des plans responsive selon l'écran
@@ -124,10 +132,9 @@ const planes = [];
 let spherePoints = [];
 
 function updatePositions() {
-  const radius = getResponsiveRadius();
+  const radius = getAdaptiveRadius(planes.length);
   const planeSize = getResponsivePlaneSize();
 
-  // recalculer points uniformes à chaque repositionnement
   spherePoints = generatePointsOnSphere(planes.length, radius);
 
   planes.forEach(({ mesh }, i) => {
@@ -138,6 +145,8 @@ function updatePositions() {
     mesh.position.copy(pos);
     mesh.lookAt(0, 0, 0);
   });
+
+  camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
 }
 
 imagesData.forEach((imgData) => {
