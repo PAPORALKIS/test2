@@ -92,13 +92,13 @@ window.addEventListener('resize', () => {
   // Réajuste la position de la caméra selon la taille d’écran
   if (width < 768) {
     // Smartphone
-    camera.position.set(0, 0, 40);
+    camera.position.set(0, 0, 20);
   } else if (width < 1024) {
     // Tablette
-    camera.position.set(0, 0, 45);
+    camera.position.set(0, 0, 20);
   } else {
     // Ordinateur
-    camera.position.set(0, 0, 50);
+    camera.position.set(0, 0, 20);
   }
 
   renderer.setSize(width, height);
