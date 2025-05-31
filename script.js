@@ -234,32 +234,16 @@ closePreviewBtn.addEventListener('click', () => {
 });
 
 // Animation & mise à jour
-function animate() {
-  requestAnimationFrame(animate);
-  controls.update();
-  renderer.render(scene, camera);
-}
-
-window.addEventListener("orientationchange", () => {
-  setTimeout(() => {
-    updatePositions();
-    camera.aspect = window.innerWidth / (window.innerHeight - 60);
-    
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight - 60);
-  }, 300);
-
-  window.addEventListener('resize', () => {
+// Resize
+window.addEventListener('resize', () => {
   const width = window.innerWidth;
-  const height = window.innerHeight - 60; // barre nav 60px
+  const height = window.innerHeight - 60;
 
   renderer.setSize(width, height);
   camera.aspect = width / height;
   camera.updateProjectionMatrix();
-
   updatePositions();
 
-  // Ajuster la position caméra selon la largeur (comme dans getCameraDistance)
   if (width < 768) {
     camera.position.set(0, 0, 100);
   } else if (width < 1024) {
@@ -269,4 +253,13 @@ window.addEventListener("orientationchange", () => {
   }
 });
 
-animate()
+// Animation
+function animate() {
+  requestAnimationFrame(animate);
+  controls.update();
+  renderer.render(scene, camera);
+}
+
+// ✅ Lancement initial
+animate();
+window.dispatchEvent(new Event('resize'));
