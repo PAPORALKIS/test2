@@ -46,19 +46,18 @@ function getResponsivePlaneSize() {
   return 3;
 }
 function updateCameraPosition() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const baseRadius = getAdaptiveRadius(planes.length);
+  const radius = getAdaptiveRadius(planes.length);
   let distance;
 
-  if (isPortrait) {
-    if (window.innerWidth < 480) distance = baseRadius + 10;
-    else if (window.innerWidth < 768) distance = baseRadius + 8;
-    else distance = baseRadius + 6;
-  } else {
-    if (window.innerWidth < 768) distance = baseRadius + 8;
-    else if (window.innerWidth < 1024) distance = baseRadius + 6;
-    else distance = baseRadius + 5;
-  }
+  if (window.innerWidth < 480) distance = radius + 10;
+  else if (window.innerWidth < 768) distance = radius + 8;
+  else if (window.innerWidth < 1024) distance = radius + 6;
+  else distance = radius + 5;
+
+  camera.position.set(0, 0, distance);
+  controls.target.set(0, 0, 0);
+  controls.update();
+}
 
   camera.position.set(0, 0, distance);
   controls.target.set(0, 0, 0);
