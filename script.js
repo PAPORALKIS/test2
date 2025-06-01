@@ -298,3 +298,5 @@ renderer.render(scene, camera);
 // ✅ Lancement initial
 animate();
 window.dispatchEvent(new Event('resize'));
+
+COMMENT GERE LA DISTANCE DE LA CAMERA ?
