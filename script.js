@@ -105,6 +105,13 @@ controls.enableDamping = true;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 3; // vitesse de rotation
 
+function getCameraDistance() {
+const width = window.innerWidth;
+if (width < 768) return 18;
+if (width < 1024) return 22;
+return 25;
+}
+
 controls.addEventListener('end', () => {
 // Quand l'utilisateur arrête la manipulation (rotation par exemple),
 // on repositionne la caméra devant le globe (axe Z positif)
@@ -123,7 +130,7 @@ controls.addEventListener('end', () => {
 // Relancer autoRotate après 5 secondes d'inactivité
 autoRotateTimeout = setTimeout(() => {
 controls.autoRotate = true;
-}, 20); // délai configurable
+}, 50); // délai configurable
 });
 });
 
@@ -204,9 +211,9 @@ planes.push({ mesh: plane, data: imgData });
 
 if (planes.length === imagesData.length) {  
   updatePositions();  
-  updateCameraPosition();
 }
- });
+
+});
 });
 
 // Clic pour ouvrir preview
@@ -222,7 +229,7 @@ const clickedData = planes.find(p => p.mesh === clickedMesh).data;
 const groupKey = clickedData.group;
 let groupImages = groupKey ? imagesData.filter(img => img.group === groupKey) : [clickedData];
 openPreview(groupImages);
- }
+}
 }
 
 window.addEventListener('click', onMouseClick);
@@ -239,11 +246,11 @@ let currentGroup = [];
 let currentIndex = 0;
 
 function openPreview(groupImages) {
- currentGroup = groupImages;
- currentIndex = 0;
- showImage(currentIndex);
- preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
- document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
+currentGroup = groupImages;
+currentIndex = 0;
+showImage(currentIndex);
+preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
+document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
 }
 
 function showImage(index) {
@@ -271,7 +278,7 @@ renderer.setSize(width, height);
 camera.aspect = width / height;
 camera.updateProjectionMatrix();
 updatePositions();
-updateCameraPosition();
+
 if (width < 768) {
 camera.position.set(0, 0, 30);
 } else if (width < 1024) {
@@ -290,7 +297,4 @@ renderer.render(scene, camera);
 
 // ✅ Lancement initial
 animate();
-updateCameraPosition();
 window.dispatchEvent(new Event('resize'));
-},200);
-
