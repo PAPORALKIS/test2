@@ -45,25 +45,6 @@ function getResponsivePlaneSize() {
   if (width < 1024) return 2.5;
   return 3;
 }
-// modif 1er juin : 
-function updateCameraPosition() {
-  const isPortrait = window.innerHeight > window.innerWidth;
-  const baseRadius = getAdaptiveRadius(planes.length);
-  const device = getDeviceType();
-  let distance = baseRadius + 5;
-
-  if (device === 'mobile') {
-    distance = isPortrait ? baseRadius + 10 : baseRadius + 8;
-  } else if (device === 'tablet') {
-    distance = isPortrait ? baseRadius + 9 : baseRadius + 7;
-  } else {
-    distance = isPortrait ? baseRadius + 8 : baseRadius + 6;
-  }
-
-  camera.position.set(0, 0, distance);
-  controls.target.set(0, 0, 0);
-  controls.update();
-}
 
 // Fonction qui génère N points uniformément répartis sur une sphère selon la méthode Fibonacci
 function generatePointsOnSphere(numPoints, radius) {
@@ -125,8 +106,7 @@ controls.addEventListener('end', () => {
   // Relancer autoRotate après 5 secondes d'inactivité
   autoRotateTimeout = setTimeout(() => {
     controls.autoRotate = true;
-   }, 10); // délai configurable
-  });
+  }, 5000); // délai configurable
 });
   // Quand l'utilisateur arrête la manipulation (rotation par exemple),
   // on repositionne la caméra devant le globe (axe Z positif)
@@ -194,7 +174,7 @@ function updatePositions() {
     mesh.position.copy(pos);
     mesh.lookAt(0, 0, 0);
   });
-  updateCameraPosition();
+
   camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
 }
 
