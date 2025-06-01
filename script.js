@@ -40,10 +40,10 @@ return base + Math.log(numImages); // pour éviter les chevauchements
 // Taille des plans responsive selon l'écran
 function getResponsivePlaneSize() {
 const width = window.innerWidth;
-if (width < 480) return 1.5;
-if (width < 768) return 2;
-if (width < 1024) return 2.5;
-return 3;
+if (width < 480) return 2.5;
+if (width < 768) return 3.5;
+if (width < 1024) return 4.5;
+return 5.5;
 }
 function getDeviceType() {
   const ua = navigator.userAgent;
