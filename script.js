@@ -45,19 +45,25 @@ if (width < 768) return 2;
 if (width < 1024) return 2.5;
 return 3;
 }
+function getDeviceType() {
+  const ua = navigator.userAgent;
+  if (/Mobi|Android/i.test(ua)) return 'mobile';
+  if (/Tablet|iPad/i.test(ua)) return 'tablet';
+  return 'desktop';
+}
+
 function updateCameraPosition() {
 const isPortrait = window.innerHeight > window.innerWidth;
 const baseRadius = getAdaptiveRadius(planes.length);
-let distance;
+const device = getDeviceType();
+let distance = baseRadius + 5;
 
-if (isPortrait) {
-if (window.innerWidth < 480) distance = baseRadius + 10;
-else if (window.innerWidth < 768) distance = baseRadius + 8;
-else distance = baseRadius + 6;
-} else {
-if (window.innerWidth < 768) distance = baseRadius + 8;
-else if (window.innerWidth < 1024) distance = baseRadius + 6;
-else distance = baseRadius + 5;
+if (device === 'mobile') {
+    distance = isPortrait ? baseRadius + 10 : baseRadius + 8;
+  } else if (device === 'tablet') {
+    distance = isPortrait ? baseRadius + 9 : baseRadius + 7;
+  } else {
+    distance = isPortrait ? baseRadius + 8 : baseRadius + 6;
 }
 
 camera.position.set(0, 0, distance);
@@ -91,8 +97,6 @@ window.innerWidth / (window.innerHeight - 60), // 👈 tenir compte barre nav de
 0.1,
 1000
 );
-camera.position.set(0, 1, 100);
-
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
 renderer.setPixelRatio(window.devicePixelRatio);
@@ -113,17 +117,16 @@ controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le cen
 controls.update();
 
 let autoRotateTimeout;
-
 controls.addEventListener('start', () => {
-controls.autoRotate = false;
-clearTimeout(autoRotateTimeout); // évite les doublons
+ controls.autoRotate = false;
+ clearTimeout(autoRotateTimeout); // évite les doublons
 });
 
 controls.addEventListener('end', () => {
 // Relancer autoRotate après 5 secondes d'inactivité
-autoRotateTimeout = setTimeout(() => {
-controls.autoRotate = true;
-}, 20); // délai configurable
+ autoRotateTimeout = setTimeout(() => {
+  controls.autoRotate = true;
+ }, 20); // délai configurable
 });
 });
 
@@ -173,10 +176,10 @@ const planes = [];
 let spherePoints = [];
 
 function updatePositions() {
-const radius = getAdaptiveRadius(planes.length);
-const planeSize = getResponsivePlaneSize();
+ const radius = getAdaptiveRadius(planes.length);
+ const planeSize = getResponsivePlaneSize();
 
-spherePoints = generatePointsOnSphere(planes.length, radius);
+ spherePoints = generatePointsOnSphere(planes.length, radius);
 
 planes.forEach(({ mesh }, i) => {
 mesh.geometry.dispose();
@@ -185,10 +188,9 @@ mesh.geometry = new THREE.PlaneGeometry(planeSize, planeSize);
 const pos = spherePoints[i];  
 mesh.position.copy(pos);  
 mesh.lookAt(0, 0, 0);
-
 });
 
-camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
+updateCameraPosition(); // ajuste zoom selon globe
 }
 
 imagesData.forEach((imgData) => {
