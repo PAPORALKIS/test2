@@ -99,6 +99,8 @@ controls.addEventListener('end', () => {
   camera.position.set(0, 0, dist);
   controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
   controls.update();
+  // redémarrer l’auto rotation 
+  controls.autoRotate = true;
 });
 
 const loader = new THREE.TextureLoader();
