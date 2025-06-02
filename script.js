@@ -100,12 +100,14 @@ controls.addEventListener('start', () =>
   controls.autoRotate = false;
 });
 
-controls.addEventListener('end', () => {
+controls.addEventListener('end', () =>{
   // Quand l'utilisateur arrête la manipulation (rotation par exemple),
   // on repositionne la caméra devant le globe (axe Z positif)
+  if (isPreviewing) return;
   camera.position.set(0, 0, dist);
   controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
   controls.update();
+
   // redémarrer l’auto rotation 
   controls.autoRotate = true;
 });
@@ -202,6 +204,7 @@ function onMouseClick(event) {
     const clickedData = planes.find(p => p.mesh === clickedMesh).data;
     const groupKey = clickedData.group;
     let groupImages = groupKey ? imagesData.filter(img => img.group === groupKey) : [clickedData];
+    isPreviewing = true;
     openPreview(groupImages);
   }
 }
@@ -240,6 +243,7 @@ nextBtn.addEventListener('click', () => showImage(currentIndex + 1));
 closePreviewBtn.addEventListener('click', () => {
   preview.style.display = 'none';
   document.getElementById('container').style.filter = 'none';
+    isPreviewing = false;
 });
 
 // Animation & mise à jour
