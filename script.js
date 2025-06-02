@@ -95,7 +95,8 @@ function getCameraDistance() {
 const dist = getCameraDistance();
 // À définir au bon endroit si besoin
 
-controls.addEventListener('start', () =>{
+controls.addEventListener('start', () =>
+{
   controls.autoRotate = false;
 });
 
@@ -183,26 +184,11 @@ imagesData.forEach((imgData) => {
     scene.add(plane);
     planes.push({ mesh: plane, data: imgData });
 
-function loadAllTextures(imagesData) {
-  const loader = new THREE.TextureLoader();
-  const planeSize = getResponsivePlaneSize();
-
-  return Promise.all(imagesData.map(imgData => {
-    return new Promise(resolve => {
-      loader.load(imgData.url, texture => {
-        const material = new THREE.MeshBasicMaterial({ map: texture, side: THREE.DoubleSide, transparent: true });
-        const geometry = new THREE.PlaneGeometry(planeSize, planeSize);
-        const plane = new THREE.Mesh(geometry, material);
-
-        plane.position.set(0, 0, 0);
-        scene.add(plane);
-        planes.push({ mesh: plane, data: imgData });
-
-        resolve(); // ✅ image chargée
-      });
-    });
-  }));
-}
+    if (planes.length === imagesData.length) {
+      updatePositions();
+    }
+  });
+});
 
 // Clic pour ouvrir preview
 function onMouseClick(event) {
