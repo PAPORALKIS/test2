@@ -92,6 +92,13 @@ function getCameraDistance() {
   if (width < 1024) return 22;
   return 25;
 }
+const dist = getCameraDistance();
+// À définir au bon endroit si besoin
+
+controls.addEventListener('start', () =>
+{
+  controls.autoRotate = false;
+});
 
 controls.addEventListener('end', () => {
   // Quand l'utilisateur arrête la manipulation (rotation par exemple),
