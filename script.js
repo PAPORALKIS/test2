@@ -252,7 +252,16 @@ window.addEventListener('resize', () => {
     camera.position.set(0, 0, 30);
   }
 });
-
+let autoRotateTimeout;
+controls.addEventListener('start', () => {
+  controls.autoRotate = false;
+  clearTimeout(autoRotateTimeout);
+});
+controls.addEventListener('end', () => {
+  autoRotateTimeout = setTimeout(() => {
+    controls.autoRotate = true;
+  }, 1);
+});
 // Animation
 function animate() {
   requestAnimationFrame(animate);
