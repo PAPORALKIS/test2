@@ -16,16 +16,25 @@
 //     lightboxImg.src = '';
 //   });
 // });
+
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 // Rayon responsive basé sur la taille de l'écran
 function getResponsiveRadius() {
   const width = window.innerWidth;
-  if (width < 480) return 0,5;
-  if (width < 768) return 0,75;
-  if (width < 1024) return 4;
-  return 1;
+  const height = window.innerHeight;
+  const minDim = Math.min(width, height);
+
+  if (minDim < 480) return 2.5;
+  if (minDim < 768) return 3.5;
+  if (minDim < 1024) return 4.5;
+  return 5.5;
+}
+
+function getAdaptiveRadius(numImages) {
+  let base = getResponsiveRadius();
+  return base + Math.log(numImages); // pour éviter les chevauchements
 }
 
 // Taille des plans responsive selon l'écran
@@ -63,7 +72,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000
 );
-camera.position.set(0, 1, 10);
+camera.position.set(0, 1, 100);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight - 60); // 👈 renderer sous nav
@@ -76,6 +85,21 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.autoRotate = true;
 controls.autoRotateSpeed = 3; // vitesse de rotation
+
+function getCameraDistance() {
+  const width = window.innerWidth;
+  if (width < 768) return 18;
+  if (width < 1024) return 22;
+  return 25;
+}
+
+controls.addEventListener('end', () => {
+  // Quand l'utilisateur arrête la manipulation (rotation par exemple),
+  // on repositionne la caméra devant le globe (axe Z positif)
+  camera.position.set(0, 0, dist);
+  controls.target.set(0, 0, 0); // assure que le contrôle regarde toujours le centre
+  controls.update();
+});
 
 const loader = new THREE.TextureLoader();
 
@@ -123,10 +147,9 @@ const planes = [];
 let spherePoints = [];
 
 function updatePositions() {
-  const radius = getResponsiveRadius();
+  const radius = getAdaptiveRadius(planes.length);
   const planeSize = getResponsivePlaneSize();
 
-  // recalculer points uniformes à chaque repositionnement
   spherePoints = generatePointsOnSphere(planes.length, radius);
 
   planes.forEach(({ mesh }, i) => {
@@ -137,6 +160,8 @@ function updatePositions() {
     mesh.position.copy(pos);
     mesh.lookAt(0, 0, 0);
   });
+
+  camera.position.set(0, 0, radius + 4); // ajuste zoom selon globe
 }
 
 imagesData.forEach((imgData) => {
@@ -189,8 +214,8 @@ function openPreview(groupImages) {
   currentGroup = groupImages;
   currentIndex = 0;
   showImage(currentIndex);
-  preview.style.display = 'flex';
-  document.getElementById('container').style.filter = 'blur(5px)';
+  preview.style.display = 'flex'; // ❗ Correction : classList.remove → style.display
+  document.body.style.overflow = 'auto'; // ❗ Correction : overlow → overflow
 }
 
 function showImage(index) {
@@ -209,17 +234,32 @@ closePreviewBtn.addEventListener('click', () => {
 });
 
 // Animation & mise à jour
+// Resize
+window.addEventListener('resize', () => {
+  const width = window.innerWidth;
+  const height = window.innerHeight - 60;
+
+  renderer.setSize(width, height);
+  camera.aspect = width / height;
+  camera.updateProjectionMatrix();
+  updatePositions();
+
+  if (width < 768) {
+    camera.position.set(0, 0, 30);
+  } else if (width < 1024) {
+    camera.position.set(0, 0, 30);
+  } else {
+    camera.position.set(0, 0, 30);
+  }
+});
+
+// Animation
 function animate() {
   requestAnimationFrame(animate);
   controls.update();
   renderer.render(scene, camera);
 }
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / (window.innerHeight - 60);
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight - 60);
-  updatePositions(); // repositionnement responsive et redimensionnement des images
-});
-
+// ✅ Lancement initial
 animate();
+window.dispatchEvent(new Event('resize'));
