@@ -1,26 +1,97 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Réalisations - Papo Renov</title>
-<link rel="stylesheet" href="realisations.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Réalisations</title>
+  <style>
+    /* CSS minimaliste, adapté de ton style */
+    body, html {
+      margin: 0; padding: 0; height: 100%;
+      background: #0a0f2c;
+      overflow: hidden;
+      font-family: Arial, sans-serif;
+      color: white;
+    }
+    #container {
+      width: 100vw;
+      height: 100vh;
+      display: block;
+      position: relative;
+    }
+    /* Modal preview */
+    #preview {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0,0,0,0.85);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.3s ease;
+    }
+    #preview.hidden {
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+    }
+    #carousel-image {
+      max-width: 80vw;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 0 15px #fff;
+      margin-bottom: 20px;
+    }
+    #carousel-text {
+      font-size: 1.2em;
+      margin-bottom: 20px;
+      text-align: center;
+      max-width: 90vw;
+      word-break: break-word;
+    }
+    #controls {
+      display: flex;
+      gap: 20px;
+    }
+    button {
+      background: #1a254f;
+      border: none;
+      padding: 10px 20px;
+      color: white;
+      cursor: pointer;
+      border-radius: 5px;
+      font-size: 1em;
+      user-select: none;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background: #374785;
+    }
+  </style>
 </head>
 <body>
+  <div id="container"></div>
 
-<div id="container"></div>
+  <div id="preview" class="hidden" role="dialog" aria-modal="true" aria-label="Aperçu de la réalisation">
+    <img id="carousel-image" src="" alt="Image de la réalisation" />
+    <div id="carousel-text"></div>
+    <div id="controls">
+      <button id="prev-btn" aria-label="Image précédente">Précédent</button>
+      <button id="close-preview" aria-label="Fermer l'aperçu">Fermer</button>
+      <button id="next-btn" aria-label="Image suivante">Suivant</button>
+    </div>
+  </div>
 
-<!-- Modal Preview -->
-<div id="preview" class="hidden">
-  <button id="close-preview" aria-label="Fermer">&times;</button>
-  <button id="prev-btn" aria-label="Image précédente">&#9664;</button>
-  <img id="carousel-image" src="" alt="Aperçu réalisation" />
-  <button id="next-btn" aria-label="Image suivante">&#9654;</button>
-  <p id="carousel-text"></p>
-</div>
+  <!-- Inclure Three.js et OrbitControls -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.150.1/examples/js/controls/OrbitControls.min.js"></script>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/examples/js/controls/OrbitControls.min.js"></script>
-<script src="realisations.js"></script>
+  <!-- Ton script JS ici -->
+  <script>
+    // (Colle ici le JS corrigé que je t'ai fourni dans le message précédent)
+  </script>
 </body>
 </html>
