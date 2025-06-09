@@ -13,6 +13,10 @@
       font-family: Arial, sans-serif;
       color: white;
     }
+    body.modal-open {
+      overflow: hidden;
+      touch-action: none;
+    }
     #container {
       width: 100vw;
       height: 100vh;
@@ -160,13 +164,15 @@
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
     scene.add(ambientLight);
 
-    // Ajout du logo central (image plane)
+    // Ajout du logo central (image plane) avec chargement asynchrone
     const loader = new THREE.TextureLoader();
-    const logoTexture = loader.load('img/logo.png');
-    const logoMaterial = new THREE.MeshBasicMaterial({map: logoTexture, transparent: true});
-    const logoGeometry = new THREE.PlaneGeometry(15, 15 * (logoTexture.image ? logoTexture.image.height/logoTexture.image.width : 1));
-    const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
-    scene.add(logoMesh);
+    loader.load('img/logo.png', (texture) => {
+      const ratio = texture.image.height / texture.image.width;
+      const logoMaterial = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+      const logoGeometry = new THREE.PlaneGeometry(15, 15 * ratio);
+      const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
+      scene.add(logoMesh);
+    });
 
     // Création des plans images autour en sphère
     const imageMeshes = [];
@@ -176,48 +182,37 @@
     projects.forEach((project, i) => {
       if (project.src.endsWith('logo.png')) return; // skip logo, déjà ajouté
 
-      const texture = loader.load(project.src);
-      const material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
-      const ratio = texture.image ? texture.image.height / texture.image.width : 1;
-      const geometry = new THREE.PlaneGeometry(10, 10 * ratio);
+      loader.load(project.src, (texture) => {
+        const material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
+        const ratio = texture.image.height / texture.image.width;
+        const geometry = new THREE.PlaneGeometry(8, 8 * ratio);
+        const mesh = new THREE.Mesh(geometry, material);
+        mesh.userData = { description: project.description, index: i };
 
-      // Calcul position sphérique (Fibonacci Sphere)
-      const y = 1 - (i / (projects.length - 1)) * 2; // y from 1 to -1
-      const radiusAtY = Math.sqrt(1 - y * y);
-      const theta = phiStep * i;
+        // Position sur une sphère avec Fibonacci
+        const y = 1 - (i / (projects.length - 1)) * 2; // -1 to 1
+        const radiusAtY = Math.sqrt(1 - y * y);
+        const theta = phiStep * i;
 
-      const x = Math.cos(theta) * radiusAtY;
-      const z = Math.sin(theta) * radiusAtY;
+        mesh.position.set(
+          radius * Math.cos(theta) * radiusAtY,
+          radius * y,
+          radius * Math.sin(theta) * radiusAtY
+        );
 
-      const mesh = new THREE.Mesh(geometry, material);
-      mesh.position.set(x * radius, y * radius, z * radius);
+        // Faire face à la caméra (optionnel)
+        mesh.lookAt(0, 0, 0);
 
-      mesh.userData = {index: i, description: project.description, src: project.src};
-      scene.add(mesh);
-      imageMeshes.push(mesh);
+        scene.add(mesh);
+        imageMeshes.push(mesh);
+      });
     });
 
-    // Raycaster pour détection clics
+    // Raycaster et souris
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
-    function onMouseClick(event){
-      // Calcul coordonnées normalisées (-1 à 1)
-      mouse.x = (event.clientX / window.innerWidth) * 2 -1;
-      mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
-
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(imageMeshes);
-
-      if (intersects.length > 0){
-        const mesh = intersects[0].object;
-        openPreview(mesh.userData.index);
-      }
-    }
-
-    window.addEventListener('click', onMouseClick);
-
-    // Preview modal
+    // Modal preview elements
     const preview = document.getElementById('preview');
     const carouselImage = document.getElementById('carousel-image');
     const carouselText = document.getElementById('carousel-text');
@@ -227,46 +222,85 @@
 
     let currentIndex = 0;
 
-    function openPreview(index){
+    // Ouvrir modal preview
+    function openPreview(index) {
       currentIndex = index;
-      carouselImage.src = projects[currentIndex].src;
-      carouselImage.alt = projects[currentIndex].description;
-      carouselText.textContent = projects[currentIndex].description;
+      updatePreview();
       preview.classList.remove('hidden');
+      document.body.classList.add('modal-open');
     }
 
-    function closePreview(){
+    // Fermer modal preview
+    function closePreview() {
       preview.classList.add('hidden');
+      document.body.classList.remove('modal-open');
     }
 
-    function showPrev(){
+    // Mettre à jour l'image et description dans le modal
+    function updatePreview() {
+      carouselImage.src = projects[currentIndex].src;
+      carouselText.textContent = projects[currentIndex].description;
+      carouselImage.alt = projects[currentIndex].description;
+    }
+
+    // Boutons du modal
+    prevBtn.addEventListener('click', () => {
       currentIndex = (currentIndex - 1 + projects.length) % projects.length;
-      openPreview(currentIndex);
-    }
-
-    function showNext(){
+      if (projects[currentIndex].src.endsWith('logo.png')) {
+        currentIndex = (currentIndex - 1 + projects.length) % projects.length;
+      }
+      updatePreview();
+    });
+    nextBtn.addEventListener('click', () => {
       currentIndex = (currentIndex + 1) % projects.length;
-      openPreview(currentIndex);
-    }
-
-    prevBtn.addEventListener('click', showPrev);
-    nextBtn.addEventListener('click', showNext);
+      if (projects[currentIndex].src.endsWith('logo.png')) {
+        currentIndex = (currentIndex + 1) % projects.length;
+      }
+      updatePreview();
+    });
     closeBtn.addEventListener('click', closePreview);
 
-    // Anim loop
-    function animate(){
+    // Clic souris sur canvas - détecter image
+    renderer.domElement.addEventListener('click', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+
+      const intersects = raycaster.intersectObjects(imageMeshes);
+      if (intersects.length > 0) {
+        const obj = intersects[0].object;
+        openPreview(obj.userData.index);
+      }
+    });
+
+    // Changer curseur si hover image
+    window.addEventListener('mousemove', (event) => {
+      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects(imageMeshes);
+      if (intersects.length > 0) {
+        renderer.domElement.style.cursor = 'pointer';
+      } else {
+        renderer.domElement.style.cursor = 'default';
+      }
+    });
+
+    // Resize
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+
+    // Animation boucle
+    function animate() {
       requestAnimationFrame(animate);
       controls.update();
       renderer.render(scene, camera);
     }
     animate();
 
-    // Resize handling
-    window.addEventListener('resize', () => {
-      camera.aspect = window.innerWidth/window.innerHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(window.innerWidth, window.innerHeight);
-    });
   </script>
 </body>
 </html>
