@@ -6,25 +6,25 @@
   <title>Réalisations - Carrousel 3D</title>
   <style>
     :root {
-      --img-size: min(28vw, 35vh);
-      --translateZ: min(42vw, 50vh);
+      --img-size: min(25vw, 25vh);
+      --translateZ: min(55vw, 55vh);
     }
 
     body {
       margin: 0;
-      background: #198f8d;
+      background: #0a0f2c; /* Bleu très foncé */
       font-family: sans-serif;
       overflow: hidden;
     }
 
-    /* Filigrane du logo centré et zoomé */
+    /* Filigrane logo centré */
     body::before {
       content: "";
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 800px;
-      height: 800px;
+      width: 900px;
+      height: 900px;
       background: url("img/logo.png") no-repeat center center;
       background-size: contain;
       opacity: 0.05;
@@ -34,13 +34,16 @@
     }
 
     .carousel-container {
-      position: relative;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       width: 100vw;
       height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      perspective: 1500px;
+      perspective: 2000px; /* plus de profondeur */
       z-index: 1;
     }
 
@@ -58,7 +61,7 @@
       height: var(--img-size);
       object-fit: cover;
       border-radius: 12px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 0 12px rgba(0, 0, 0, 0.6);
       transition: transform 0.4s ease;
       cursor: pointer;
     }
@@ -79,8 +82,8 @@
 
     @media (orientation: portrait) {
       :root {
-        --img-size: 40vw;
-        --translateZ: 50vw;
+        --img-size: 38vw;
+        --translateZ: 60vw;
       }
     }
   </style>
