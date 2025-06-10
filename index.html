@@ -7,7 +7,7 @@
   <style>
     :root {
       --img-size: 150px;
-      --translateZ: 900px;
+      --translateZ: 1000px;
     }
 
     html, body {
@@ -194,7 +194,7 @@
 
       if (centerIndex !== currentZoomIndex) {
         if (currentZoomIndex >= 0) {
-          images[currentZoomIndex].style.transition = "transform 0.3s ease";
+          images[currentZoomIndex].style.transition = "transform 0.5s ease";
           const prevTheta = angleStep * currentZoomIndex + angle;
           const prevExtraRotation = -angleStep * 0.3;
           images[currentZoomIndex].style.transform =
@@ -203,11 +203,12 @@
 
         currentZoomIndex = centerIndex;
 
-        images[centerIndex].style.transition = "transform 0.3s ease";
+        images[centerIndex].style.transition = "transform 0.7s ease";
         const theta = angleStep * centerIndex + angle;
         const extraRotation = -angleStep * 0.3;
+
         images[centerIndex].style.transform =
-          `rotateY(${theta}deg) translateZ(${radius + 100}px) rotateY(${extraRotation}deg) scale(1.15)`;
+          `rotateY(${theta}deg) translateZ(${radius + 300}px) rotateY(${extraRotation}deg) scale(1.05)`;
         images[centerIndex].style.zIndex = 10;
       }
     }
@@ -216,7 +217,7 @@
       const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.005 * delta;
+        velocity = 0.0025 * delta; // vitesse ralentie
         angle += velocity;
       } else {
         angle += velocity;
@@ -319,4 +320,4 @@
     animate(performance.now());
   </script>
 </body>
-</html>
+</
