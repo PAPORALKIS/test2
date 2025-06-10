@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Réalisations – Carrousel 3D avec zoom central</title>
+  <title>Réalisations – Carrousel 3D avec inertie</title>
   <style>
     :root {
       --img-size: 150px;
@@ -56,27 +56,13 @@
       object-fit: cover;
       border-radius: 12px;
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 0.4s ease;
+      transition: transform 0.3s ease;
       cursor: pointer;
     }
 
     .carousel img:hover {
       transform: scale(1.1);
       z-index: 10;
-    }
-
-    @keyframes zoomCenter {
-      0%, 100% {
-        transform: scale(1);
-      }
-      50% {
-        transform: scale(1.15);
-      }
-    }
-
-    .carousel img.centered {
-      animation: zoomCenter 1.2s ease-in-out;
-      z-index: 2;
     }
 
     .zoomed {
@@ -110,8 +96,8 @@
 </head>
 <body>
   <div class="carousel-container" id="carousel-container">
-    <div class="carousel" id="carousel">      
-      <!-- Remplace ou complète avec tes images -->
+    <div class="carousel" id="carousel">
+      <!-- Remplace ces balises par tes vraies images si besoin -->
       <img src="img/CHBR0.jpg" />
       <img src="img/CHBR1.jpg" />
       <img src="img/CUIEXT.jpg" />
@@ -167,6 +153,7 @@
     let angle = 0;
     let autoRotate = true;
     let lastTime = performance.now();
+
     let velocity = 0;
     const friction = 0.95;
 
@@ -180,41 +167,60 @@
 
     function positionImages() {
       const angleStep = 360 / total;
-      let closestIndex = 0;
-      let minDiff = 360;
-
-      for (let i = 0; i < total; i++) {
-        const theta = (angleStep * i + angle) % 360;
-        const imgAngle = (theta + 360) % 360;
-        const diff = Math.min(Math.abs(imgAngle - 0), Math.abs(imgAngle - 360));
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestIndex = i;
-        }
-      }
-
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
         const extraRotation = -angleStep * 0.3;
         images[i].style.transform =
-          `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${extraRotation}deg)`;
+          `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${extraRotation}deg) scale(1)`;
+        images[i].style.zIndex = 1;
+      }
+    }
 
-        images[i].classList.remove("centered");
+    let currentZoomIndex = -1;
+
+    function applyZoomEffect() {
+      let minDiff = 360;
+      let centerIndex = -1;
+      const angleStep = 360 / total;
+
+      for (let i = 0; i < total; i++) {
+        const theta = angleStep * i + angle;
+        const diff = Math.abs(((theta % 360) + 360) % 360 - 180);
+        if (diff < minDiff) {
+          minDiff = diff;
+          centerIndex = i;
+        }
       }
 
-      images[closestIndex].classList.add("centered");
+      if (centerIndex !== currentZoomIndex) {
+        if (currentZoomIndex >= 0) {
+          images[currentZoomIndex].style.transition = "transform 0.3s ease";
+          const prevTheta = angleStep * currentZoomIndex + angle;
+          const prevExtraRotation = -angleStep * 0.3;
+          images[currentZoomIndex].style.transform =
+            `rotateY(${prevTheta}deg) translateZ(${radius}px) rotateY(${prevExtraRotation}deg) scale(1)`;
+        }
+
+        currentZoomIndex = centerIndex;
+
+        images[centerIndex].style.transition = "transform 0.3s ease";
+        const theta = angleStep * centerIndex + angle;
+        const extraRotation = -angleStep * 0.3;
+        images[centerIndex].style.transform =
+          `rotateY(${theta}deg) translateZ(${radius + 100}px) rotateY(${extraRotation}deg) scale(1.15)`;
+        images[centerIndex].style.zIndex = 10;
+      }
     }
 
     function animate(now) {
       const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.01 * delta;
+        velocity = 0.005 * delta;
         angle += velocity;
       } else {
         angle += velocity;
         velocity *= friction;
-
         if (Math.abs(velocity) < 0.001) {
           autoRotate = true;
           velocity = 0;
@@ -222,6 +228,7 @@
       }
 
       positionImages();
+      applyZoomEffect();
       lastTime = now;
       requestAnimationFrame(animate);
     }
