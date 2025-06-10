@@ -7,7 +7,7 @@
   <style>
     :root {
       --img-size: 150px;
-      --translateZ: 4000;
+      --translateZ: 2000px;  /* bien mettre l’unité */
       --zoom-offset: -60px;
     }
     html, body {
@@ -134,13 +134,16 @@
   </div>
 
   <script>
+    // Récupération dynamique de la variable CSS --translateZ
+    const rootStyles = getComputedStyle(document.documentElement);
+    const baseRadius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000;
+    const zoomTranslateZ = 1600;  // tu peux aussi le rendre dynamique si tu veux
+
     const carousel = document.getElementById("carousel");
     const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    const baseRadius = 1000;
-    const zoomTranslateZ = 1600;
     const zoomScale = 1.5;
     let angle = 0;
     let autoRotate = true;
@@ -169,7 +172,6 @@
 
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
-        const normalizedTheta = ((theta % 360) + 360) % 360;
         const extraRotation = -angleStep * 0.3;
 
         if (i === closestIndex) {
