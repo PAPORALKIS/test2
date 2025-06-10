@@ -10,11 +10,20 @@
       --translateZ: min(80vw, 80vh);
     }
 
-    body {
+    html, body {
+      height: 100%;
       margin: 0;
+    }
+
+    body {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
       background: #00010d;
       overflow: hidden;
       font-family: sans-serif;
+      position: relative; /* pour le ::before */
     }
 
     body::before {
@@ -32,17 +41,13 @@
     }
 
     .carousel-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 100vw;
-      height: 100vh;
+      position: relative;
       perspective: 3000px; /* caméra reculée */
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1;
+      /* plus besoin de width et height fixes */
     }
 
     .carousel {
