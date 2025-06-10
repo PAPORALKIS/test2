@@ -16,14 +16,11 @@
     }
 
     body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
       background: #00010d;
       overflow: hidden;
       font-family: sans-serif;
       position: relative; /* pour le ::before */
+      height: 100vh;
     }
 
     body::before {
@@ -41,13 +38,16 @@
     }
 
     .carousel-container {
-      position: relative;
-      perspective: 3000px; /* caméra reculée */
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      perspective: 3000px;
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 1;
-      /* plus besoin de width et height fixes */
+      /* On enlève width/height fixes ici */
     }
 
     .carousel {
