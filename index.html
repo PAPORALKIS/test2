@@ -6,7 +6,7 @@
   <title>Réalisations – Carrousel 3D avec inertie</title>
   <style>
     :root {
-      --img-size: 220px;
+      --img-size: 150px;
       --translateZ: 700px;
     }
 
@@ -156,7 +156,7 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    const radius = 800; // Rayon de la rotation en 3D
+    const radius = 1000; // Rayon de la rotation en 3D
     let angle = 0;      // Angle de rotation actuel
     let autoRotate = true; // Contrôle rotation auto
 
@@ -183,7 +183,7 @@
       const angleStep = 360 / total;
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3; // Inclinaison vers l’extérieur
+        const extraRotation = -angleStep * 0.5; // Inclinaison vers l’extérieur
         images[i].style.transform =
           `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${extraRotation}deg)`;
       }
@@ -230,7 +230,7 @@
     }
 
     // Gestion scroll molette / trackpad
-    container.addEventListener("wheel", (e) => {
+    conner.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
 
