@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Réalisations – Carrousel 3D</title>
+  <title>Réalisations – Carrousel 3D avec inertie</title>
   <style>
     :root {
       --img-size: 190px;
@@ -112,95 +112,97 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    // Rayon du cercle en 3D (distance des images à l'axe central)
-    const radius = 700;
+    const radius = 700; // Rayon de la rotation en 3D
+    let angle = 0;      // Angle de rotation actuel
+    let autoRotate = true; // Contrôle rotation auto
 
-    // Angle courant de rotation (en degrés)
-    let angle = 0;
-
-    // Contrôle si la rotation automatique tourne
-    let autoRotate = true;
-
-    // Pour suivre le temps entre frames, utile pour l'animation lisse
     let lastTime = performance.now();
+
+    // Variables pour inertie
+    let velocity = 0;    // Vitesse actuelle de rotation (deg/ms)
+    const friction = 0.95; // Facteur de ralentissement de l'inertie (0 < friction < 1)
+
+    // Variables drag souris
+    let isDragging = false;
+    let startX = 0;
+    let lastX = 0;
+
+    // Variables touch
+    let isTouching = false;
+    let touchStartX = 0;
+    let lastTouchX = 0;
 
     /**
      * Positionne les images autour du cylindre 3D
-     * en répartissant équitablement selon le nombre d'images
-     * et en appliquant la rotation 'angle' globale.
      */
     function positionImages() {
       const angleStep = 360 / total;
       for (let i = 0; i < total; i++) {
-        // Calcul de la position angulaire + rotation globale
         const theta = angleStep * i + angle;
-
-        // Applique la rotation Y puis la translation Z (profondeur)
         images[i].style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
       }
     }
 
     /**
-     * Animation en boucle via requestAnimationFrame
-     * Si autoRotate actif, incrémente l'angle pour tourner doucement.
+     * Boucle d'animation
+     * Applique la rotation automatique ou inertie si présente
      */
     function animate(now) {
+      const delta = now - lastTime;
+
       if (autoRotate) {
-        const delta = now - lastTime;
-        angle += 0.02 * delta; // vitesse automatique
-        positionImages();
+        // Rotation automatique quand pas d'interaction
+        velocity = 0.02 * delta; // vitesse fixe
+        angle += velocity;
+      } else {
+        // Rotation avec inertie (après drag/touch)
+        angle += velocity;
+        velocity *= friction;
+
+        // Si inertie presque nulle, on relance rotation auto
+        if (Math.abs(velocity) < 0.001) {
+          autoRotate = true;
+          velocity = 0;
+        }
       }
+
+      positionImages();
       lastTime = now;
       requestAnimationFrame(animate);
     }
 
-    // Timer pour relancer la rotation automatique après interaction
-    let interactionTimeout;
-
     /**
-     * Relance la rotation automatique après 2s d'inactivité
+     * Relance la rotation automatique après délai d'inactivité
      */
+    let interactionTimeout;
     function restartAutoRotate() {
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
-        autoRotate = true;
+        autoRotate = false; // On met à false car on gère inertie au lieu auto pure
+        velocity = 0.02; // vitesse initiale auto quand inertie fini
       }, 2000);
     }
 
-    /**
-     * Gestion du scroll (molette / trackpad)
-     * Scroll vertical ou horizontal fait tourner le manège.
-     */
+    // Gestion scroll molette / trackpad
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
-
-      // Stop la rotation automatique dès interaction utilisateur
       autoRotate = false;
 
-      // On choisit l'axe dominant du scroll pour tourner
-      const scrollAmount = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+      // On ajoute la vitesse proportionnelle à la force du scroll (sens inversé pour naturel)
+      velocity += e.deltaY * 0.005;
 
-      // Ajustement de la vitesse de rotation selon scroll
-      angle += scrollAmount * 0.3;
-
-      positionImages();
-
-      // Relancer la rotation auto après délai
       restartAutoRotate();
     });
 
-    // Variables pour la gestion du drag souris
-    let isDragging = false;
-    let startX = 0;
-
-    // Quand l'utilisateur commence à cliquer/glisser sur le carrousel
+    // Gestion drag souris
     container.addEventListener("mousedown", (e) => {
       isDragging = true;
       startX = e.clientX;
-      autoRotate = false; // stop auto pendant drag
+      lastX = startX;
+      autoRotate = false;
+      velocity = 0;
     });
 
-    // Quand il lâche la souris, on relance la rotation auto après délai
     window.addEventListener("mouseup", () => {
       if (isDragging) {
         isDragging = false;
@@ -208,43 +210,42 @@
       }
     });
 
-    // Quand il bouge la souris en maintenant appuyé, on calcule déplacement horizontal
     window.addEventListener("mousemove", (e) => {
       if (isDragging) {
-        const deltaX = e.clientX - startX;
-        startX = e.clientX;
-        angle += deltaX * 0.5; // sensibilité du drag
+        const currentX = e.clientX;
+        const deltaX = currentX - lastX;
+        lastX = currentX;
+
+        // Sensibilité du drag ajustée pour rotation fluide
+        angle += deltaX * 0.5;
+        velocity = deltaX * 0.5; // Mise à jour vitesse pour inertie
         positionImages();
       }
     });
 
-    // --- SUPPORT TOUCH ---
-
-    // Variables pour gestion du toucher tactile
-    let isTouching = false;
-    let touchStartX = 0;
-
-    // Toucher commence sur la zone du carousel
+    // Gestion touch
     container.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
         isTouching = true;
         touchStartX = e.touches[0].clientX;
+        lastTouchX = touchStartX;
         autoRotate = false;
+        velocity = 0;
       }
     }, { passive: true });
 
-    // Toucher bouge -> calcule déplacement horizontal et fait tourner
     container.addEventListener("touchmove", (e) => {
       if (isTouching && e.touches.length === 1) {
         const touchX = e.touches[0].clientX;
-        const deltaX = touchX - touchStartX;
-        touchStartX = touchX;
+        const deltaX = touchX - lastTouchX;
+        lastTouchX = touchX;
+
         angle += deltaX * 0.5;
+        velocity = deltaX * 0.5;
         positionImages();
       }
     }, { passive: true });
 
-    // Toucher relâché -> relance rotation automatique après délai
     container.addEventListener("touchend", () => {
       if (isTouching) {
         isTouching = false;
@@ -252,7 +253,7 @@
       }
     });
 
-    // Zoom au clic sur une image (créé un overlay fullscreen)
+    // Zoom sur image au clic
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
@@ -265,7 +266,7 @@
       });
     });
 
-    // Position initiale + lancement animation
+    // Initialisation
     positionImages();
     animate(performance.now());
   </script>
