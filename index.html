@@ -8,6 +8,7 @@
     :root {
       --img-size: 150px;
       --translateZ: 1300px;
+      --zoom-offset: 0px;
     }
     html, body {
       margin: 0; height: 100%;
@@ -48,7 +49,7 @@
       object-fit: cover;
       border-radius: 12px;
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 1s ease, z-index 1s ease;
+      transition: transform 0.7s ease, z-index 0.7s ease;
       cursor: pointer;
       z-index: 1;
       transform-origin: center center;
@@ -77,6 +78,7 @@
       :root {
         --img-size: 36vw;
         --translateZ: 400px;
+        --zoom-offset: 20px;
       }
     }
   </style>
@@ -136,9 +138,9 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    const baseRadius = 800;      // Rayon du cercle
-    const zoomTranslateZ = 1300; // Distance de l’image zoomée vers l’avant
-    const zoomScale = 1.5;       // Facteur d’agrandissement image zoomée
+    const baseRadius = 800;
+    const zoomTranslateZ = 1300;
+    const zoomScale = 1.5;
     let angle = 0;
     let autoRotate = true;
     let lastTime = performance.now();
@@ -157,7 +159,6 @@
 
       for (let i = 0; i < total; i++) {
         const theta = (angleStep * i + angle) % 360;
-        // Chercher l’angle le plus proche de 0 (face caméra)
         const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
         if (diff < minDiff) {
           minDiff = diff;
@@ -165,19 +166,19 @@
         }
       }
 
+      const zoomOffset = getComputedStyle(document.documentElement).getPropertyValue('--zoom-offset').trim();
+
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
         const normalizedTheta = ((theta % 360) + 360) % 360;
         const extraRotation = -angleStep * 0.3;
 
         if (i === closestIndex) {
-          // Image devant: avancée + zoomée
           images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) rotateY(${extraRotation}deg) scale(${zoomScale})`;
+            `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) translateY(${zoomOffset}) rotateY(${extraRotation}deg) scale(${zoomScale})`;
           images[i].style.zIndex = 100;
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
         } else {
-          // Images normales
           images[i].style.transform =
             `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
           images[i].style.zIndex = 1;
@@ -188,9 +189,8 @@
 
     function animate(now) {
       const delta = now - lastTime;
-
       if (autoRotate) {
-        velocity = 0.0025 * delta; // vitesse un peu plus rapide
+        velocity = 0.0015 * delta;
         angle += velocity;
       } else {
         angle += velocity;
