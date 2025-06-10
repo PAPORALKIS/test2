@@ -6,8 +6,8 @@
   <title>Réalisations – Carrousel 3D</title>
   <style>
     :root {
-      --img-size: 220px;       /* AUGMENTATION de la taille des images */
-      --translateZ: 700px;     /* Rayon de rotation NON changé */
+      --img-size: 220px;
+      --translateZ: 700px;
     }
 
     html, body {
@@ -36,7 +36,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -50%);
+      transform: translate(-50%, -49%);
       perspective: 3000px;
       z-index: 1;
     }
@@ -46,7 +46,6 @@
       width: 0;
       height: 0;
       transform-style: preserve-3d;
-      transform: rotateX(10deg); /* SURPLOMB CAMÉRA (légère inclinaison vers le bas) */
     }
 
     .carousel img {
@@ -89,7 +88,7 @@
     @media (orientation: portrait) {
       :root {
         --img-size: 38vw;
-        --translateZ: 300px;
+        --translateZ: 400px;
       }
     }
   </style>
@@ -97,12 +96,13 @@
 <body>
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
-      <img src="img/CHBR0.jpg" class="group-chambre" />
-      <img src="img/CUIEXT1.jpg" class="group-chambre" />
-      <img src="img/CUIEXT2.jpg" class="group-chambre" />
-      <img src="img/CUIEXT3.jpg" class="group-chambre" />
-      <img src="img/CUIEXT4.jpg" class="group-chambre" />
-      <img src="img/CUIEXT5.jpg" class="group-chambre" />
+      <!-- Images du manège -->
+      <img src="img/CHBR0.jpg" />
+      <img src="img/CUIEXT1.jpg" />
+      <img src="img/CUIEXT2.jpg" />
+      <img src="img/CUIEXT3.jpg" />
+      <img src="img/CUIEXT4.jpg" />
+      <img src="img/CUIEXT5.jpg" />
     </div>
   </div>
 
@@ -111,38 +111,74 @@
     const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
-
-    // Lire le rayon à partir de la variable CSS
-    const rootStyles = getComputedStyle(document.documentElement);
-    const radius = parseFloat(rootStyles.getPropertyValue("--translateZ")) || 700;
-
+    const radius = 700; // distance des images au centre
     let angle = 0;
-    let rotating = true;
+    let autoRotate = true;
+    let lastTime = performance.now();
 
-    /**
-     * Positionne les images avec un angle réduit entre elles (donc plus proches)
-     */
     function positionImages() {
-      const deltaAngle = 360 / total - 2; // Réduction de l'angle entre chaque image
       for (let i = 0; i < total; i++) {
-        const theta = deltaAngle * i + angle;
+        const theta = (360 / total) * i + angle;
         images[i].style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
       }
     }
 
-    function animate() {
-      if (rotating) {
-        angle += 0.2;
+    // Animation automatique
+    function animate(now) {
+      if (autoRotate) {
+        const delta = now - lastTime;
+        angle += 0.03 * delta; // vitesse de rotation
         positionImages();
       }
+      lastTime = now;
       requestAnimationFrame(animate);
     }
 
-    // Pause au survol
-    container.addEventListener("mouseenter", () => rotating = false);
-    container.addEventListener("mouseleave", () => rotating = true);
+    // Relancer l'animation après une interaction
+    let interactionTimeout;
+    function restartAutoRotate() {
+      clearTimeout(interactionTimeout);
+      interactionTimeout = setTimeout(() => {
+        autoRotate = true;
+      }, 2000); // délai après interaction
+    }
 
-    // Zoom au clic
+    // Scroll horizontal
+    container.addEventListener("wheel", (e) => {
+      e.preventDefault();
+      autoRotate = false;
+      angle += e.deltaY * 0.1;
+      positionImages();
+      restartAutoRotate();
+    });
+
+    // Glissement souris
+    let isDragging = false;
+    let startX = 0;
+
+    container.addEventListener("mousedown", (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      autoRotate = false;
+    });
+
+    window.addEventListener("mouseup", () => {
+      if (isDragging) {
+        isDragging = false;
+        restartAutoRotate();
+      }
+    });
+
+    window.addEventListener("mousemove", (e) => {
+      if (isDragging) {
+        const deltaX = e.clientX - startX;
+        startX = e.clientX;
+        angle += deltaX * 0.5;
+        positionImages();
+      }
+    });
+
+    // Zoom sur clic
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
@@ -155,9 +191,8 @@
       });
     });
 
-    // Initialisation
     positionImages();
-    animate();
+    animate(performance.now());
   </script>
 </body>
 </html>
