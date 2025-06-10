@@ -82,13 +82,11 @@
       z-index: 9999;
     }
     .zoomed img {
-      --zoom-offset: -240px; /* redéfinition locale pour s’assurer */
       width: 90vw;
       max-height: 70vh;
-      transform: translateY(var(--zoom-offset, -240px)); /* fallback en dur */
+      transform: translateY(var(--zoom-offset -240px));
       border-radius: 8px;
       box-shadow: 0 0 40px black;
-      will-change: transform; /* optimise la fluidité */
     }
 
     /* Adaptation mobile (portrait) : plus petit, profondeur réduite */
@@ -96,7 +94,7 @@
       :root {
         --img-size: 36vw;
         --translateZ: 700px;
-        --zoom-offset: -120px; /* décalage vertical zoom plus faible */
+        --zoom-offset: -120px;
       }
     }
   </style>
@@ -268,4 +266,60 @@
 
     // Pendant drag souris
     window.addEventListener("mousemove", (e) => {
-      if (isDraggi
+      if (isDragging) {
+        const deltaX = e.clientX - lastX;
+        lastX = e.clientX;
+        angle += deltaX * 0.3;     // modifie l’angle selon mouvement souris
+        velocity = deltaX * 0.3;   // met à jour la vitesse
+        positionImages();
+      }
+    });
+
+    // Touch start pour mobile
+    container.addEventListener("touchstart", (e) => {
+      if (e.touches.length === 1) {
+        isDragging = true;
+        lastX = e.touches[0].clientX;
+        autoRotate = false;
+        velocity = 0;
+      }
+    }, { passive: true });
+
+    // Touch move pour mobile
+    container.addEventListener("touchmove", (e) => {
+      if (isDragging && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - lastX;
+        lastX = e.touches[0].clientX;
+        angle += deltaX * 0.6;
+        velocity = deltaX * 0.6;
+        positionImages();
+      }
+    }, { passive: true });
+
+    // Touch end pour mobile
+    container.addEventListener("touchend", () => {
+      if (isDragging) {
+        isDragging = false;
+        restartAutoRotate();
+      }
+    });
+
+    // Ajoute la fonction zoom au clic sur chaque image
+    Array.from(images).forEach(img => {
+      img.addEventListener("click", () => {
+        const zoomDiv = document.createElement("div");
+        zoomDiv.className = "zoomed";
+        const zoomImg = document.createElement("img");
+        zoomImg.src = img.src;
+        zoomDiv.appendChild(zoomImg);
+        document.body.appendChild(zoomDiv);
+        zoomDiv.addEventListener("click", () => zoomDiv.remove());
+      });
+    });
+
+    // Première position des images + démarrage animation
+    positionImages();
+    animate(performance.now());
+  </script>
+</body>
+</html>
