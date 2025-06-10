@@ -48,7 +48,7 @@
       object-fit: cover;
       border-radius: 12px;
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 0.5s ease, z-index 0.5s ease;
+      transition: transform 1s ease, z-index 1s ease;
       cursor: pointer;
       z-index: 1;
       transform-origin: center center;
@@ -190,7 +190,7 @@
       const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.005 * delta; // vitesse un peu plus rapide
+        velocity = 0.0025 * delta; // vitesse un peu plus rapide
         angle += velocity;
       } else {
         angle += velocity;
