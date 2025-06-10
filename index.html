@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carrousel 3D Optimisé</title>
+  <title>Carrousel 3D avec avancée zoomée</title>
   <style>
     :root {
       --img-size: 150px;
@@ -11,18 +11,16 @@
       --zoom-offset: -60px;
     }
     html, body {
-      margin: 0;
-      height: 100%;
+      margin: 0; height: 100%;
       background: #00010d;
       overflow: hidden;
+      font-family: sans-serif;
     }
     body::before {
       content: "";
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 1000px;
-      height: 1000px;
+      top: 50%; left: 50%;
+      width: 1000px; height: 1000px;
       background: url("img/logo.png") no-repeat center/contain;
       opacity: 0.03;
       transform: translate(-50%, -50%);
@@ -51,7 +49,7 @@
       object-fit: cover;
       border-radius: 12px;
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 0.4s ease, z-index 0.4s ease;
+      transition: transform 0.6s ease, z-index 0.6s ease;
       cursor: pointer;
       z-index: 1;
       transform-origin: center center;
@@ -89,12 +87,48 @@
 <body>
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
-      <!-- Ajoute ici tes images -->
+      <!-- Tes images ici -->
       <img src="img/CHBR0.jpg" />
       <img src="img/CHBR1.jpg" />
       <img src="img/CUIEXT.jpg" />
       <img src="img/CUIEXT1.jpg" />
-      <!-- ... -->
+      <img src="img/CUIEXT2.jpg" />
+      <img src="img/CUIEXT3.jpg" />
+      <img src="img/CUIEXT4.jpg" />
+      <img src="img/CUIEXT5.jpg" />
+      <img src="img/CUIEXT6.jpg" />
+      <img src="img/CUIMARS1.jpg" />
+      <img src="img/CUIMARS2.jpg" />
+      <img src="img/CUIMARS3.jpg" />
+      <img src="img/CUIMARS4.jpg" />
+      <img src="img/Iso2.jpg" />
+      <img src="img/Iso3.jpg" />
+      <img src="img/Iso4.jpg" />
+      <img src="img/Iso5.jpg" />
+      <img src="img/Iso6.jpg" />
+      <img src="img/SDB1.jpg" />
+      <img src="img/SDB2.jpg" />
+      <img src="img/SDB3.jpg" />
+      <img src="img/SDB4.jpg" />
+      <img src="img/SDB5.jpg" />
+      <img src="img/WC2.jpg" />
+      <img src="img/cuisine_exterieure_cyporex.jpg" />
+      <img src="img/ext1.jpg" />
+      <img src="img/ext2.jpg" />
+      <img src="img/exterieur.jpg" />
+      <img src="img/meuble-laura-1.jpg" />
+      <img src="img/meuble-laura-2.jpg" />
+      <img src="img/meuble-laura-3.jpg" />
+      <img src="img/martegauxavant1.jpg" />
+      <img src="img/martegauxavant2.jpg" />
+      <img src="img/martegauxavant3.jpg" />
+      <img src="img/martegauxB.jpg" />
+      <img src="img/martegauxC.jpg" />
+      <img src="img/martegauxD.jpg" />
+      <img src="img/martegauxE.jpg" />
+      <img src="img/velaux0.jpg" />
+      <img src="img/velaux1.jpg" />
+      <img src="img/velaux2.jpg" />
       <img src="img/velaux3.jpg" />
     </div>
   </div>
@@ -109,17 +143,18 @@
     const zoomTranslateZ = 1600;
     const zoomScale = 1.5;
     let angle = 0;
-    let velocity = 0;
     let autoRotate = true;
     let lastTime = performance.now();
+
+    let velocity = 0;
+    const friction = 0.95;
+
     let isDragging = false;
     let lastX = 0;
-    let needsUpdate = true;
-
-    const friction = 0.94;
-    const angleStep = 360 / total;
 
     function positionImages() {
+      const angleStep = 360 / total;
+
       let closestIndex = 0;
       let minDiff = 360;
 
@@ -140,7 +175,7 @@
         if (i === closestIndex) {
           images[i].style.transform =
             `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) rotateY(${extraRotation}deg) scale(${zoomScale})`;
-          images[i].style.zIndex = 10;
+          images[i].style.zIndex = 100;
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
         } else {
           images[i].style.transform =
@@ -153,41 +188,37 @@
 
     function animate(now) {
       const delta = now - lastTime;
-      lastTime = now;
 
       if (autoRotate) {
-        velocity = 0.002 * delta;
+        velocity = 0.0015 * delta;
         angle += velocity;
-        needsUpdate = true;
       } else {
         angle += velocity;
         velocity *= friction;
-        if (Math.abs(velocity) > 0.001) {
-          needsUpdate = true;
-        } else {
+        if (Math.abs(velocity) < 0.001) {
           autoRotate = true;
+          velocity = 0;
         }
       }
 
-      if (needsUpdate) {
-        positionImages();
-        needsUpdate = false;
-      }
-
+      positionImages();
+      lastTime = now;
       requestAnimationFrame(animate);
     }
 
+    let interactionTimeout;
     function restartAutoRotate() {
-      clearTimeout(autoTimer);
-      autoTimer = setTimeout(() => {
-        autoRotate = true;
+      clearTimeout(interactionTimeout);
+      interactionTimeout = setTimeout(() => {
+        autoRotate = false;
+        velocity = 0.02;
       }, 2000);
     }
 
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
-      velocity += e.deltaY * 0.004;
+      velocity += e.deltaY * 0.003;
       restartAutoRotate();
     });
 
@@ -205,17 +236,13 @@
       }
     });
 
-    let throttleTimer;
     window.addEventListener("mousemove", (e) => {
       if (isDragging) {
-        if (!throttleTimer) {
-          const deltaX = e.clientX - lastX;
-          lastX = e.clientX;
-          angle += deltaX * 0.4;
-          velocity = deltaX * 0.4;
-          needsUpdate = true;
-          throttleTimer = setTimeout(() => (throttleTimer = null), 16);
-        }
+        const deltaX = e.clientX - lastX;
+        lastX = e.clientX;
+        angle += deltaX * 0.3;
+        velocity = deltaX * 0.3;
+        positionImages();
       }
     });
 
@@ -234,7 +261,7 @@
         lastX = e.touches[0].clientX;
         angle += deltaX * 0.6;
         velocity = deltaX * 0.6;
-        needsUpdate = true;
+        positionImages();
       }
     }, { passive: true });
 
@@ -244,8 +271,6 @@
         restartAutoRotate();
       }
     });
-
-    let autoTimer = null;
 
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
