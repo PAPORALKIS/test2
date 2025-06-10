@@ -8,8 +8,8 @@
     /* Variables CSS pour taille des images, profondeur Z et offset du zoom */
     :root {
       --img-size: 150px;        /* taille de chaque image dans le carrousel */
-      --translateZ: 1500;       /* distance à laquelle les images sont placées en 3D */
-      --zoom-offset: -400px;     /* décalage vertical de l'image zoomée */
+      --translateZ: 1100;       /* distance à laquelle les images sont placées en 3D */
+      --zoom-offset: -800px;     /* décalage vertical de l'image zoomée */
     }
 
     html, body {
@@ -214,7 +214,7 @@
       const delta = now - lastTime;  // temps écoulé depuis la dernière frame
 
       if (autoRotate) {
-        velocity = 0.0050 * delta;  // vitesse fixe de rotation automatique
+        velocity = 0.0035 * delta;  // vitesse fixe de rotation automatique
         angle += velocity;
       } else {
         angle += velocity;          // rotation selon la vitesse du drag
