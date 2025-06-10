@@ -2,36 +2,30 @@
 <html lang="fr">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Réalisations – Carrousel 3D corrigé</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carrousel 3D avec avancée zoomée</title>
   <style>
     :root {
       --img-size: 150px;
-      --translateZ: 1100px;
+      --translateZ: 1300px;
     }
-
     html, body {
-      margin: 0;
-      height: 100%;
+      margin: 0; height: 100%;
       background: #00010d;
       overflow: hidden;
       font-family: sans-serif;
     }
-
     body::before {
       content: "";
       position: fixed;
-      top: 50%;
-      left: 50%;
-      width: 1000px;
-      height: 1000px;
+      top: 50%; left: 50%;
+      width: 1000px; height: 1000px;
       background: url("img/logo.png") no-repeat center/contain;
       opacity: 0.03;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 0;
     }
-
     .carousel-container {
       position: fixed;
       top: 40%;
@@ -40,7 +34,6 @@
       perspective: 3000px;
       z-index: 1;
     }
-
     .carousel {
       position: relative;
       width: 0;
@@ -48,7 +41,6 @@
       transform-style: preserve-3d;
       transform: rotateX(-5deg);
     }
-
     .carousel img {
       position: absolute;
       width: var(--img-size);
@@ -56,37 +48,31 @@
       object-fit: cover;
       border-radius: 12px;
       box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 0.3s ease;
+      transition: transform 0.5s ease, z-index 0.5s ease;
       cursor: pointer;
       z-index: 1;
+      transform-origin: center center;
     }
-
     .carousel img:hover {
       transform: scale(1.1);
       z-index: 10;
     }
-
     .zoomed {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.95);
+      top: 0; left: 0;
+      width: 100vw; height: 100vh;
+      background: rgba(0,0,0,0.95);
       display: flex;
       justify-content: center;
       align-items: center;
       z-index: 9999;
     }
-
     .zoomed img {
       width: 90vw;
-      height: auto;
       max-height: 90vh;
       border-radius: 8px;
       box-shadow: 0 0 40px black;
     }
-
     @media (orientation: portrait) {
       :root {
         --img-size: 36vw;
@@ -150,71 +136,53 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    const radius = 800;
+    const baseRadius = 800;      // Rayon du cercle
+    const zoomTranslateZ = 1300; // Distance de l’image zoomée vers l’avant
+    const zoomScale = 1.5;       // Facteur d’agrandissement image zoomée
     let angle = 0;
     let autoRotate = true;
     let lastTime = performance.now();
 
     let velocity = 0;
-    const friction = 0.93; // un peu plus de friction pour stabiliser
+    const friction = 0.95;
 
     let isDragging = false;
-    let startX = 0;
     let lastX = 0;
-
-    let isTouching = false;
-    let touchStartX = 0;
-    let lastTouchX = 0;
 
     function positionImages() {
       const angleStep = 360 / total;
-      for (let i = 0; i < total; i++) {
-        const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3;
-        images[i].style.transform =
-          `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${extraRotation}deg) scale(1)`;
-        images[i].style.zIndex = 1;
-      }
-    }
 
-    let currentZoomIndex = -1;
-
-    function applyZoomEffect() {
+      let closestIndex = 0;
       let minDiff = 360;
-      let centerIndex = -1;
-      const angleStep = 360 / total;
 
-      // Cherche l'image dont l'angle est le plus proche de 0 (face caméra)
       for (let i = 0; i < total; i++) {
-        const theta = ((angleStep * i + angle) % 360 + 360) % 360; // Normalisation 0-360
-        const diff = Math.min(Math.abs(theta), Math.abs(360 - theta)); // Proche de 0 ou 360
+        const theta = (angleStep * i + angle) % 360;
+        // Chercher l’angle le plus proche de 0 (face caméra)
+        const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
         if (diff < minDiff) {
           minDiff = diff;
-          centerIndex = i;
+          closestIndex = i;
         }
       }
 
-      if (centerIndex !== currentZoomIndex) {
-        if (currentZoomIndex >= 0) {
-          images[currentZoomIndex].style.transition = "transform 0.5s ease";
-          const prevTheta = angleStep * currentZoomIndex + angle;
-          const prevExtraRotation = -angleStep * 0.3;
-          images[currentZoomIndex].style.transform =
-            `rotateY(${prevTheta}deg) translateZ(${radius}px) rotateY(${prevExtraRotation}deg) scale(1)`;
-          images[currentZoomIndex].style.zIndex = 1;
-        }
-
-        currentZoomIndex = centerIndex;
-
-        images[centerIndex].style.transition = "transform 0.7s ease";
-        const theta = angleStep * centerIndex + angle;
+      for (let i = 0; i < total; i++) {
+        const theta = angleStep * i + angle;
+        const normalizedTheta = ((theta % 360) + 360) % 360;
         const extraRotation = -angleStep * 0.3;
 
-        // Zoom en avant et plus grand
-        images[centerIndex].style.transform =
-          `rotateY(${theta}deg) translateZ(${radius + 450}px) rotateY(${extraRotation}deg) scale(1.3)`;
-
-        images[centerIndex].style.zIndex = 20;
+        if (i === closestIndex) {
+          // Image devant: avancée + zoomée
+          images[i].style.transform =
+            `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) rotateY(${extraRotation}deg) scale(${zoomScale})`;
+          images[i].style.zIndex = 100;
+          images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
+        } else {
+          // Images normales
+          images[i].style.transform =
+            `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
+          images[i].style.zIndex = 1;
+          images[i].style.filter = "none";
+        }
       }
     }
 
@@ -222,7 +190,7 @@
       const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.004 * delta;  // vitesse légèrement augmentée
+        velocity = 0.005 * delta; // vitesse un peu plus rapide
         angle += velocity;
       } else {
         angle += velocity;
@@ -234,7 +202,6 @@
       }
 
       positionImages();
-      applyZoomEffect();
       lastTime = now;
       requestAnimationFrame(animate);
     }
@@ -244,21 +211,20 @@
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
         autoRotate = false;
-        velocity = 0.015; // un peu plus rapide après interaction
+        velocity = 0.02;
       }, 2000);
     }
 
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
-      velocity += e.deltaY * 0.0025;
+      velocity += e.deltaY * 0.003;
       restartAutoRotate();
     });
 
     container.addEventListener("mousedown", (e) => {
       isDragging = true;
-      startX = e.clientX;
-      lastX = startX;
+      lastX = e.clientX;
       autoRotate = false;
       velocity = 0;
     });
@@ -272,30 +238,27 @@
 
     window.addEventListener("mousemove", (e) => {
       if (isDragging) {
-        const currentX = e.clientX;
-        const deltaX = currentX - lastX;
-        lastX = currentX;
-        angle += deltaX * 0.25;
-        velocity = deltaX * 0.25;
+        const deltaX = e.clientX - lastX;
+        lastX = e.clientX;
+        angle += deltaX * 0.3;
+        velocity = deltaX * 0.3;
         positionImages();
       }
     });
 
     container.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
-        isTouching = true;
-        touchStartX = e.touches[0].clientX;
-        lastTouchX = touchStartX;
+        isDragging = true;
+        lastX = e.touches[0].clientX;
         autoRotate = false;
         velocity = 0;
       }
     }, { passive: true });
 
     container.addEventListener("touchmove", (e) => {
-      if (isTouching && e.touches.length === 1) {
-        const touchX = e.touches[0].clientX;
-        const deltaX = touchX - lastTouchX;
-        lastTouchX = touchX;
+      if (isDragging && e.touches.length === 1) {
+        const deltaX = e.touches[0].clientX - lastX;
+        lastX = e.touches[0].clientX;
         angle += deltaX * 0.6;
         velocity = deltaX * 0.6;
         positionImages();
@@ -303,8 +266,8 @@
     }, { passive: true });
 
     container.addEventListener("touchend", () => {
-      if (isTouching) {
-        isTouching = false;
+      if (isDragging) {
+        isDragging = false;
         restartAutoRotate();
       }
     });
