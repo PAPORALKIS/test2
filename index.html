@@ -3,11 +3,11 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Réalisations – Carrousel 3D avec inertie</title>
+  <title>Réalisations – Carrousel 3D avec zoom central</title>
   <style>
     :root {
       --img-size: 150px;
-      --translateZ: 900px;
+      --translateZ: 1000px;
     }
 
     html, body {
@@ -31,7 +31,7 @@
       pointer-events: none;
       z-index: 0;
     }
- /* <--- position carousel */
+
     .carousel-container {
       position: fixed;
       top: 40%;
@@ -46,7 +46,7 @@
       width: 0;
       height: 0;
       transform-style: preserve-3d;
-      transform: rotateX(-5deg); /* <--- vue plongeante */
+      transform: rotateX(-5deg);
     }
 
     .carousel img {
@@ -63,6 +63,20 @@
     .carousel img:hover {
       transform: scale(1.1);
       z-index: 10;
+    }
+
+    @keyframes zoomCenter {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.15);
+      }
+    }
+
+    .carousel img.centered {
+      animation: zoomCenter 1.2s ease-in-out;
+      z-index: 2;
     }
 
     .zoomed {
@@ -97,108 +111,110 @@
 <body>
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">      
-       <img src="img/CHBR0.jpg" />
-       <img src="img/CHBR1.jpg" />
-       <img src="img/CUIEXT.jpg" />
-       <img src="img/CUIEXT1.jpg" />
-       <img src="img/CUIEXT2.jpg" />
-       <img src="img/CUIEXT3.jpg" />
-       <img src="img/CUIEXT4.jpg" />
-       <img src="img/CUIEXT5.jpg" />
-       <img src="img/CUIEXT6.jpg" />
-       <img src="img/CUIMARS1.jpg" />
-       <img src="img/CUIMARS2.jpg" />
-       <img src="img/CUIMARS3.jpg" />
-       <img src="img/CUIMARS4.jpg" />
-       <img src="img/Iso2.jpg" />
-       <img src="img/Iso3.jpg" />
-       <img src="img/Iso4.jpg" />
-       <img src="img/Iso5.jpg" />
-       <img src="img/Iso6.jpg" />,
-       <img src="img/SDB1.jpg" />
-       <img src="img/SDB2.jpg" />
-       <img src="img/SDB3.jpg" />
-       <img src="img/SDB4.jpg" />
-       <img src="img/SDB5.jpg" />
-       <img src="img/WC2.jpg" />
-       <img src="img/cuisine_exterieure_cyporex.jpg" />
-       <img src="img/ext1.jpg" />
-       <img src="img/ext2.jpg" />
-       <img src="img/exterieur.jpg" />
-       <img src="img/meuble-laura-1.jpg" />
-       <img src="img/meuble-laura-2.jpg" />
-       <img src="img/meuble-laura-3.jpg" />
-       <img src="img/martegauxavant1.jpg" />,
-       <img src="img/martegauxavant2.jpg" />
-       <img src="img/martegauxavant3.jpg" />
-       <img src="img/martegauxB.jpg" />
-       <img src="img/martegauxC.jpg" />
-       <img src="img/martegauxD.jpg" />
-       <img src="img/martegauxE.jpg" />
-       <img src="img/velaux0.jpg" />
-       <img src="img/velaux1.jpg" />
-       <img src="img/velaux2.jpg" />
-       <img src="img/velaux3.jpg" />
+      <!-- Remplace ou complète avec tes images -->
+      <img src="img/CHBR0.jpg" />
+      <img src="img/CHBR1.jpg" />
+      <img src="img/CUIEXT.jpg" />
+      <img src="img/CUIEXT1.jpg" />
+      <img src="img/CUIEXT2.jpg" />
+      <img src="img/CUIEXT3.jpg" />
+      <img src="img/CUIEXT4.jpg" />
+      <img src="img/CUIEXT5.jpg" />
+      <img src="img/CUIEXT6.jpg" />
+      <img src="img/CUIMARS1.jpg" />
+      <img src="img/CUIMARS2.jpg" />
+      <img src="img/CUIMARS3.jpg" />
+      <img src="img/CUIMARS4.jpg" />
+      <img src="img/Iso2.jpg" />
+      <img src="img/Iso3.jpg" />
+      <img src="img/Iso4.jpg" />
+      <img src="img/Iso5.jpg" />
+      <img src="img/Iso6.jpg" />
+      <img src="img/SDB1.jpg" />
+      <img src="img/SDB2.jpg" />
+      <img src="img/SDB3.jpg" />
+      <img src="img/SDB4.jpg" />
+      <img src="img/SDB5.jpg" />
+      <img src="img/WC2.jpg" />
+      <img src="img/cuisine_exterieure_cyporex.jpg" />
+      <img src="img/ext1.jpg" />
+      <img src="img/ext2.jpg" />
+      <img src="img/exterieur.jpg" />
+      <img src="img/meuble-laura-1.jpg" />
+      <img src="img/meuble-laura-2.jpg" />
+      <img src="img/meuble-laura-3.jpg" />
+      <img src="img/martegauxavant1.jpg" />
+      <img src="img/martegauxavant2.jpg" />
+      <img src="img/martegauxavant3.jpg" />
+      <img src="img/martegauxB.jpg" />
+      <img src="img/martegauxC.jpg" />
+      <img src="img/martegauxD.jpg" />
+      <img src="img/martegauxE.jpg" />
+      <img src="img/velaux0.jpg" />
+      <img src="img/velaux1.jpg" />
+      <img src="img/velaux2.jpg" />
+      <img src="img/velaux3.jpg" />
     </div>
   </div>
 
   <script>
-    // Récupération des éléments
     const carousel = document.getElementById("carousel");
     const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    const radius = 800; // Rayon de la rotation en 3D
-    let angle = 0;      // Angle de rotation actuel
-    let autoRotate = true; // Contrôle rotation auto
-
+    const radius = 800;
+    let angle = 0;
+    let autoRotate = true;
     let lastTime = performance.now();
+    let velocity = 0;
+    const friction = 0.95;
 
-    // Variables pour inertie
-    let velocity = 0;    // Vitesse actuelle de rotation (deg/ms)
-    const friction = 0.95; // Facteur de ralentissement de l'inertie (0 < friction < 1)
-
-    // Variables drag souris
     let isDragging = false;
     let startX = 0;
     let lastX = 0;
 
-    // Variables touch
     let isTouching = false;
     let touchStartX = 0;
     let lastTouchX = 0;
 
-    /**
-     * Positionne les images autour du cylindre 3D
-     */
     function positionImages() {
       const angleStep = 360 / total;
+      let closestIndex = 0;
+      let minDiff = 360;
+
+      for (let i = 0; i < total; i++) {
+        const theta = (angleStep * i + angle) % 360;
+        const imgAngle = (theta + 360) % 360;
+        const diff = Math.min(Math.abs(imgAngle - 0), Math.abs(imgAngle - 360));
+        if (diff < minDiff) {
+          minDiff = diff;
+          closestIndex = i;
+        }
+      }
+
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3; // Inclinaison vers l’extérieur
+        const extraRotation = -angleStep * 0.3;
         images[i].style.transform =
           `rotateY(${theta}deg) translateZ(${radius}px) rotateY(${extraRotation}deg)`;
+
+        images[i].classList.remove("centered");
       }
+
+      images[closestIndex].classList.add("centered");
     }
 
-    /**
-     * Boucle d'animation
-     * Applique la rotation automatique ou inertie si présente
-     */
     function animate(now) {
       const delta = now - lastTime;
 
       if (autoRotate) {
-        // Rotation automatique quand pas d'interaction
-        velocity = 0.01 * delta; // vitesse fixe
+        velocity = 0.01 * delta;
         angle += velocity;
       } else {
-        // Rotation avec inertie (après drag/touch)
         angle += velocity;
         velocity *= friction;
 
-        // Si inertie presque nulle, on relance rotation auto
         if (Math.abs(velocity) < 0.001) {
           autoRotate = true;
           velocity = 0;
@@ -210,30 +226,22 @@
       requestAnimationFrame(animate);
     }
 
-    /**
-     * Relance la rotation automatique après délai d'inactivité
-     */
     let interactionTimeout;
     function restartAutoRotate() {
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
-        autoRotate = false; // On met à false car on gère inertie au lieu auto pure
-        velocity = 0.01; // vitesse initiale auto quand inertie fini
+        autoRotate = false;
+        velocity = 0.01;
       }, 2000);
     }
 
-    // Gestion scroll molette / trackpad
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
-
-      // On ajoute la vitesse proportionnelle à la force du scroll (sens inversé pour naturel)
       velocity += e.deltaY * 0.002;
-
       restartAutoRotate();
     });
 
-    // Gestion drag souris
     container.addEventListener("mousedown", (e) => {
       isDragging = true;
       startX = e.clientX;
@@ -254,15 +262,12 @@
         const currentX = e.clientX;
         const deltaX = currentX - lastX;
         lastX = currentX;
-
-        // Sensibilité du drag ajustée pour rotation fluide
         angle += deltaX * 0.2;
-        velocity = deltaX * 0.2; // Mise à jour vitesse pour inertie
+        velocity = deltaX * 0.2;
         positionImages();
       }
     });
 
-    // Gestion touch
     container.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
         isTouching = true;
@@ -278,7 +283,6 @@
         const touchX = e.touches[0].clientX;
         const deltaX = touchX - lastTouchX;
         lastTouchX = touchX;
-
         angle += deltaX * 0.5;
         velocity = deltaX * 0.5;
         positionImages();
@@ -292,7 +296,6 @@
       }
     });
 
-    // Zoom sur image au clic
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
@@ -305,11 +308,8 @@
       });
     });
 
-    // Initialisation
     positionImages();
     animate(performance.now());
   </script>
 </body>
 </html>
-
- 
