@@ -7,15 +7,16 @@
   <style>
     :root {
       --img-size: min(22vw, 22vh);
-      --translateZ: min(60vw, 60vh);
+      --translateZ: min(80vw, 80vh);
     }
+
     body {
       margin: 0;
-      background: #01010f; /* bleu presque noir */
+      background: #00010d;
       overflow: hidden;
       font-family: sans-serif;
     }
-    /* filigrane logo */
+
     body::before {
       content: "";
       position: fixed;
@@ -24,50 +25,63 @@
       width: 1000px;
       height: 1000px;
       background: url("img/logo.png") no-repeat center/contain;
-      opacity: 0.04;
+      opacity: 0.03;
       transform: translate(-50%, -50%);
       pointer-events: none;
       z-index: 0;
     }
+
     .carousel-container {
       position: fixed;
       top: 50%;
       left: 50%;
-      width: 100%;
-      height: 100%;
       transform: translate(-50%, -50%);
-      perspective: 2500px; /* plus de recul */
+      width: 100vw;
+      height: 100vh;
+      perspective: 3000px; /* caméra reculée */
+      display: flex;
+      justify-content: center;
+      align-items: center;
       z-index: 1;
     }
+
     .carousel {
       position: relative;
-      width: 100%;
-      height: 100%;
+      width: var(--translateZ);
+      height: var(--translateZ);
       transform-style: preserve-3d;
-      animation: rotate 60s linear infinite;
+      animation: spin 40s linear infinite;
     }
+
     .carousel img {
       position: absolute;
       width: var(--img-size);
       height: var(--img-size);
       object-fit: cover;
       border-radius: 12px;
-      box-shadow: 0 0 14px rgba(0,0,0,0.7);
+      box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
       transition: transform 0.4s ease;
       cursor: pointer;
     }
+
     .carousel img:hover {
-      transform: scale(1.12);
+      transform: scale(1.1);
       z-index: 10;
     }
-    @keyframes rotate {
-      from { transform: rotateY(0deg); }
-      to { transform: rotateY(360deg); }
+
+    @keyframes spin {
+      from {
+        transform: rotateY(0deg);
+      }
+      to {
+        transform: rotateY(360deg);
+      }
     }
+
     @media (orientation: portrait) {
       :root {
         --img-size: 38vw;
-        --translateZ: 65vw;
+        --translateZ: 85vw;
       }
     }
   </style>
@@ -75,12 +89,12 @@
 <body>
   <div class="carousel-container">
     <div class="carousel">
-      <img src="img/CHBR0.jpg" style="transform: rotateY(0deg) translateZ(var(--translateZ));">
-      <img src="img/CHBR1.jpg" style="transform: rotateY(60deg) translateZ(var(--translateZ));">
-      <img src="img/CHBR2.jpg" style="transform: rotateY(120deg) translateZ(var(--translateZ));">
-      <img src="img/CHBR3.jpg" style="transform: rotateY(180deg) translateZ(var(--translateZ));">
-      <img src="img/CHBR4.jpg" style="transform: rotateY(240deg) translateZ(var(--translateZ));">
-      <img src="img/CHBR5.jpg" style="transform: rotateY(300deg) translateZ(var(--translateZ));">
+      <img src="img/CHBR0.jpg" style="transform: rotateY(0deg) translateZ(var(--translateZ));" />
+      <img src="img/CHBR1.jpg" style="transform: rotateY(60deg) translateZ(var(--translateZ));" />
+      <img src="img/CHBR2.jpg" style="transform: rotateY(120deg) translateZ(var(--translateZ));" />
+      <img src="img/CHBR3.jpg" style="transform: rotateY(180deg) translateZ(var(--translateZ));" />
+      <img src="img/CHBR4.jpg" style="transform: rotateY(240deg) translateZ(var(--translateZ));" />
+      <img src="img/CHBR5.jpg" style="transform: rotateY(300deg) translateZ(var(--translateZ));" />
     </div>
   </div>
 </body>
