@@ -179,7 +179,7 @@
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
         autoRotate = false; // On met à false car on gère inertie au lieu auto pure
-        velocity = 0.02; // vitesse initiale auto quand inertie fini
+        velocity = 0.01; // vitesse initiale auto quand inertie fini
       }, 2000);
     }
 
@@ -189,7 +189,7 @@
       autoRotate = false;
 
       // On ajoute la vitesse proportionnelle à la force du scroll (sens inversé pour naturel)
-      velocity += e.deltaY * 0.005;
+      velocity += e.deltaY * 0.002;
 
       restartAutoRotate();
     });
@@ -217,8 +217,8 @@
         lastX = currentX;
 
         // Sensibilité du drag ajustée pour rotation fluide
-        angle += deltaX * 0.5;
-        velocity = deltaX * 0.5; // Mise à jour vitesse pour inertie
+        angle += deltaX * 0.3;
+        velocity = deltaX * 0.3; // Mise à jour vitesse pour inertie
         positionImages();
       }
     });
