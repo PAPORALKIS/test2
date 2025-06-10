@@ -7,7 +7,7 @@
   <style>
     :root {
       --img-size: 180px;
-      --translateZ: 500px;
+      --translateZ: 700px;
     }
 
     html, body {
@@ -36,7 +36,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -48%);
+      transform: translate(-50%, -50%);
       perspective: 3000px;
       z-index: 1;
     }
@@ -97,11 +97,11 @@
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
       <img src="img/CHBR0.jpg" class="group-chambre" />
-      <img src="img/CHBR1.jpg" class="group-chambre" />
-      <img src="img/CHBR2.jpg" class="group-chambre" />
-      <img src="img/CHBR3.jpg" class="group-chambre" />
-      <img src="img/CHBR4.jpg" class="group-chambre" />
-      <img src="img/CHBR5.jpg" class="group-chambre" />
+      <img src="img/CUIEXT1.jpg" class="group-chambre" />
+      <img src="img/CUIEXT2.jpg" class="group-chambre" />
+      <img src="img/CUIEXT3.jpg" class="group-chambre" />
+      <img src="img/CUIEXT4.jpg" class="group-chambre" />
+      <img src="img/CUIEXT5.jpg" class="group-chambre" />
     </div>
   </div>
 
@@ -110,7 +110,10 @@
     const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
-    const radius = 500; // on remplace la lecture CSS par une valeur réelle
+
+    const rootStyles = getComputedStyle(document.documentElement);
+    const radius = parseFloat(rootStyles.getPropertyValue("--translateZ")) || 700;
+
     let angle = 0;
     let rotating = true;
 
@@ -129,11 +132,9 @@
       requestAnimationFrame(animate);
     }
 
-    // Pause on hover
     container.addEventListener("mouseenter", () => rotating = false);
     container.addEventListener("mouseleave", () => rotating = true);
 
-    // Zoom on click
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
