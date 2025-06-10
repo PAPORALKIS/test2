@@ -6,7 +6,7 @@
   <title>Réalisations – Carrousel 3D</title>
   <style>
     :root {
-      --img-size: 220px;
+      --img-size: 190px;
       --translateZ: 700px;
     }
 
@@ -87,7 +87,7 @@
 
     @media (orientation: portrait) {
       :root {
-        --img-size: 38vw;
+        --img-size: 36vw;
         --translateZ: 400px;
       }
     }
@@ -111,39 +111,39 @@
     const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
-    const radius = 700; // distance des images au centre
+    const radius = 700;
     let angle = 0;
     let autoRotate = true;
     let lastTime = performance.now();
 
     function positionImages() {
+      const minAngleGap = 360 / total;
       for (let i = 0; i < total; i++) {
-        const theta = (360 / total) * i + angle;
+        const theta = (minAngleGap * i + angle);
         images[i].style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
       }
     }
 
-    // Animation automatique
     function animate(now) {
       if (autoRotate) {
         const delta = now - lastTime;
-        angle += 0.03 * delta; // vitesse de rotation
+        angle += 0.03 * delta;
         positionImages();
       }
       lastTime = now;
       requestAnimationFrame(animate);
     }
 
-    // Relancer l'animation après une interaction
+    // Restart rotation after user interaction
     let interactionTimeout;
     function restartAutoRotate() {
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
         autoRotate = true;
-      }, 2000); // délai après interaction
+      }, 2000);
     }
 
-    // Scroll horizontal
+    // Scroll interaction
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
@@ -152,7 +152,7 @@
       restartAutoRotate();
     });
 
-    // Glissement souris
+    // Drag interaction
     let isDragging = false;
     let startX = 0;
 
@@ -178,7 +178,7 @@
       }
     });
 
-    // Zoom sur clic
+    // Zoom on image click
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
