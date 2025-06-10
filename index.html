@@ -152,7 +152,7 @@
 
       if (autoRotate) {
         // Rotation automatique quand pas d'interaction
-        velocity = 0.02 * delta; // vitesse fixe
+        velocity = 0.01 * delta; // vitesse fixe
         angle += velocity;
       } else {
         // Rotation avec inertie (après drag/touch)
@@ -217,8 +217,8 @@
         lastX = currentX;
 
         // Sensibilité du drag ajustée pour rotation fluide
-        angle += deltaX * 0.3;
-        velocity = deltaX * 0.3; // Mise à jour vitesse pour inertie
+        angle += deltaX * 0.2;
+        velocity = deltaX * 0.2; // Mise à jour vitesse pour inertie
         positionImages();
       }
     });
