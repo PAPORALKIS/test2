@@ -36,7 +36,7 @@
       position: fixed;
       top: 50%;
       left: 50%;
-      transform: translate(-50%, -48%); /* -48% pour un meilleur centrage visuel */
+      transform: translate(-50%, -48%);
       perspective: 5000px;
       z-index: 1;
     }
@@ -64,6 +64,27 @@
       z-index: 10;
     }
 
+    .zoomed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .zoomed img {
+      width: 90vw;
+      height: auto;
+      max-height: 90vh;
+      border-radius: 8px;
+      box-shadow: 0 0 40px black;
+    }
+
     @media (orientation: portrait) {
       :root {
         --img-size: 38vw;
@@ -73,23 +94,26 @@
   </style>
 </head>
 <body>
-  <div class="carousel-container">
+  <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
-      <img src="img/CHBR0.jpg" />
-      <img src="img/CHBR1.jpg" />
-      <img src="img/CHBR2.jpg" />
-      <img src="img/CHBR3.jpg" />
-      <img src="img/CHBR4.jpg" />
-      <img src="img/CHBR5.jpg" />
+      <!-- Exemple : class="group-chambre" pour regroupement futur -->
+      <img src="img/CHBR0.jpg" class="group-chambre" />
+      <img src="img/CHBR1.jpg" class="group-chambre" />
+      <img src="img/CUIEXT1.jpg" class="group-chambre" />
+      <img src="img/CUIEXT2.jpg" class="group-chambre" />
+      <img src="img/CUIEXT3.jpg" class="group-chambre" />
+      <img src="img/CUIEXT4.jpg" class="group-chambre" />
     </div>
   </div>
 
   <script>
     const carousel = document.getElementById("carousel");
+    const container = document.getElementById("carousel-container");
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
     const radius = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--translateZ'));
     let angle = 0;
+    let rotating = true;
 
     function positionImages() {
       for (let i = 0; i < total; i++) {
@@ -99,11 +123,31 @@
     }
 
     function animate() {
-      angle += 0.2; // vitesse de rotation
-      positionImages();
+      if (rotating) {
+        angle += 0.2;
+        positionImages();
+      }
       requestAnimationFrame(animate);
     }
 
+    // Pause on hover
+    container.addEventListener("mouseenter", () => rotating = false);
+    container.addEventListener("mouseleave", () => rotating = true);
+
+    // Zoom on click
+    Array.from(images).forEach(img => {
+      img.addEventListener("click", () => {
+        const zoomDiv = document.createElement("div");
+        zoomDiv.className = "zoomed";
+        const zoomImg = document.createElement("img");
+        zoomImg.src = img.src;
+        zoomDiv.appendChild(zoomImg);
+        document.body.appendChild(zoomDiv);
+        zoomDiv.addEventListener("click", () => zoomDiv.remove());
+      });
+    });
+
+    // Init
     positionImages();
     animate();
   </script>
