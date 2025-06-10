@@ -1,293 +1,240 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carrousel 3D avec avancée zoomée</title>
-  <style>
-    :root {
-      --img-size: 150px;
-      --translateZ: 2000px;  /* bien mettre l’unité */
-      --zoom-offset: -60px;
-    }
-    html, body {
-      margin: 0; height: 100%;
-      background: #00010d;
-      overflow: hidden;
-      font-family: sans-serif;
-    }
-    body::before {
-      content: "";
-      position: fixed;
-      top: 50%; left: 50%;
-      width: 1000px; height: 1000px;
-      background: url("img/logo.png") no-repeat center/contain;
-      opacity: 0.03;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-    .carousel-container {
-      position: fixed;
-      top: 40%;
-      left: 45%;
-      transform: translate(-50%, -49%);
-      perspective: 3000px;
-      z-index: 1;
-    }
-    .carousel {
-      position: relative;
-      width: 0;
-      height: 0;
-      transform-style: preserve-3d;
-      transform: rotateX(-5deg);
-    }
-    .carousel img {
-      position: absolute;
-      width: var(--img-size);
-      height: var(--img-size);
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 0.6s ease, z-index 0.6s ease;
-      cursor: pointer;
-      z-index: 1;
-      transform-origin: center center;
-    }
-    .carousel img:hover {
-      transform: scale(1.1);
-      z-index: 10;
-    }
-    .zoomed {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .zoomed img {
-      width: 90vw;
-      max-height: 70vh;
-      transform: translateY(var(--zoom-offset));
-      border-radius: 8px;
-      box-shadow: 0 0 40px black;
-    }
-    @media (orientation: portrait) {
-      :root {
-        --img-size: 36vw;
-        --translateZ: 700px;
-        --zoom-offset: -60px;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Carrousel 3D interactif</title>
+<style>
+  :root {
+    --img-size: 120px;
+    --translateZ: 300px; /* Rayon cercle 3D */
+    --zoom-distance: 600px; /* Distance image zoomée */
+  }
+  body {
+    margin: 0;
+    background: #111;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
+  .carousel-container {
+    perspective: 1000px;
+    position: relative;
+  }
+  .carousel {
+    position: relative;
+    width: var(--img-size);
+    height: var(--img-size);
+    transform-style: preserve-3d;
+    cursor: grab;
+  }
+  .carousel:active {
+    cursor: grabbing;
+  }
+  .carousel img {
+    position: absolute;
+    width: var(--img-size);
+    height: var(--img-size);
+    border-radius: 10px;
+    box-shadow: 0 0 5px rgba(255,255,255,0.2);
+    transition: transform 0.5s ease, box-shadow 0.5s ease;
+    user-select: none;
+  }
+  .carousel img.zoomed {
+    box-shadow: 0 0 40px white;
+    transform: translateZ(var(--zoom-distance)) scale(1.5) !important;
+    z-index: 20;
+  }
+  .overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+  }
+  .overlay img {
+    max-width: 90vw;
+    max-height: 80vh;
+    border-radius: 10px;
+    box-shadow: 0 0 50px white;
+    user-select: none;
+  }
+</style>
 </head>
 <body>
-  <div class="carousel-container" id="carousel-container">
-    <div class="carousel" id="carousel">
-      <!-- Tes images ici -->
-      <img src="img/CHBR0.jpg" />
-      <img src="img/CHBR1.jpg" />
-      <img src="img/CUIEXT.jpg" />
-      <img src="img/CUIEXT1.jpg" />
-      <img src="img/CUIEXT2.jpg" />
-      <img src="img/CUIEXT3.jpg" />
-      <img src="img/CUIEXT4.jpg" />
-      <img src="img/CUIEXT5.jpg" />
-      <img src="img/CUIEXT6.jpg" />
-      <img src="img/CUIMARS1.jpg" />
-      <img src="img/CUIMARS2.jpg" />
-      <img src="img/CUIMARS3.jpg" />
-      <img src="img/CUIMARS4.jpg" />
-      <img src="img/Iso2.jpg" />
-      <img src="img/Iso3.jpg" />
-      <img src="img/Iso4.jpg" />
-      <img src="img/Iso5.jpg" />
-      <img src="img/Iso6.jpg" />
-      <img src="img/SDB1.jpg" />
-      <img src="img/SDB2.jpg" />
-      <img src="img/SDB3.jpg" />
-      <img src="img/SDB4.jpg" />
-      <img src="img/SDB5.jpg" />
-      <img src="img/WC2.jpg" />
-      <img src="img/cuisine_exterieure_cyporex.jpg" />
-      <img src="img/ext1.jpg" />
-      <img src="img/ext2.jpg" />
-      <img src="img/exterieur.jpg" />
-      <img src="img/meuble-laura-1.jpg" />
-      <img src="img/meuble-laura-2.jpg" />
-      <img src="img/meuble-laura-3.jpg" />
-      <img src="img/martegauxavant1.jpg" />
-      <img src="img/martegauxavant2.jpg" />
-      <img src="img/martegauxavant3.jpg" />
-      <img src="img/martegauxB.jpg" />
-      <img src="img/martegauxC.jpg" />
-      <img src="img/martegauxD.jpg" />
-      <img src="img/martegauxE.jpg" />
-      <img src="img/velaux0.jpg" />
-      <img src="img/velaux1.jpg" />
-      <img src="img/velaux2.jpg" />
-      <img src="img/velaux3.jpg" />
-    </div>
+
+<div class="carousel-container">
+  <div class="carousel" id="carousel">
+    <img src="img1.jpg" alt="Image 1"/>
+    <img src="img2.jpg" alt="Image 2"/>
+    <img src="img3.jpg" alt="Image 3"/>
+    <img src="img4.jpg" alt="Image 4"/>
+    <img src="img5.jpg" alt="Image 5"/>
+    <img src="img6.jpg" alt="Image 6"/>
   </div>
+</div>
 
-  <script>
-    // Récupération dynamique de la variable CSS --translateZ
-    const rootStyles = getComputedStyle(document.documentElement);
-    const baseRadius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000;
-    const zoomTranslateZ = 1600;  // tu peux aussi le rendre dynamique si tu veux
+<script>
+  const carousel = document.getElementById('carousel');
+  const images = Array.from(carousel.querySelectorAll('img'));
+  const imgCount = images.length;
 
-    const carousel = document.getElementById("carousel");
-    const container = document.getElementById("carousel-container");
-    const images = carousel.getElementsByTagName("img");
-    const total = images.length;
+  const rootStyles = getComputedStyle(document.documentElement);
+  const radius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 300;
+  const zoomDistance = parseInt(rootStyles.getPropertyValue('--zoom-distance')) || 600;
 
-    const zoomScale = 1.5;
-    let angle = 0;
-    let autoRotate = true;
-    let lastTime = performance.now();
+  let angle = 0;
+  let rotationSpeed = 0.15;
+  let isDragging = false;
+  let lastX = 0;
+  let velocity = 0;
+  const friction = 0.95;
+  let autoRotate = true;
+  let interactionTimeout;
 
-    let velocity = 0;
-    const friction = 0.95;
-
-    let isDragging = false;
-    let lastX = 0;
-
-    function positionImages() {
-      const angleStep = 360 / total;
-
-      let closestIndex = 0;
-      let minDiff = 360;
-
-      for (let i = 0; i < total; i++) {
-        const theta = (angleStep * i + angle) % 360;
-        const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestIndex = i;
-        }
-      }
-
-      for (let i = 0; i < total; i++) {
-        const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3;
-
-        if (i === closestIndex) {
-          images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) rotateY(${extraRotation}deg) scale(${zoomScale})`;
-          images[i].style.zIndex = 100;
-          images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
-        } else {
-          images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
-          images[i].style.zIndex = 1;
-          images[i].style.filter = "none";
-        }
-      }
-    }
-
-    function animate(now) {
-      const delta = now - lastTime;
-
-      if (autoRotate) {
-        velocity = 0.0025 * delta;
-        angle += velocity;
-      } else {
-        angle += velocity;
-        velocity *= friction;
-        if (Math.abs(velocity) < 0.001) {
-          autoRotate = true;
-          velocity = 0;
-        }
-      }
-
-      positionImages();
-      lastTime = now;
-      requestAnimationFrame(animate);
-    }
-
-    let interactionTimeout;
-    function restartAutoRotate() {
-      clearTimeout(interactionTimeout);
-      interactionTimeout = setTimeout(() => {
-        autoRotate = false;
-        velocity = 0.02;
-      }, 2000);
-    }
-
-    container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      autoRotate = false;
-      velocity += e.deltaY * 0.003;
-      restartAutoRotate();
-    });
-
-    container.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      lastX = e.clientX;
-      autoRotate = false;
-      velocity = 0;
-    });
-
-    window.addEventListener("mouseup", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
+  function positionImages() {
+    const angleStep = 360 / imgCount;
+    images.forEach((img, i) => {
+      const imgAngle = angleStep * i + angle;
+      if (!img.classList.contains('zoomed')) {
+        img.style.transform = `rotateY(${imgAngle}deg) translateZ(${radius}px)`;
+        img.style.zIndex = 1;
+        img.style.boxShadow = "0 0 5px rgba(255,255,255,0.2)";
       }
     });
+  }
 
-    window.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        const deltaX = e.clientX - lastX;
-        lastX = e.clientX;
-        angle += deltaX * 0.3;
-        velocity = deltaX * 0.3;
-        positionImages();
-      }
-    });
-
-    container.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastX = e.touches[0].clientX;
-        autoRotate = false;
+  function animate() {
+    if (autoRotate && !isDragging) {
+      angle += rotationSpeed;
+    } else {
+      angle += velocity;
+      velocity *= friction;
+      if (Math.abs(velocity) < 0.001) {
         velocity = 0;
+        autoRotate = true;
       }
-    }, { passive: true });
-
-    container.addEventListener("touchmove", (e) => {
-      if (isDragging && e.touches.length === 1) {
-        const deltaX = e.touches[0].clientX - lastX;
-        lastX = e.touches[0].clientX;
-        angle += deltaX * 0.6;
-        velocity = deltaX * 0.6;
-        positionImages();
-      }
-    }, { passive: true });
-
-    container.addEventListener("touchend", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    Array.from(images).forEach(img => {
-      img.addEventListener("click", () => {
-        const zoomDiv = document.createElement("div");
-        zoomDiv.className = "zoomed";
-        const zoomImg = document.createElement("img");
-        zoomImg.src = img.src;
-        zoomDiv.appendChild(zoomImg);
-        document.body.appendChild(zoomDiv);
-        zoomDiv.addEventListener("click", () => zoomDiv.remove());
-      });
-    });
-
+    }
     positionImages();
-    animate(performance.now());
-  </script>
+    requestAnimationFrame(animate);
+  }
+  animate();
+
+  // Drag controls
+  carousel.addEventListener('mousedown', e => {
+    isDragging = true;
+    lastX = e.clientX;
+    velocity = 0;
+    autoRotate = false;
+  });
+  window.addEventListener('mouseup', e => {
+    if (isDragging) {
+      isDragging = false;
+      resetAutoRotate();
+    }
+  });
+  window.addEventListener('mousemove', e => {
+    if (isDragging) {
+      const deltaX = e.clientX - lastX;
+      lastX = e.clientX;
+      angle += deltaX * 0.5;
+      velocity = deltaX * 0.5;
+      positionImages();
+    }
+  });
+
+  // Touch controls (mobile)
+  carousel.addEventListener('touchstart', e => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastX = e.touches[0].clientX;
+      velocity = 0;
+      autoRotate = false;
+    }
+  }, {passive:true});
+  window.addEventListener('touchend', e => {
+    if (isDragging) {
+      isDragging = false;
+      resetAutoRotate();
+    }
+  });
+  window.addEventListener('touchmove', e => {
+    if (isDragging && event.touches.length === 1) {
+      const deltaX = event.touches[0].clientX - lastX;
+      lastX = event.touches[0].clientX;
+      angle += deltaX * 0.5;
+      velocity = deltaX * 0.5;
+      positionImages();
+    }
+  }, {passive:true});
+
+  // Scroll wheel to control rotation speed
+  carousel.addEventListener('wheel', e => {
+    e.preventDefault();
+    autoRotate = false;
+    velocity += e.deltaY * -0.01;
+    resetAutoRotate();
+  }, {passive:false});
+
+  // Pause rotation on hover
+  carousel.addEventListener('mouseenter', () => {
+    autoRotate = false;
+  });
+  carousel.addEventListener('mouseleave', () => {
+    resetAutoRotate();
+  });
+
+  // Reset auto-rotation after inactivity
+  function resetAutoRotate() {
+    clearTimeout(interactionTimeout);
+    interactionTimeout = setTimeout(() => {
+      autoRotate = true;
+    }, 3000);
+  }
+
+  // Zoom au clic avec overlay sombre
+  images.forEach(img => {
+    img.addEventListener('click', e => {
+      if (img.classList.contains('zoomed')) {
+        removeZoom();
+        return;
+      }
+      removeZoom(); // enlever zoom si un autre est actif
+
+      img.classList.add('zoomed');
+      img.style.transform = `rotateY(0deg) translateZ(${zoomDistance}px) scale(1.5)`;
+      img.style.zIndex = 100;
+
+      // Création overlay
+      const overlay = document.createElement('div');
+      overlay.className = 'overlay';
+      const zoomedImg = document.createElement('img');
+      zoomedImg.src = img.src;
+      overlay.appendChild(zoomedImg);
+      document.body.appendChild(overlay);
+
+      overlay.addEventListener('click', () => {
+        removeZoom();
+      });
+
+      function removeZoom() {
+        img.classList.remove('zoomed');
+        img.style.zIndex = 1;
+        if (overlay.parentNode) {
+          overlay.parentNode.removeChild(overlay);
+        }
+      }
+    });
+  });
+
+  // Position initiale
+  positionImages();
+</script>
+
 </body>
 </html>
