@@ -45,7 +45,7 @@
     // Chargement d'images
     const textureLoader = new THREE.TextureLoader();
     const imageCount = 10; // nombre d'images à charger
-    const radius = 30;
+    const radius = 20;
 
     for (let i = 0; i < imageCount; i++) {
       const texture = textureLoader.load(`img/CHBR${i}.jpg`, () => renderer.render(scene, camera));
