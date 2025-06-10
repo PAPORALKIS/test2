@@ -7,7 +7,7 @@
   <style>
     :root {
       --img-size: 150px;
-      --translateZ: 1600px;
+      --translateZ: 1900px;
       --zoom-offset: -60px;
     }
     html, body {
@@ -190,7 +190,7 @@
       const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.0015 * delta;
+        velocity = 0.0005 * delta;
         angle += velocity;
       } else {
         angle += velocity;
