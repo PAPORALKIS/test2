@@ -6,8 +6,8 @@
   <title>Réalisations – Carrousel 3D</title>
   <style>
     :root {
-      --img-size: 180px;
-      --translateZ: 700px;
+      --img-size: 220px;       /* AUGMENTATION de la taille des images */
+      --translateZ: 700px;     /* Rayon de rotation NON changé */
     }
 
     html, body {
@@ -46,6 +46,7 @@
       width: 0;
       height: 0;
       transform-style: preserve-3d;
+      transform: rotateX(10deg); /* SURPLOMB CAMÉRA (légère inclinaison vers le bas) */
     }
 
     .carousel img {
@@ -111,15 +112,20 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
+    // Lire le rayon à partir de la variable CSS
     const rootStyles = getComputedStyle(document.documentElement);
     const radius = parseFloat(rootStyles.getPropertyValue("--translateZ")) || 700;
 
     let angle = 0;
     let rotating = true;
 
+    /**
+     * Positionne les images avec un angle réduit entre elles (donc plus proches)
+     */
     function positionImages() {
+      const deltaAngle = 360 / total - 2; // Réduction de l'angle entre chaque image
       for (let i = 0; i < total; i++) {
-        const theta = (360 / total) * i + angle;
+        const theta = deltaAngle * i + angle;
         images[i].style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
       }
     }
@@ -132,9 +138,11 @@
       requestAnimationFrame(animate);
     }
 
+    // Pause au survol
     container.addEventListener("mouseenter", () => rotating = false);
     container.addEventListener("mouseleave", () => rotating = true);
 
+    // Zoom au clic
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
@@ -147,6 +155,7 @@
       });
     });
 
+    // Initialisation
     positionImages();
     animate();
   </script>
