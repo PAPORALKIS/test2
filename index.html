@@ -96,7 +96,6 @@
 <body>
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
-      <!-- Images du manège -->
       <img src="img/CHBR0.jpg" />
       <img src="img/CUIEXT1.jpg" />
       <img src="img/CUIEXT2.jpg" />
@@ -117,9 +116,9 @@
     let lastTime = performance.now();
 
     function positionImages() {
-      const minAngleGap = 360 / total;
+      const angleStep = 360 / total;
       for (let i = 0; i < total; i++) {
-        const theta = (minAngleGap * i + angle);
+        const theta = angleStep * i + angle;
         images[i].style.transform = `rotateY(${theta}deg) translateZ(${radius}px)`;
       }
     }
@@ -127,14 +126,14 @@
     function animate(now) {
       if (autoRotate) {
         const delta = now - lastTime;
-        angle += 0.03 * delta;
+        angle += 0.02 * delta;
         positionImages();
       }
       lastTime = now;
       requestAnimationFrame(animate);
     }
 
-    // Restart rotation after user interaction
+    // Reprend la rotation automatique après inactivité
     let interactionTimeout;
     function restartAutoRotate() {
       clearTimeout(interactionTimeout);
@@ -143,16 +142,20 @@
       }, 2000);
     }
 
-    // Scroll interaction
+    // Scroll (molette ou trackpad)
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
-      angle += e.deltaY * 0.1;
+
+      // Sensibilité ajustée
+      const scrollAmount = (Math.abs(e.deltaX) > Math.abs(e.deltaY)) ? e.deltaX : e.deltaY;
+      angle += scrollAmount * 0.3;
+
       positionImages();
       restartAutoRotate();
     });
 
-    // Drag interaction
+    // Drag à la souris
     let isDragging = false;
     let startX = 0;
 
@@ -178,7 +181,7 @@
       }
     });
 
-    // Zoom on image click
+    // Zoom au clic
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const zoomDiv = document.createElement("div");
