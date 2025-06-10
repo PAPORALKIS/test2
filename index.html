@@ -6,261 +6,68 @@
   <title>Réalisations</title>
   <style>
     body, html {
-      margin: 0; padding: 0; height: 100%;
-      background: #0a0f2c;
+      margin: 0;
+      padding: 0;
+      height: 100%;
       overflow: hidden;
-      font-family: Arial, sans-serif;
-      color: white;
-    }
-    body.modal-open {
-      overflow: hidden;
-      touch-action: none;
+      background-color: #0a0f2c;
     }
     #container {
       width: 100vw;
       height: 100vh;
-      position: relative;
-      overflow: hidden;
-    }
-    #preview {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0,0,0,0.85);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.3s ease;
-    }
-    #preview.hidden {
-      pointer-events: none;
-      opacity: 0;
-      visibility: hidden;
-    }
-    #carousel-image {
-      max-width: 80vw;
-      max-height: 80vh;
-      border-radius: 8px;
-      box-shadow: 0 0 15px #fff;
-      margin-bottom: 20px;
-    }
-    #carousel-text {
-      font-size: 1.2em;
-      margin-bottom: 20px;
-      text-align: center;
-      max-width: 90vw;
-      word-break: break-word;
-    }
-    #controls {
-      display: flex;
-      gap: 20px;
-    }
-    button {
-      background: #1a254f;
-      border: none;
-      padding: 10px 20px;
-      color: white;
-      cursor: pointer;
-      border-radius: 5px;
-      font-size: 1em;
-      user-select: none;
-      transition: background-color 0.3s ease;
-    }
-    button:hover {
-      background: #374785;
     }
   </style>
 </head>
 <body>
   <div id="container"></div>
 
-  <div id="preview" class="hidden" role="dialog" aria-modal="true" aria-label="Aperçu de la réalisation">
-    <img id="carousel-image" src="" alt="Image de la réalisation" />
-    <div id="carousel-text"></div>
-    <div id="controls">
-      <button id="prev-btn" aria-label="Image précédente">Précédent</button>
-      <button id="close-preview" aria-label="Fermer l'aperçu">Fermer</button>
-      <button id="next-btn" aria-label="Image suivante">Suivant</button>
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/three@0.149.0/examples/js/controls/OrbitControls.js"></script>
-
-  <script>
-    const projects = [
-      {src: 'img/CHBR0.jpg', description: 'Chambre 0 - Projet rénovation'},
-      {src: 'img/CHBR1.jpg', description: 'Chambre 1 - Projet rénovation'},
-      {src: 'img/CUIEXT.jpg', description: 'Cuisine extérieure'},
-      {src: 'img/CUIEXT1.jpg', description: 'Cuisine extérieure 1'},
-      {src: 'img/CUIEXT2.jpg', description: 'Cuisine extérieure 2'},
-      {src: 'img/CUIEXT3.jpg', description: 'Cuisine extérieure 3'},
-      {src: 'img/CUIEXT4.jpg', description: 'Cuisine extérieure 4'},
-      {src: 'img/CUIEXT5.jpg', description: 'Cuisine extérieure 5'},
-      {src: 'img/CUIEXT6.jpg', description: 'Cuisine extérieure 6'},
-      {src: 'img/CUIMARS1.jpg', description: 'Cuisine Mars 1'},
-      {src: 'img/CUIMARS2.jpg', description: 'Cuisine Mars 2'},
-      {src: 'img/CUIMARS3.jpg', description: 'Cuisine Mars 3'},
-      {src: 'img/CUIMARS4.jpg', description: 'Cuisine Mars 4'},
-      {src: 'img/DRESSMARS1.jpg', description: 'Dressing Mars 1'},
-      {src: 'img/DRESSMARS2.jpg', description: 'Dressing Mars 2'},
-      {src: 'img/DRESSMARS3.jpg', description: 'Dressing Mars 3'},
-      {src: 'img/DRESSMARS4.jpg', description: 'Dressing Mars 4'},
-      {src: 'img/Iso2.jpg', description: 'Isolation 2'},
-      {src: 'img/Iso3.jpg', description: 'Isolation 3'},
-      {src: 'img/Iso4.jpg', description: 'Isolation 4'},
-      {src: 'img/Iso5.jpg', description: 'Isolation 5'},
-      {src: 'img/Iso6.jpg', description: 'Isolation 6'},
-      {src: 'img/SDB1.jpg', description: 'Salle de bain 1'},
-      {src: 'img/SDB2.jpg', description: 'Salle de bain 2'},
-      {src: 'img/SDB3.jpg', description: 'Salle de bain 3'},
-      {src: 'img/SDB4.jpg', description: 'Salle de bain 4'},
-      {src: 'img/SDB5.jpg', description: 'Salle de bain 5'},
-      {src: 'img/WC1.jpg', description: 'WC 1'},
-      {src: 'img/WC2.jpg', description: 'WC 2'},
-      {src: 'img/ext1.jpg', description: 'Extérieur 1'},
-      {src: 'img/ext2.jpg', description: 'Extérieur 2'},
-      {src: 'img/exterieur.jpg', description: 'Extérieur'},
-      {src: 'img/exterieur.png', description: 'Extérieur PNG'},
-      {src: 'img/iso1.jpg', description: 'Isolation 1'},
-      {src: 'img/meuble-laura-1.jpg', description: 'Meuble Laura 1'},
-      {src: 'img/meuble-laura-2.jpg', description: 'Meuble Laura 2'},
-      {src: 'img/meuble-laura-3.jpg', description: 'Meuble Laura 3'},
-      {src: 'img/pack.png', description: 'Pack'},
-      {src: 'img/packs.jpg', description: 'Packs'},
-      {src: 'img/reno_express.jpg', description: 'Reno Express'},
-      {src: 'img/reno_exterieure.jpg', description: 'Rénovation extérieure'},
-      {src: 'img/renovation_interieure.jpg', description: 'Rénovation intérieure'},
-      {src: 'img/travaux_quotidien.jpg', description: 'Travaux quotidien'}
-    ];
+  <script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.149.0/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.149.0/examples/jsm/controls/OrbitControls.js';
 
     const container = document.getElementById('container');
+
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(60, window.innerWidth/window.innerHeight, 0.1, 1000);
+    const camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 80;
 
-    const renderer = new THREE.WebGLRenderer({antialias: true, alpha:true});
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
     container.appendChild(renderer.domElement);
 
-    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    const controls = new OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
-    controls.dampingFactor = 0.1;
+    controls.dampingFactor = 0.05;
 
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
     scene.add(ambientLight);
 
-    const loader = new THREE.TextureLoader();
-    loader.load('img/logo.png', (texture) => {
-      const ratio = texture.image.height / texture.image.width;
-      const material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
-      const geometry = new THREE.PlaneGeometry(15, 15 * ratio);
+    // Chargement d'images
+    const textureLoader = new THREE.TextureLoader();
+    const imageCount = 10; // nombre d'images à charger
+    const radius = 30;
+
+    for (let i = 0; i < imageCount; i++) {
+      const texture = textureLoader.load(`img/CHBR${i}.jpg`, () => renderer.render(scene, camera));
+      const material = new THREE.MeshBasicMaterial({ map: texture });
+      const geometry = new THREE.PlaneGeometry(10, 7);
       const mesh = new THREE.Mesh(geometry, material);
+
+      const phi = Math.acos(-1 + (2 * i) / imageCount);
+      const theta = Math.sqrt(imageCount * Math.PI) * phi;
+
+      mesh.position.setFromSphericalCoords(radius, phi, theta);
+      mesh.lookAt(new THREE.Vector3(0, 0, 0));
       scene.add(mesh);
-    });
-
-    const imageMeshes = [];
-    const radius = 40;
-    const phiStep = Math.PI * (3 - Math.sqrt(5));
-
-    projects.forEach((project, i) => {
-      loader.load(project.src, (texture) => {
-        const material = new THREE.MeshBasicMaterial({map: texture, transparent: true});
-        const ratio = texture.image.height / texture.image.width;
-        const geometry = new THREE.PlaneGeometry(8, 8 * ratio);
-        const mesh = new THREE.Mesh(geometry, material);
-        mesh.userData = { description: project.description, index: i };
-
-        const y = 1 - (i / (projects.length - 1)) * 2;
-        const radiusAtY = Math.sqrt(1 - y * y);
-        const theta = phiStep * i;
-
-        mesh.position.set(
-          radius * Math.cos(theta) * radiusAtY,
-          radius * y,
-          radius * Math.sin(theta) * radiusAtY
-        );
-
-        mesh.lookAt(0, 0, 0);
-        scene.add(mesh);
-        imageMeshes.push(mesh);
-      });
-    });
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-
-    const preview = document.getElementById('preview');
-    const carouselImage = document.getElementById('carousel-image');
-    const carouselText = document.getElementById('carousel-text');
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const closeBtn = document.getElementById('close-preview');
-
-    let currentIndex = 0;
-
-    function openPreview(index) {
-      currentIndex = index;
-      updatePreview();
-      preview.classList.remove('hidden');
-      document.body.classList.add('modal-open');
     }
 
-    function closePreview() {
-      preview.classList.add('hidden');
-      document.body.classList.remove('modal-open');
-    }
-
-    function updatePreview() {
-      carouselImage.src = projects[currentIndex].src;
-      carouselText.textContent = projects[currentIndex].description;
-      carouselImage.alt = projects[currentIndex].description;
-    }
-
-    function skipToValidIndex(direction) {
-      let tries = 0;
-      do {
-        currentIndex = (currentIndex + direction + projects.length) % projects.length;
-        tries++;
-        if (tries > projects.length) break;
-      } while (!projects[currentIndex] || projects[currentIndex].src.includes('logo.png'));
-    }
-
-    prevBtn.addEventListener('click', () => {
-      skipToValidIndex(-1);
-      updatePreview();
-    });
-
-    nextBtn.addEventListener('click', () => {
-      skipToValidIndex(1);
-      updatePreview();
-    });
-
-    closeBtn.addEventListener('click', closePreview);
-
-    renderer.domElement.addEventListener('click', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(imageMeshes);
-      if (intersects.length > 0) {
-        const obj = intersects[0].object;
-        if (obj.userData && typeof obj.userData.index === 'number') {
-          openPreview(obj.userData.index);
-        }
-      }
-    });
-
-    window.addEventListener('mousemove', (event) => {
-      mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-      mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
-      raycaster.setFromCamera(mouse, camera);
-      const intersects = raycaster.intersectObjects(imageMeshes);
-      renderer.domElement.style.cursor = intersects.length > 0 ? 'pointer' : 'default';
-    });
+    // Logo central
+    const logoTexture = textureLoader.load('img/logo.png');
+    const logoMaterial = new THREE.MeshBasicMaterial({ map: logoTexture, transparent: true });
+    const logoGeometry = new THREE.PlaneGeometry(12, 12);
+    const logoMesh = new THREE.Mesh(logoGeometry, logoMaterial);
+    logoMesh.position.set(0, 0, 0);
+    scene.add(logoMesh);
 
     window.addEventListener('resize', () => {
       camera.aspect = window.innerWidth / window.innerHeight;
@@ -273,6 +80,7 @@
       controls.update();
       renderer.render(scene, camera);
     }
+
     animate();
   </script>
 </body>
