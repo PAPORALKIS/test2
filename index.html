@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mes Réalisations</title>
-  <link href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" rel="stylesheet" />
+  <title>Carrousel Réalisations</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
   <style>
     body {
       margin: 0;
@@ -14,53 +15,96 @@
     }
     h1 {
       text-align: center;
-      margin-top: 20px;
-    }
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 10px;
       padding: 20px;
-      max-width: 1200px;
-      margin: auto;
     }
-    .gallery a img {
-      width: 100%;
-      height: auto;
+    .swiper {
+      width: 90%;
+      padding-bottom: 40px;
+    }
+    .swiper-slide {
+      text-align: center;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .swiper-slide img {
+      max-width: 100%;
+      max-height: 400px;
       border-radius: 8px;
       transition: transform 0.3s ease;
+      cursor: pointer;
     }
-    .gallery a:hover img {
+    .swiper-slide img:hover {
       transform: scale(1.05);
     }
   </style>
 </head>
 <body>
   <h1>Mes Réalisations</h1>
-  <div class="gallery">
-    <a href="img/CHBR0.jpg" class="glightbox" data-gallery="chbr0" data-title="CHBR0 - Salle rénovée" data-description="Rénovation complète avec peinture, parquet, et luminaires.">
-      <img src="img/CHBR0.jpg" alt="CHBR0">
-    </a>
-    <a href="img/CHBR1.jpg" class="glightbox" data-gallery="chbr0">
-      <img src="img/CHBR1.jpg" alt="CHBR1">
-    </a>
-    <a href="img/CHBR2.jpg" class="glightbox" data-gallery="chbr0">
-      <img src="img/CHBR2.jpg" alt="CHBR2">
-    </a>
-
-    <a href="img/CHBR3.jpg" class="glightbox" data-gallery="chbr3" data-title="CHBR3 - Cuisine" data-description="Refonte totale de la cuisine avec carrelage mural et mobilier moderne.">
-      <img src="img/CHBR3.jpg" alt="CHBR3">
-    </a>
-    <a href="img/CHBR4.jpg" class="glightbox" data-gallery="chbr3">
-      <img src="img/CHBR4.jpg" alt="CHBR4">
-    </a>
-    <a href="img/CHBR5.jpg" class="glightbox" data-gallery="chbr3">
-      <img src="img/CHBR5.jpg" alt="CHBR5">
-    </a>
+  <div class="swiper mySwiper">
+    <div class="swiper-wrapper">
+      <div class="swiper-slide">
+        <a href="img/CHBR0.jpg" class="glightbox" data-gallery="chbr0" data-title="CHBR0 - Salle rénovée" data-description="Peinture, parquet, luminaires.">
+          <img src="img/CHBR0.jpg" alt="CHBR0">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="img/CHBR1.jpg" class="glightbox" data-gallery="chbr0">
+          <img src="img/CHBR1.jpg" alt="CHBR1">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="img/CHBR2.jpg" class="glightbox" data-gallery="chbr0">
+          <img src="img/CHBR2.jpg" alt="CHBR2">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="img/CHBR3.jpg" class="glightbox" data-gallery="chbr3" data-title="CHBR3 - Cuisine" data-description="Cuisine moderne avec carrelage mural.">
+          <img src="img/CHBR3.jpg" alt="CHBR3">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="img/CHBR4.jpg" class="glightbox" data-gallery="chbr3">
+          <img src="img/CHBR4.jpg" alt="CHBR4">
+        </a>
+      </div>
+      <div class="swiper-slide">
+        <a href="img/CHBR5.jpg" class="glightbox" data-gallery="chbr3">
+          <img src="img/CHBR5.jpg" alt="CHBR5">
+        </a>
+      </div>
+    </div>
+    <!-- Pagination et navigation -->
+    <div class="swiper-pagination"></div>
+    <div class="swiper-button-prev"></div>
+    <div class="swiper-button-next"></div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
   <script>
+    const swiper = new Swiper(".mySwiper", {
+      slidesPerView: 1,
+      spaceBetween: 20,
+      loop: true,
+      pagination: {
+        el: ".swiper-pagination",
+        clickable: true
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev"
+      },
+      breakpoints: {
+        640: {
+          slidesPerView: 2
+        },
+        1024: {
+          slidesPerView: 3
+        }
+      }
+    });
+
     const lightbox = GLightbox({
       selector: '.glightbox'
     });
