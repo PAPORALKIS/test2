@@ -114,6 +114,11 @@
         --container-translate-y: -50%;
         --container-translate-x: -50%;
       }
+      /* Augmentation taille image zoomée en portrait smartphone/tablette */
+      .ed img {
+        width: 95vw !important;
+        max-height: 85vh !important;
+      }
     }
 
     /* Adaptation mobile/tablette en paysage : ajustement taille et position */
@@ -203,8 +208,15 @@
     // Fonction pour récupérer les valeurs CSS variables dynamiques
     function getRootCSSVars() {
       const rootStyles = getComputedStyle(document.documentElement);
+      let translateZ = parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000;
+
+      // Recule la caméra sur smartphone/tablette en paysage
+      if (window.matchMedia("(max-width: 767px) and (orientation: landscape)").matches) {
+        translateZ += 200; // +200px pour reculer la caméra
+      }
+
       return {
-        translateZ: parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000,
+        translateZ: translateZ,
         offset: rootStyles.getPropertyValue('--offset') || '-250px',
         perspective: rootStyles.getPropertyValue('--perspective') || '3000px',
         containerTop: rootStyles.getPropertyValue('--container-top') || '30%',
@@ -216,187 +228,62 @@
     }
 
     // Mets à jour la perspective et position du container en fonction des variables CSS
-    function updateContainerStyle() {
+    function updateContainer() {
       const vars = getRootCSSVars();
-      container.style.perspective = vars.perspective;
       container.style.top = vars.containerTop;
       container.style.left = vars.containerLeft;
       container.style.transform = `translate(${vars.containerTranslateX}, ${vars.containerTranslateY})`;
+      container.style.perspective = vars.perspective;
     }
 
-    // Mets à jour la taille des images à partir de la variable CSS
-    function updateImageSizes() {
-      const vars = getRootCSSVars();
-      Array.from(images).forEach(img => {
-        img.style.width = vars.imgSize.trim();
-        img.style.height = vars.imgSize.trim();
-      });
-    }
-
-    // Récupère la profondeur 3D à partir de la variable CSS --translateZ
-    let baseRadius = 900;
-
-    // Profondeur et scale spécifiques pour image ée
-    const Scale = 1.5;        // facteur d’agrandissement de l’image ée
-
-    let angle = 0;                // angle global du carrousel en degrés
-    let autoRotate = true;        // indique si le carrousel tourne automatiquement
-    let lastTime = performance.now(); // timestamp de la dernière frame
-
-    let velocity = 0;             // vitesse actuelle de rotation (en degrés/frame)
-    const friction = 0.95;        // frottement qui ralentit la rotation lors du drag
-
-    let isDragging = false;       // indique si l’utilisateur est en train de glisser
-    let lastX = 0;                // dernière position X de la souris/touch
-
-    // Place et transforme les images sur le cercle en fonction de l’angle global
+    // Positionne chaque image en cercle 3D
     function positionImages() {
       const vars = getRootCSSVars();
-      baseRadius = vars.translateZ;
-      const offset = vars.offset.trim();
-      const angleStep = 360 / total;  // angle entre chaque image
-
-      // Trouve l’image la plus proche du centre (frontale)
-      let closestIndex = 0;
-      let minDiff = 360;
+      const angleStep = 360 / total;
+      const translateZ = vars.translateZ;
 
       for (let i = 0; i < total; i++) {
-        const theta = (angleStep * i + angle) % 360;
-        const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
-        if (diff < minDiff) {
-          minDiff = diff;
-          closestIndex = i;
-        }
-      }
-
-      // Positionne chaque image en rotation Y + translation Z pour créer l’effet cercle
-      for (let i = 0; i < total; i++) {
-        const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3;  // légère rotation sur elle-même pour esthétique
-
-        if (i === closestIndex) {
-          // Image ée au centre
-          images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${baseRadius * 1.6}px) rotateY(${extraRotation}deg) scale(${Scale})`;
-          images[i].style.zIndex = 100;  // devant toutes les autres
-          images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
-          images[i].style.setProperty('--offset', offset);
-        } else {
-          // Images normales autour
-          images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
-          images[i].style.zIndex = 1;
-          images[i].style.filter = "none";
-        }
+        const img = images[i];
+        const angle = i * angleStep;
+        img.style.transform = `rotateY(${angle}deg) translateZ(${translateZ}px)`;
+        img.style.width = vars.imgSize;
+        img.style.height = vars.imgSize;
       }
     }
-
-    // Animation appelée à chaque frame
-    function animate(now) {
-      const delta = now - lastTime;  // temps écoulé depuis la dernière frame
-
-      if (autoRotate) {
-        velocity = 0.0050 * delta;  // vitesse fixe de rotation automatique
-        angle += velocity;
-      } else {
-        angle += velocity;          // rotation selon la vitesse du drag
-        velocity *= friction;       // ralentit peu à peu (friction)
-        if (Math.abs(velocity) < 0.001) {
-          autoRotate = true;        // reprend rotation automatique si très lent
-          velocity = 0;
-        }
-      }
-
-      positionImages();             // repositionne les images selon angle
-      lastTime = now;
-      requestAnimationFrame(animate);
-    }
-
-    // Permet de relancer la rotation automatique après interaction utilisateur
-    let interactionTimeout;
-    function restartAutoRotate() {
-      clearTimeout(interactionTimeout);
-      interactionTimeout = setTimeout(() => {
-        autoRotate = false;       // On arrête auto rotation à la fin du timeout
-        velocity = 0.02;          // vitesse initiale à reprendre
-      }, 2000);
-    }
-
-    // Gère la roulette de la souris ( + rotation)
-    container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      autoRotate = false;
-      velocity += e.deltaY * 0.003;  // vitesse changée par la molette
-      restartAutoRotate();
-    });
-
-    // Début drag souris
-    container.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      lastX = e.clientX;
-      autoRotate = false;
-      velocity = 0;
-    });
-
-    // Fin drag souris
-    window.addEventListener("mouseup", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    // Pendant drag souris
-    window.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        const dx = e.clientX - lastX;
-        velocity = dx * 0.5;
-        angle += velocity;
-        lastX = e.clientX;
-      }
-    });
-
-    // Touch start
-    container.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastX = e.touches[0].clientX;
-        autoRotate = false;
-        velocity = 0;
-      }
-    });
-
-    // Touch end
-    container.addEventListener("touchend", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    // Touch move
-    container.addEventListener("touchmove", (e) => {
-      if (isDragging && e.touches.length === 1) {
-        const dx = e.touches[0].clientX - lastX;
-        velocity = dx * 0.5;
-        angle += velocity;
-        lastX = e.touches[0].clientX;
-      }
-    });
-
-    // Mise à jour responsive lors du resize ou rotation
-    window.addEventListener('resize', () => {
-      updateContainerStyle();
-      updateImageSizes();
-      positionImages();
-    });
 
     // Initialisation
-    updateContainerStyle();
-    updateImageSizes();
-    positionImages();
+    function initCarousel() {
+      updateContainer();
+      positionImages();
+    }
 
-    requestAnimationFrame(animate);
+    // Réinitialise au chargement et redimensionnement (rotation)
+    window.addEventListener("load", initCarousel);
+    window.addEventListener("resize", initCarousel);
+
+    // Gestion du zoom sur l'image au clic
+    let zoomedImg = null;
+    carousel.addEventListener("click", e => {
+      if (e.target.tagName !== "IMG") return;
+
+      if (zoomedImg) {
+        zoomedImg.parentElement.removeChild(zoomedImg);
+        zoomedImg = null;
+        return;
+      }
+
+      zoomedImg = document.createElement("div");
+      zoomedImg.className = "ed";
+      const imgClone = e.target.cloneNode();
+      zoomedImg.appendChild(imgClone);
+      document.body.appendChild(zoomedImg);
+
+      // Fermeture au clic sur le fond
+      zoomedImg.addEventListener("click", () => {
+        zoomedImg.parentElement.removeChild(zoomedImg);
+        zoomedImg = null;
+      });
+    });
   </script>
 </body>
 </html>
