@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carrousel 3D avec avancée zoomée</title>
+  <title>Carrousel 3D avec avancée ée</title>
   <style>
-    /* Variables CSS pour taille des images, profondeur Z et offset du zoom */
+    /* Variables CSS pour taille des images, profondeur Z et offset du  */
     :root {
       --img-size: 200px;        /* taille de chaque image dans le carrousel */
       --translateZ: 700;       /* distance à laquelle les images sont placées en 3D */
-      --zoom-offset: -60px;     /* décalage vertical de l'image zoomée */
+      ---offset: -120px;     /* décalage vertical de l'image ée */
     }
 
     html, body {
@@ -64,14 +64,14 @@
       transform-origin: center center;
     }
 
-    /* Zoom léger au survol */
+    /*  léger au survol */
     .carousel img:hover {
       transform: scale(1.1);
       z-index: 10;
     }
 
-    /* Style pour l’image zoomée au clic */
-    .zoomed {
+    /* Style pour l’image ée au clic */
+    .ed {
       position: fixed;
       top: 0; left: 0;
       width: 100vw; height: 100vh;
@@ -81,10 +81,10 @@
       align-items: center;
       z-index: 9999;
     }
-    .zoomed img {
+    .ed img {
       width: 90vw;
       max-height: 70vh;
-      transform: translateY(var(--zoom-offset));
+      transform: translateY(var(---offset));
       border-radius: 8px;
       box-shadow: 0 0 40px black;
     }
@@ -94,7 +94,7 @@
       :root {
         --img-size: 36vw;
         --translateZ: 700px;
-        --zoom-offset: -120px;
+        ---offset: -200px;
       }
     }
   </style>
@@ -158,8 +158,8 @@
     const rootStyles = getComputedStyle(document.documentElement);
     const baseRadius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000;
 
-    const zoomTranslateZ = 1600;  // profondeur pour l’image zoomée
-    const zoomScale = 1.5;        // facteur d’agrandissement de l’image zoomée
+    const TranslateZ = 1600;  // profondeur pour l’image ée
+    const Scale = 1.5;        // facteur d’agrandissement de l’image ée
 
     let angle = 0;                // angle global du carrousel en degrés
     let autoRotate = true;        // indique si le carrousel tourne automatiquement
@@ -194,9 +194,9 @@
         const extraRotation = -angleStep * 0.3;  // légère rotation sur elle-même pour esthétique
 
         if (i === closestIndex) {
-          // Image zoomée au centre
+          // Image ée au centre
           images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${zoomTranslateZ}px) rotateY(${extraRotation}deg) scale(${zoomScale})`;
+            `rotateY(${theta}deg) translateZ(${TranslateZ}px) rotateY(${extraRotation}deg) scale(${Scale})`;
           images[i].style.zIndex = 100;  // devant toutes les autres
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
         } else {
@@ -240,7 +240,7 @@
       }, 2000);
     }
 
-    // Gère la roulette de la souris (zoom + rotation)
+    // Gère la roulette de la souris ( + rotation)
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
@@ -304,16 +304,16 @@
       }
     });
 
-    // Ajoute la fonction zoom au clic sur chaque image
+    // Ajoute la fonction  au clic sur chaque image
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
-        const zoomDiv = document.createElement("div");
-        zoomDiv.className = "zoomed";
-        const zoomImg = document.createElement("img");
-        zoomImg.src = img.src;
-        zoomDiv.appendChild(zoomImg);
-        document.body.appendChild(zoomDiv);
-        zoomDiv.addEventListener("click", () => zoomDiv.remove());
+        const Div = document.createElement("div");
+        Div.className = "ed";
+        const Img = document.createElement("img");
+        Img.src = img.src;
+        Div.appendChild(Img);
+        document.body.appendChild(Div);
+        Div.addEventListener("click", () => Div.remove());
       });
     });
 
