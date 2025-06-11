@@ -1,107 +1,100 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Carrousel 3D Responsive</title>
-  <style>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+<title>Carrousel 3D Responsive</title>
+<style>
+  :root {
+    --img-size: 150px;
+    --translateZ: 900px;
+    --offset: -250px;
+  }
+  html, body {
+    margin: 0; height: 100%;
+    background: #00010d;
+    overflow: hidden;
+    font-family: sans-serif;
+  }
+  body::before {
+    content: "";
+    position: fixed;
+    top: 50%; left: 50%;
+    width: 1000px; height: 1000px;
+    background: url("img/logo.png") no-repeat center/contain;
+    opacity: 0.03;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .carousel-container {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    perspective: 3000px;
+    width: 100vw;
+    height: 60vh;
+    max-width: 1000px;
+    z-index: 1;
+  }
+  .carousel {
+    position: relative;
+    width: 0; height: 0;
+    transform-style: preserve-3d;
+    transform: rotateX(-4deg);
+  }
+  .carousel img {
+    position: absolute;
+    width: var(--img-size);
+    height: var(--img-size);
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
+    transition: transform 1s ease, z-index 1s ease;
+    cursor: pointer;
+    z-index: 1;
+    transform-origin: center center;
+  }
+  .carousel img:hover {
+    transform: scale(1.1);
+    z-index: 10;
+  }
+  .ed {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(0,0,0,0.95);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+  }
+  .ed img {
+    width: 90vw;
+    max-height: 70vh;
+    transform: translateY(var(--offset));
+    border-radius: 8px;
+    box-shadow: 0 0 40px black;
+  }
+
+  /* Ajout responsive simple */
+  @media (max-width: 768px) {
     :root {
-      --img-size: 150px;
-      --translateZ: 900px;
-      --offset: -250px;
+      --img-size: 36vw;
+      --translateZ: 700px;
     }
-
-    html, body {
-      margin: 0; height: 100%;
-      background: #00010d;
-      overflow: hidden;
-      font-family: sans-serif;
-    }
-
-    body::before {
-      content: "";
-      position: fixed;
-      top: 50%; left: 50%;
-      width: 1000px; height: 1000px;
-      background: url("img/logo.png") no-repeat center/contain;
-      opacity: 0.03;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
     .carousel-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      perspective: 3000px;
-      width: 100vw;
-      height: 60vh;
-      max-width: 1000px;
-      z-index: 1;
+      height: 50vh;
+      perspective: 1500px;
     }
-
-    @media (max-width: 768px) {
-      :root {
-        --img-size: 36vw;
-        --translateZ: 700px;
-        --offset: -200px;
-      }
-      .carousel-container {
-        height: 50vh;
-        perspective: 1500px;
-      }
-    }
-
-    .carousel {
-      position: relative;
-      width: 0; height: 0;
-      transform-style: preserve-3d;
-      transform: rotateX(-4deg);
-    }
-
-    .carousel img {
-      position: absolute;
-      width: var(--img-size);
-      height: var(--img-size);
-      object-fit: cover;
-      border-radius: 12px;
-      box-shadow: 0 0 14px rgba(0, 0, 0, 0.7);
-      transition: transform 1s ease, z-index 1s ease;
-      cursor: pointer;
-      z-index: 1;
-      transform-origin: center center;
-    }
-
-    .carousel img:hover {
-      transform: scale(1.1);
-      z-index: 10;
-    }
-
-    .ed {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw; height: 100vh;
-      background: rgba(0,0,0,0.95);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-    }
-    .ed img {
-      width: 90vw;
-      max-height: 70vh;
-      transform: translateY(var(--offset));
-      border-radius: 8px;
-      box-shadow: 0 0 40px black;
-    }
-  </style>
+  }
+</style>
 </head>
 <body>
   <div class="carousel-container" id="carousel-container">
     <div class="carousel" id="carousel">
-      <!-- Images à remplacer par tes images -->
+      <!-- Tes images ici -->
       <img src="img/CHBR0.jpg" />
       <img src="img/CHBR1.jpg" />
       <img src="img/CUIEXT.jpg" />
@@ -147,194 +140,171 @@
     </div>
   </div>
 
-  <script>
-    const carousel = document.getElementById("carousel");
-    const container = document.getElementById("carousel-container");
-    const images = carousel.getElementsByTagName("img");
-    const total = images.length;
+<script>
+  const carousel = document.getElementById("carousel");
+  const container = document.getElementById("carousel-container");
+  const images = carousel.getElementsByTagName("img");
+  const total = images.length;
 
-    const rootStyles = getComputedStyle(document.documentElement);
-    let baseRadius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 900;
+  // Garde la valeur css translateZ par défaut
+  function getTranslateZ() {
+    return parseInt(getComputedStyle(document.documentElement).getPropertyValue('--translateZ')) || 900;
+  }
 
-    let TranslateZ = 1600;  // profondeur pour l’image ée (zoom)
-    let Scale = 1.5;        // facteur zoom image ée
+  let angle = 0;
+  let autoRotate = true;
+  let lastTime = performance.now();
+  let velocity = 0;
+  const friction = 0.95;
+  let isDragging = false;
+  let lastX = 0;
 
-    let angle = 0;
-    let autoRotate = true;
-    let lastTime = performance.now();
+  // Variables fixes qui n'ont pas été modifiées pour ne pas casser la version PC
+  let TranslateZ = getTranslateZ();
+  let Scale = 1.5;
 
-    let velocity = 0;
-    const friction = 0.95;
+  // Fonction de positionnement des images strictement identique à ta version PC
+  function positionImages() {
+    const angleStep = 360 / total;
+    let closestIndex = 0;
+    let minDiff = 360;
 
-    let isDragging = false;
-    let lastX = 0;
+    for (let i = 0; i < total; i++) {
+      const theta = (angleStep * i + angle) % 360;
+      const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
+      if (diff < minDiff) {
+        minDiff = diff;
+        closestIndex = i;
+      }
+    }
 
-    // Ajuste TranslateZ et vitesse auto selon largeur écran
-    function adaptSettings() {
-      const screenWidth = window.innerWidth;
-      baseRadius = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--translateZ')) || 900;
+    for (let i = 0; i < total; i++) {
+      const theta = angleStep * i + angle;
+      const extraRotation = -angleStep * 0.3;
 
-      if(screenWidth <= 768) {
-        TranslateZ = 900;
-        autoRotateSpeed = 0.0015;
-        dragSensitivity = 0.5;
+      if (i === closestIndex) {
+        images[i].style.transform =
+          `rotateY(${theta}deg) translateZ(${TranslateZ}px) rotateY(${extraRotation}deg) scale(${Scale})`;
+        images[i].style.zIndex = 100;
+        images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
       } else {
-        TranslateZ = 1600;
-        autoRotateSpeed = 0.0025;
-        dragSensitivity = 0.3;
+        images[i].style.transform =
+          `rotateY(${theta}deg) translateZ(${getTranslateZ()}px) rotateY(${extraRotation}deg) scale(1)`;
+        images[i].style.zIndex = 1;
+        images[i].style.filter = "none";
       }
     }
-    adaptSettings();
+  }
 
-    let autoRotateSpeed = 0.0025;  // initial
-    let dragSensitivity = 0.3;      // initial
+  function animate(now) {
+    const delta = now - lastTime;
 
-    function positionImages() {
-      const angleStep = 360 / total;
-
-      let closestIndex = 0;
-      let minDiff = 360;
-
-      for(let i=0; i<total; i++) {
-        const theta = (angleStep * i + angle) % 360;
-        const diff = Math.min(Math.abs(theta), Math.abs(360 - theta));
-        if(diff < minDiff) {
-          minDiff = diff;
-          closestIndex = i;
-        }
-      }
-
-      for(let i=0; i<total; i++) {
-        const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3;
-
-        if(i === closestIndex) {
-          images[i].style.transform = 
-            `rotateY(${theta}deg) translateZ(${TranslateZ}px) rotateY(${extraRotation}deg) scale(${Scale})`;
-          images[i].style.zIndex = 100;
-          images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
-        } else {
-          images[i].style.transform = 
-            `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
-          images[i].style.zIndex = 1;
-          images[i].style.filter = "none";
-        }
-      }
-    }
-
-    function animate(now) {
-      const delta = now - lastTime;
-
-      if(autoRotate) {
-        velocity = autoRotateSpeed * delta;
-        angle += velocity;
-      } else {
-        angle += velocity;
-        velocity *= friction;
-        if(Math.abs(velocity) < 0.001) {
-          autoRotate = true;
-          velocity = 0;
-        }
-      }
-
-      positionImages();
-      lastTime = now;
-      requestAnimationFrame(animate);
-    }
-
-    let interactionTimeout;
-    function restartAutoRotate() {
-      clearTimeout(interactionTimeout);
-      interactionTimeout = setTimeout(() => {
+    if (autoRotate) {
+      velocity = 0.0025 * delta;
+      angle += velocity;
+    } else {
+      angle += velocity;
+      velocity *= friction;
+      if (Math.abs(velocity) < 0.001) {
         autoRotate = true;
-        velocity = 0.02;  // vitesse initiale reprise
-      }, 2000);
-    }
-
-    container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      autoRotate = false;
-      velocity += e.deltaY * 0.003;
-      restartAutoRotate();
-    });
-
-    container.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      lastX = e.clientX;
-      autoRotate = false;
-      velocity = 0;
-    });
-
-    window.addEventListener("mouseup", () => {
-      if(isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    window.addEventListener("mousemove", (e) => {
-      if(isDragging) {
-        const deltaX = e.clientX - lastX;
-        lastX = e.clientX;
-        angle += deltaX * dragSensitivity;
-        velocity = deltaX * dragSensitivity;
-        positionImages();
-      }
-    });
-
-    container.addEventListener("touchstart", (e) => {
-      if(e.touches.length === 1) {
-        isDragging = true;
-        lastX = e.touches[0].clientX;
-        autoRotate = false;
         velocity = 0;
       }
-    });
+    }
 
-    container.addEventListener("touchend", () => {
-      if(isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    container.addEventListener("touchmove", (e) => {
-      if(isDragging && e.touches.length === 1) {
-        const touch = e.touches[0];
-        const deltaX = touch.clientX - lastX;
-        lastX = touch.clientX;
-        angle += deltaX * dragSensitivity;
-        velocity = deltaX * dragSensitivity;
-        positionImages();
-      }
-    });
-
-    // Zoom au clic sur image
-    carousel.addEventListener("click", (e) => {
-      if(e.target.tagName === "IMG") {
-        // Clone et afficher en fullscreen
-        const fullscreenDiv = document.createElement("div");
-        fullscreenDiv.className = "ed";
-        const imgFull = document.createElement("img");
-        imgFull.src = e.target.src;
-        fullscreenDiv.appendChild(imgFull);
-        document.body.appendChild(fullscreenDiv);
-
-        fullscreenDiv.addEventListener("click", () => {
-          document.body.removeChild(fullscreenDiv);
-        });
-      }
-    });
-
-    // Recalage au resize / orientation
-    window.addEventListener("resize", () => {
-      adaptSettings();
-      positionImages();
-    });
-
-    // Initial position
     positionImages();
+    lastTime = now;
     requestAnimationFrame(animate);
-  </script>
+  }
+
+  let interactionTimeout;
+  function restartAutoRotate() {
+    clearTimeout(interactionTimeout);
+    interactionTimeout = setTimeout(() => {
+      autoRotate = true;
+      velocity = 0.02;
+    }, 2000);
+  }
+
+  // Gestion souris
+  container.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    autoRotate = false;
+    velocity += e.deltaY * 0.003;
+    restartAutoRotate();
+  });
+  container.addEventListener("mousedown", (e) => {
+    isDragging = true;
+    lastX = e.clientX;
+    autoRotate = false;
+    velocity = 0;
+  });
+  window.addEventListener("mouseup", () => {
+    if (isDragging) {
+      isDragging = false;
+      restartAutoRotate();
+    }
+  });
+  window.addEventListener("mousemove", (e) => {
+    if (isDragging) {
+      const deltaX = e.clientX - lastX;
+      lastX = e.clientX;
+      angle += deltaX * 0.3; // sensibilité fixe pour PC
+      velocity = deltaX * 0.3;
+      positionImages();
+    }
+  });
+
+  // Gestion tactile mobile/tablette
+  container.addEventListener("touchstart", (e) => {
+    if (e.touches.length === 1) {
+      isDragging = true;
+      lastX = e.touches[0].clientX;
+      autoRotate = false;
+      velocity = 0;
+    }
+  });
+  container.addEventListener("touchend", () => {
+    if (isDragging) {
+      isDragging = false;
+      restartAutoRotate();
+    }
+  });
+  container.addEventListener("touchmove", (e) => {
+    if (isDragging && e.touches.length === 1) {
+      const touch = e.touches[0];
+      const deltaX = touch.clientX - lastX;
+      lastX = touch.clientX;
+      angle += deltaX * 0.3; // même sensibilité que souris pour éviter trop rapide
+      velocity = deltaX * 0.3;
+      positionImages();
+    }
+  });
+
+  // Zoom au clic
+  carousel.addEventListener("click", (e) => {
+    if (e.target.tagName === "IMG") {
+      const fullscreenDiv = document.createElement("div");
+      fullscreenDiv.className = "ed";
+      const imgFull = document.createElement("img");
+      imgFull.src = e.target.src;
+      fullscreenDiv.appendChild(imgFull);
+      document.body.appendChild(fullscreenDiv);
+
+      fullscreenDiv.addEventListener("click", () => {
+        document.body.removeChild(fullscreenDiv);
+      });
+    }
+  });
+
+  // Recalage au resize (mise à jour translateZ via CSS)
+  window.addEventListener("resize", () => {
+    TranslateZ = getTranslateZ();
+    positionImages();
+  });
+
+  // Initialisation
+  positionImages();
+  requestAnimationFrame(animate);
+</script>
 </body>
 </html>
