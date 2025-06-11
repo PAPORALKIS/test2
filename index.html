@@ -9,7 +9,7 @@
     :root {
       --img-size: 200px;        /* taille de chaque image dans le carrousel */
       --translateZ: 700;       /* distance à laquelle les images sont placées en 3D */
-      ---offset: -250px;     /* décalage vertical de l'image ée */
+      --zoom-offset: -200px;     /* décalage vertical de l'image ée */
     }
 
     html, body {
@@ -78,13 +78,14 @@
       background: rgba(0,0,0,0.95);
       display: flex;
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      padding-top: 60px;
       z-index: 9999;
     }
     .ed img {
       width: 90vw;
       max-height: 70vh;
-      transform: translateY(var(---offset));
+      transform: translateY(var(--zoom-offset));
       border-radius: 8px;
       box-shadow: 0 0 40px black;
     }
@@ -94,7 +95,7 @@
       :root {
         --img-size: 36vw;
         --translateZ: 700px;
-        ---offset: -200px;
+        --zoom-offset: -200px;
       }
     }
   </style>
@@ -191,16 +192,14 @@
       // Positionne chaque image en rotation Y + translation Z pour créer l’effet cercle
       for (let i = 0; i < total; i++) {
         const theta = angleStep * i + angle;
-        const extraRotation = -angleStep * 0.3;  // légère rotation sur elle-même pour esthétique
+        const extraRotation = -angleStep * 0.3;
 
         if (i === closestIndex) {
-          // Image ée au centre
           images[i].style.transform =
             `rotateY(${theta}deg) translateZ(${TranslateZ}px) rotateY(${extraRotation}deg) scale(${Scale})`;
-          images[i].style.zIndex = 100;  // devant toutes les autres
+          images[i].style.zIndex = 100;
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
         } else {
-          // Images normales autour
           images[i].style.transform =
             `rotateY(${theta}deg) translateZ(${baseRadius}px) rotateY(${extraRotation}deg) scale(1)`;
           images[i].style.zIndex = 1;
@@ -209,46 +208,42 @@
       }
     }
 
-    // Animation appelée à chaque frame
     function animate(now) {
-      const delta = now - lastTime;  // temps écoulé depuis la dernière frame
+      const delta = now - lastTime;
 
       if (autoRotate) {
-        velocity = 0.0050 * delta;  // vitesse fixe de rotation automatique
+        velocity = 0.0050 * delta;
         angle += velocity;
       } else {
-        angle += velocity;          // rotation selon la vitesse du drag
-        velocity *= friction;       // ralentit peu à peu (friction)
+        angle += velocity;
+        velocity *= friction;
         if (Math.abs(velocity) < 0.001) {
-          autoRotate = true;        // reprend rotation automatique si très lent
+          autoRotate = true;
           velocity = 0;
         }
       }
 
-      positionImages();             // repositionne les images selon angle
+      positionImages();
       lastTime = now;
       requestAnimationFrame(animate);
     }
 
-    // Permet de relancer la rotation automatique après interaction utilisateur
     let interactionTimeout;
     function restartAutoRotate() {
       clearTimeout(interactionTimeout);
       interactionTimeout = setTimeout(() => {
-        autoRotate = false;       // On arrête auto rotation à la fin du timeout
-        velocity = 0.02;          // vitesse initiale à reprendre
+        autoRotate = false;
+        velocity = 0.02;
       }, 2000);
     }
 
-    // Gère la roulette de la souris ( + rotation)
     container.addEventListener("wheel", (e) => {
       e.preventDefault();
       autoRotate = false;
-      velocity += e.deltaY * 0.003;  // vitesse changée par la molette
+      velocity += e.deltaY * 0.003;
       restartAutoRotate();
     });
 
-    // Début drag souris
     container.addEventListener("mousedown", (e) => {
       isDragging = true;
       lastX = e.clientX;
@@ -256,7 +251,6 @@
       velocity = 0;
     });
 
-    // Fin drag souris
     window.addEventListener("mouseup", () => {
       if (isDragging) {
         isDragging = false;
@@ -264,18 +258,16 @@
       }
     });
 
-    // Pendant drag souris
     window.addEventListener("mousemove", (e) => {
       if (isDragging) {
         const deltaX = e.clientX - lastX;
         lastX = e.clientX;
-        angle += deltaX * 0.3;     // modifie l’angle selon mouvement souris
-        velocity = deltaX * 0.3;   // met à jour la vitesse
+        angle += deltaX * 0.3;
+        velocity = deltaX * 0.3;
         positionImages();
       }
     });
 
-    // Touch start pour mobile
     container.addEventListener("touchstart", (e) => {
       if (e.touches.length === 1) {
         isDragging = true;
@@ -285,7 +277,6 @@
       }
     }, { passive: true });
 
-    // Touch move pour mobile
     container.addEventListener("touchmove", (e) => {
       if (isDragging && e.touches.length === 1) {
         const deltaX = e.touches[0].clientX - lastX;
@@ -296,7 +287,6 @@
       }
     }, { passive: true });
 
-    // Touch end pour mobile
     container.addEventListener("touchend", () => {
       if (isDragging) {
         isDragging = false;
@@ -304,7 +294,6 @@
       }
     });
 
-    // Ajoute la fonction  au clic sur chaque image
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
         const Div = document.createElement("div");
@@ -317,7 +306,6 @@
       });
     });
 
-    // Première position des images + démarrage animation
     positionImages();
     animate(performance.now());
   </script>
