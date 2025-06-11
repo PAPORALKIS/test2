@@ -7,9 +7,9 @@
   <style>
     /* Variables CSS pour taille des images, profondeur Z et offset du zoom */
     :root {
-      --img-size: 150px;        /* taille de chaque image dans le carrousel */
-      --translateZ: 1100px;     /* distance à laquelle les images sont placées en 3D */
-      --zoom-offset: -800px;    /* décalage vertical de l'image zoomée */
+      --img-size: 200px;        /* taille de chaque image dans le carrousel */
+      --translateZ: 700;       /* distance à laquelle les images sont placées en 3D */
+      --zoom-offset: -60px;     /* décalage vertical de l'image zoomée */
     }
 
     html, body {
@@ -35,7 +35,7 @@
     /* Conteneur centré pour le carrousel avec perspective 3D */
     .carousel-container {
       position: fixed;
-      top: 30%;
+      top: 40%;
       left: 45%;
       transform: translate(-50%, -49%);
       perspective: 3000px;  /* profondeur 3D pour effet */
@@ -89,21 +89,12 @@
       box-shadow: 0 0 40px black;
     }
 
-    /* Adaptation mobile (portrait) : plus petit, profondeur augmentée */
+    /* Adaptation mobile (portrait) : plus petit, profondeur réduite */
     @media (orientation: portrait) {
       :root {
         --img-size: 36vw;
-        --translateZ: 1400px;   /* plus loin pour reculer caméra */
+        --translateZ: 700px;
         --zoom-offset: -120px;
-      }
-    }
-
-    /* Adaptation paysage petits écrans (smartphone/tablette) */
-    @media (orientation: landscape) and (max-width: 768px) {
-      :root {
-        --img-size: 30vw;
-        --translateZ: 1400px;    /* reculer caméra */
-        --zoom-offset: -200px;   /* ajustement zoom */
       }
     }
   </style>
@@ -223,7 +214,7 @@
       const delta = now - lastTime;  // temps écoulé depuis la dernière frame
 
       if (autoRotate) {
-        velocity = 0.0035 * delta;  // vitesse fixe de rotation automatique
+        velocity = 0.0050 * delta;  // vitesse fixe de rotation automatique
         angle += velocity;
       } else {
         angle += velocity;          // rotation selon la vitesse du drag
@@ -316,4 +307,19 @@
     // Ajoute la fonction zoom au clic sur chaque image
     Array.from(images).forEach(img => {
       img.addEventListener("click", () => {
-        const zoomDiv = document.createElement("
+        const zoomDiv = document.createElement("div");
+        zoomDiv.className = "zoomed";
+        const zoomImg = document.createElement("img");
+        zoomImg.src = img.src;
+        zoomDiv.appendChild(zoomImg);
+        document.body.appendChild(zoomDiv);
+        zoomDiv.addEventListener("click", () => zoomDiv.remove());
+      });
+    });
+
+    // Première position des images + démarrage animation
+    positionImages();
+    animate(performance.now());
+  </script>
+</body>
+</html>
