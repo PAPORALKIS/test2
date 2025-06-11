@@ -8,13 +8,8 @@
     /* Variables CSS pour taille des images, profondeur Z et offset du  */
     :root {
       --img-size: 150px;        /* taille de chaque image dans le carrousel */
-      --translateZ: 900px;       /* distance à laquelle les images sont placées en 3D */
-      --offset: -250px;     /* décalage vertical de l'image ée */
-      --perspective: 3000px; /* perspective 3D */
-      --container-top: 30%;
-      --container-left: 45%;
-      --container-translate-y: -49%;
-      --container-translate-x: -50%;
+      --translateZ: 900;       /* distance à laquelle les images sont placées en 3D */
+      ---offset: -250px;     /* décalage vertical de l'image ée */
     }
 
     html, body {
@@ -40,16 +35,11 @@
     /* Conteneur centré pour le carrousel avec perspective 3D */
     .carousel-container {
       position: fixed;
-      top: var(--container-top);
-      left: var(--container-left);
-      transform: translate(var(--container-translate-x), var(--container-translate-y));
-      perspective: var(--perspective);  /* profondeur 3D pour effet */
+      top: 30%;
+      left: 45%;
+      transform: translate(-50%, -49%);
+      perspective: 3000px;  /* profondeur 3D pour effet */
       z-index: 1;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
     }
 
     /* Conteneur des images avec style 3D */
@@ -58,7 +48,6 @@
       width: 0; height: 0;
       transform-style: preserve-3d;
       transform: rotateX(-4deg); /* légère inclinaison vers l'avant */
-      touch-action: pan-y; /* permet de scroll vertical sur mobile sans bloquer */
     }
 
     /* Style des images */
@@ -73,8 +62,6 @@
       cursor: pointer;
       z-index: 1;
       transform-origin: center center;
-      user-select: none;
-      -webkit-user-drag: none;
     }
 
     /*  léger au survol */
@@ -97,50 +84,17 @@
     .ed img {
       width: 90vw;
       max-height: 70vh;
-      transform: translateY(var(--offset));
+      transform: translateY(var(---offset));
       border-radius: 8px;
       box-shadow: 0 0 40px black;
     }
 
-    /* Adaptation mobile et tablette en portrait : plus petit, profondeur réduite */
-    @media (max-width: 767px) and (orientation: portrait) {
+    /* Adaptation mobile (portrait) : plus petit, profondeur réduite */
+    @media (orientation: portrait) {
       :root {
         --img-size: 36vw;
         --translateZ: 700px;
-        --offset: -200px;
-        --perspective: 2000px;
-        --container-top: 40%;
-        --container-left: 50%;
-        --container-translate-y: -50%;
-        --container-translate-x: -50%;
-      }
-    }
-
-    /* Adaptation mobile/tablette en paysage : ajustement taille et position */
-    @media (max-width: 767px) and (orientation: landscape) {
-      :root {
-        --img-size: 25vw;
-        --translateZ: 600px;
-        --offset: -180px;
-        --perspective: 2200px;
-        --container-top: 50%;
-        --container-left: 50%;
-        --container-translate-y: -50%;
-        --container-translate-x: -50%;
-      }
-    }
-
-    /* Adaptation tablettes grand écran (768px à 1024px) */
-    @media (min-width: 768px) and (max-width: 1024px) {
-      :root {
-        --img-size: 120px;
-        --translateZ: 800px;
-        --offset: -220px;
-        --perspective: 2800px;
-        --container-top: 35%;
-        --container-left: 48%;
-        --container-translate-y: -49%;
-        --container-translate-x: -50%;
+        ---offset: -200px;
       }
     }
   </style>
@@ -200,44 +154,13 @@
     const images = carousel.getElementsByTagName("img");
     const total = images.length;
 
-    // Fonction pour récupérer les valeurs CSS variables dynamiques
-    function getRootCSSVars() {
-      const rootStyles = getComputedStyle(document.documentElement);
-      return {
-        translateZ: parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000,
-        offset: rootStyles.getPropertyValue('--offset') || '-250px',
-        perspective: rootStyles.getPropertyValue('--perspective') || '3000px',
-        containerTop: rootStyles.getPropertyValue('--container-top') || '30%',
-        containerLeft: rootStyles.getPropertyValue('--container-left') || '45%',
-        containerTranslateX: rootStyles.getPropertyValue('--container-translate-x') || '-50%',
-        containerTranslateY: rootStyles.getPropertyValue('--container-translate-y') || '-49%',
-        imgSize: rootStyles.getPropertyValue('--img-size') || '150px'
-      };
-    }
-
-    // Mets à jour la perspective et position du container en fonction des variables CSS
-    function updateContainerStyle() {
-      const vars = getRootCSSVars();
-      container.style.perspective = vars.perspective;
-      container.style.top = vars.containerTop;
-      container.style.left = vars.containerLeft;
-      container.style.transform = `translate(${vars.containerTranslateX}, ${vars.containerTranslateY})`;
-    }
-
-    // Mets à jour la taille des images à partir de la variable CSS
-    function updateImageSizes() {
-      const vars = getRootCSSVars();
-      Array.from(images).forEach(img => {
-        img.style.width = vars.imgSize.trim();
-        img.style.height = vars.imgSize.trim();
-      });
-    }
-
     // Récupère la profondeur 3D à partir de la variable CSS --translateZ
-    let baseRadius = 900;
+    const rootStyles = getComputedStyle(document.documentElement);
+    const baseRadius = parseInt(rootStyles.getPropertyValue('--translateZ')) || 1000;
 
-    // Profondeur et scale spécifiques pour image ée
-    const Scale = 1.5;        // facteur d’agrandissement de l’image ée
+    // Variables modifiables pour zoom et profondeur
+    let TranslateZ = 1600;  // profondeur pour l’image ée
+    let Scale = 1.5;        // facteur d’agrandissement de l’image ée
 
     let angle = 0;                // angle global du carrousel en degrés
     let autoRotate = true;        // indique si le carrousel tourne automatiquement
@@ -249,11 +172,37 @@
     let isDragging = false;       // indique si l’utilisateur est en train de glisser
     let lastX = 0;                // dernière position X de la souris/touch
 
+    // Met à jour les tailles et profondeur selon la taille de l’écran et orientation
+    function updateImageSizes() {
+      const width = window.innerWidth;
+      const height = window.innerHeight;
+      const isPortrait = height > width;
+
+      if (width <= 768) { // smartphone/tablette
+        if (isPortrait) {
+          // Portrait : image centrale plus proche et zoom augmenté modéré
+          document.documentElement.style.setProperty('--img-size', '40vw');
+          document.documentElement.style.setProperty('--translateZ', '900px');  // plus proche
+          TranslateZ = 1100;  // profondeur un peu plus proche pour zoom
+          Scale = 1.8;  // zoom plus grand
+        } else {
+          // Paysage : caméra reculée (carrousel plus éloigné)
+          document.documentElement.style.setProperty('--img-size', '36vw');
+          document.documentElement.style.setProperty('--translateZ', '1200px'); // plus éloigné
+          TranslateZ = 1400;  // plus éloigné
+          Scale = 1.4;  // zoom un peu réduit
+        }
+      } else {
+        // Desktop ou grand écran : valeurs par défaut
+        document.documentElement.style.setProperty('--img-size', '150px');
+        document.documentElement.style.setProperty('--translateZ', '900px');
+        TranslateZ = 1600;
+        Scale = 1.5;
+      }
+    }
+
     // Place et transforme les images sur le cercle en fonction de l’angle global
     function positionImages() {
-      const vars = getRootCSSVars();
-      baseRadius = vars.translateZ;
-      const offset = vars.offset.trim();
       const angleStep = 360 / total;  // angle entre chaque image
 
       // Trouve l’image la plus proche du centre (frontale)
@@ -277,10 +226,9 @@
         if (i === closestIndex) {
           // Image ée au centre
           images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${baseRadius * 1.6}px) rotateY(${extraRotation}deg) scale(${Scale})`;
+            `rotateY(${theta}deg) translateZ(${TranslateZ}px) rotateY(${extraRotation}deg) scale(${Scale})`;
           images[i].style.zIndex = 100;  // devant toutes les autres
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
-          images[i].style.setProperty('--offset', offset);
         } else {
           // Images normales autour
           images[i].style.transform =
@@ -291,112 +239,77 @@
       }
     }
 
-    // Animation appelée à chaque frame
-    function animate(now) {
-      const delta = now - lastTime;  // temps écoulé depuis la dernière frame
+    // Animation du carrousel
+    function animate() {
+      const now = performance.now();
+      const dt = now - lastTime;
+      lastTime = now;
 
-      if (autoRotate) {
-        velocity = 0.0050 * delta;  // vitesse fixe de rotation automatique
-        angle += velocity;
-      } else {
-        angle += velocity;          // rotation selon la vitesse du drag
-        velocity *= friction;       // ralentit peu à peu (friction)
-        if (Math.abs(velocity) < 0.001) {
-          autoRotate = true;        // reprend rotation automatique si très lent
-          velocity = 0;
-        }
+      if (autoRotate && !isDragging) {
+        angle += 0.01 * dt;  // rotation lente automatique
       }
 
-      positionImages();             // repositionne les images selon angle
-      lastTime = now;
+      if (velocity !== 0) {
+        angle += velocity;
+        velocity *= friction;
+        if (Math.abs(velocity) < 0.001) velocity = 0;
+      }
+
+      positionImages();
       requestAnimationFrame(animate);
     }
 
-    // Permet de relancer la rotation automatique après interaction utilisateur
-    let interactionTimeout;
-    function restartAutoRotate() {
-      clearTimeout(interactionTimeout);
-      interactionTimeout = setTimeout(() => {
-        autoRotate = false;       // On arrête auto rotation à la fin du timeout
-        velocity = 0.02;          // vitesse initiale à reprendre
-      }, 2000);
+    // Gestion du drag souris et tactile
+    function onDragStart(e) {
+      isDragging = true;
+      autoRotate = false;
+      lastX = e.clientX || e.touches[0].clientX;
+    }
+    function onDragMove(e) {
+      if (!isDragging) return;
+      const x = e.clientX || e.touches[0].clientX;
+      const deltaX = x - lastX;
+      lastX = x;
+      angle += deltaX * 0.5;
+      velocity = deltaX * 0.3;
+    }
+    function onDragEnd(e) {
+      isDragging = false;
+      autoRotate = true;
     }
 
-    // Gère la roulette de la souris ( + rotation)
-    container.addEventListener("wheel", (e) => {
-      e.preventDefault();
-      autoRotate = false;
-      velocity += e.deltaY * 0.003;  // vitesse changée par la molette
-      restartAutoRotate();
+    // Gestion de l’image ée au clic
+    carousel.addEventListener("click", (e) => {
+      if (e.target.tagName !== "IMG") return;
+      if (e.target.classList.contains("ed")) return; // déjà en mode ée
+
+      // Ajoute la classe ed pour afficher en plein écran
+      e.target.classList.add("ed");
+
+      // Clic sur image ée la referme
+      e.target.addEventListener("click", () => {
+        e.target.classList.remove("ed");
+      }, { once: true });
     });
 
-    // Début drag souris
-    container.addEventListener("mousedown", (e) => {
-      isDragging = true;
-      lastX = e.clientX;
-      autoRotate = false;
-      velocity = 0;
-    });
+    // Gestion des événements souris et tactile pour drag
+    container.addEventListener("mousedown", onDragStart);
+    container.addEventListener("mousemove", onDragMove);
+    container.addEventListener("mouseup", onDragEnd);
+    container.addEventListener("mouseleave", onDragEnd);
 
-    // Fin drag souris
-    window.addEventListener("mouseup", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
+    container.addEventListener("touchstart", onDragStart);
+    container.addEventListener("touchmove", onDragMove);
+    container.addEventListener("touchend", onDragEnd);
 
-    // Pendant drag souris
-    window.addEventListener("mousemove", (e) => {
-      if (isDragging) {
-        const dx = e.clientX - lastX;
-        velocity = dx * 0.5;
-        angle += velocity;
-        lastX = e.clientX;
-      }
-    });
-
-    // Touch start
-    container.addEventListener("touchstart", (e) => {
-      if (e.touches.length === 1) {
-        isDragging = true;
-        lastX = e.touches[0].clientX;
-        autoRotate = false;
-        velocity = 0;
-      }
-    });
-
-    // Touch end
-    container.addEventListener("touchend", () => {
-      if (isDragging) {
-        isDragging = false;
-        restartAutoRotate();
-      }
-    });
-
-    // Touch move
-    container.addEventListener("touchmove", (e) => {
-      if (isDragging && e.touches.length === 1) {
-        const dx = e.touches[0].clientX - lastX;
-        velocity = dx * 0.5;
-        angle += velocity;
-        lastX = e.touches[0].clientX;
-      }
-    });
-
-    // Mise à jour responsive lors du resize ou rotation
-    window.addEventListener('resize', () => {
-      updateContainerStyle();
+    // Mise à jour au redimensionnement de la fenêtre
+    window.addEventListener("resize", () => {
       updateImageSizes();
-      positionImages();
     });
 
-    // Initialisation
-    updateContainerStyle();
+    // Initialisation au chargement
     updateImageSizes();
-    positionImages();
-
-    requestAnimationFrame(animate);
+    animate();
   </script>
 </body>
 </html>
