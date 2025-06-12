@@ -106,8 +106,8 @@
     @media (max-width: 767px) and (orientation: portrait) {
       :root {
         --img-size: 25vw;
-        --translateZ: 1200px;
-        --offset: -200px;
+        --translateZ: 300px;
+        --offset: -100px;
         --perspective: 2000px;
         --container-top: 40%;
         --container-left: 50%;
@@ -119,7 +119,7 @@
     /* Adaptation mobile/tablette en paysage : ajustement taille et position */
     @media (max-width: 767px) and (orientation: landscape) {
       :root {
-        --img-size: 20vw; /* Définit la taille des images à 25vw (25% de la largeur de la fenêtre).*/
+        --img-size: 25vw; /* Définit la taille des images à 25vw (25% de la largeur de la fenêtre).*/
         
         --translateZ:300px; /* <-- ici la distance Z pour la caméra en paysage */
         
@@ -136,9 +136,22 @@
         --container-translate-y: -50%; /* <-- Combiné avec top: 50% et left: 50%, cela centre parfaitement l’élément */
         
         --container-translate-x: -50%; /* <-- Combiné avec top: 50% et left: 50%, cela centre parfaitement l’élément */
-        
-        
+         
       }
+       .carrousel {
+    perspective: var(--perspective); /* Applique la perspective */
+    position: absolute;
+    top: var(--container-top);
+    left: var(--container-left);
+    transform: translate(-50%, -50%) rotateY(var(--rotation)) translateZ(var(--translateZ));
+    transition: transform 0.5s ease; /* Transition fluide pour l'animation */
+  }
+
+  .carrousel__image {
+    width: var(--img-size); /* Taille des images ajustée */
+    transform: rotateY(calc(360deg / var(--num-images) * var(--i))) translateX(0);
+    transition: transform 0.5s ease; /* Transition pour l’animation */
+  }
     }
 
     /* Adaptation tablettes grand écran (768px à 1024px) */
