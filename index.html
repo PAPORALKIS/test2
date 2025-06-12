@@ -8,7 +8,7 @@
     /* Variables CSS pour taille des images, profondeur Z et offset du  */
     :root {
       --img-size: 150px;        /* taille de chaque image dans le carrousel */
-      --translateZ: 600px;       /* distance à laquelle les images sont placées en 3D */
+      --translateZ: 900px;       /* distance à laquelle les images sont placées en 3D */
       --offset: -250px;     /* décalage vertical de l'image ée */
       --perspective: 3000px; /* perspective 3D */
       --container-top: 30%;
@@ -119,7 +119,7 @@
     /* Adaptation mobile/tablette en paysage : ajustement taille et position */
     @media (max-width: 767px) and (orientation: landscape) {
       :root {
-        --img-size: 20vw; /* Définit la taille des images à 25vw (25% de la largeur de la fenêtre).*/
+        --img-size: 30vw; /* Définit la taille des images à 25vw (25% de la largeur de la fenêtre).*/
         
         --translateZ: 4500px; /* <-- ici la distance Z pour la caméra en paysage */
         
