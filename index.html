@@ -301,7 +301,7 @@
         if (i === closestIndex) {
           // Image ée au centre
           images[i].style.transform =
-            `rotateY(${theta}deg) translateZ(${baseRadius * 1.6}px) translateY(-20px) rotateY(${extraRotation}deg) scale(${Scale})`;
+            `rotateY(${theta}deg) translateZ(${baseRadius * 1.6}px) translateY(-20px) rotateY(${extraRotation}deg) scale(1.5)`;
           images[i].style.zIndex = 100;  // devant toutes les autres
           images[i].style.filter = "drop-shadow(0 0 20px rgba(255,255,255,0.6))";
           images[i].style.setProperty('--offset', offset);
