@@ -103,23 +103,42 @@
     }
 
     /* Adaptation mobile et tablette en portrait : plus petit, profondeur réduite */
-    @media (max-width: 767px) and (orientation: portrait) {
-  .ed img {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    width: 60vw;
-    height: auto;
-    max-height: 80vh;
-    transform: translate(-50%, -50%);
-    z-index: 9999;
-    background: black;
-    border-radius: 0;
-    box-shadow: none;
+    @media (max-width: 767px) and (orientation: landscape) {
+      :root {
+        --img-size: 13vw; /* Définit la taille des images à 25vw (25% de la largeur de la fenêtre).*/
+        
+        --translateZ:325px; /* <-- ici la distance Z pour la caméra en paysage */
+        
+        --offset: -100px; /* Sert à décaler les éléments (probablement sur l’axe Y ou X) de -180 pixels.
+       Peut être utilisé pour ajuster la hauteur ou la rotation verticale du carrousel/image. */
+        
+        --perspective: 1500px; /* Détermine la profondeur de la perspective 3D.
+      Plus la valeur est grande, moins l’effet de perspective est prononcé (les objets paraissent plus plats). */
+        
+        --container-top: 35%; /* <-- Centre le conteneur principal à 50% du haut et 50% de la gauche de l’écran. */
+        
+       /* --container-left: 50%; /* <--Centre le conteneur principal à 50% du haut et 50% de la gauche de l’écran. */
+        
+        --container-translate-y: -50%; /* <-- Combiné avec top: 50% et left: 50%, cela centre parfaitement l’élément */
+        
+        --container-translate-x: -50%; /* <-- Combiné avec top: 50% et left: 50%, cela centre parfaitement l’élément */
+         
+      }
+       .carrousel {
+    perspective: var(--perspective); /* Applique la perspective */
+    position: absolute;
+    top: var(--container-top);
+    left: var(--container-left);
+    transform: translate(-50%, -50%) rotateY(var(--rotation)) translateZ(var(--translateZ));
+    transition: transform 0.5s ease; /* Transition fluide pour l'animation */
   }
-}
-    
 
+  .carrousel__image {
+    width: var(--img-size); /* Taille des images ajustée */
+    transform: rotateY(calc(360deg / var(--num-images) * var(--i))) translateX(20px);
+    transition: transform 0.5s ease; /* Transition pour l’animation */
+  }
+    }
     /* Adaptation mobile/tablette en paysage : ajustement taille et position */
     @media (max-width: 767px) and (orientation: landscape) {
       :root {
