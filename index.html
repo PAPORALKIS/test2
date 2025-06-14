@@ -104,21 +104,18 @@
 
     /* Adaptation mobile et tablette en portrait : plus petit, profondeur réduite */
     @media (max-width: 767px) and (orientation: portrait) {
-      :root {
-        --img-size: 25vw;
-        --translateZ: 300px;
-        --offset: -100px;
-        --perspective: 2000px;
-        --container-top: 40%;
-        --container-left: 50%;
-        --container-translate-y: -50%;
-        --container-translate-x: -50%;
-        
-      }
-      .ed img {
-  width: 95vw;
-  max-height: 85vh;
-  transform: translateY(0);
+  .ed img {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 100vw;
+    height: auto;
+    max-height: 100vh;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+    background: black;
+    border-radius: 0;
+    box-shadow: none;
   }
 }
     
