@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Carrousel 3D avec zoom interactif</title>
+  <style>
+    .zoom-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.95);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      flex-direction: column;
+      z-index: 9999;
+    }
+    .zoom-image {
+      max-width: 90vw;
+      max-height: 70vh;
+      border-radius: 12px;
+      box-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+      margin-bottom: 20px;
+    }
+    .zoom-description {
+      color: #fff;
+      font-size: 1em;
+      margin-bottom: 20px;
+    }
+    .zoom-thumbnails {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .zoom-thumbnails img {
+      width: 100px;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .zoom-thumbnails img:hover {
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Zoom Overlay -->
+  <div class="zoom-overlay" id="zoomOverlay">
+    <div class="zoom-description" id="zoomDescription"></div>
+    <img class="zoom-image" id="zoomImage" src="" alt="Zoom" />
+    <div class="zoom-thumbnails" id="zoomThumbnails"></div>
+  </div>
+
+  <script>
+    const images = []; // à remplir dynamiquement selon ton système
+    const zoomOverlay = document.getElementById("zoomOverlay");
+    const zoomImage = document.getElementById("zoomImage");
+    const zoomThumbnails = document.getElementById("zoomThumbnails");
+    const zoomDescription = document.getElementById("zoomDescription");
+
+    const imageData = {
+      "CHBR0.jpg": {
+        description: "Chambre rénovée - Avant",
+        group: ["CHBR0.jpg", "CHBR1.jpg"]
+      },
+      "CHBR1.jpg": {
+        description: "Chambre rénovée - Après",
+        group: ["CHBR0.jpg", "CHBR1.jpg"]
+      }
+    };
+
+    document.querySelectorAll('img.carousel__image').forEach(img => {
+      images.push(img);
+      img.addEventListener("click", () => {
+        const src = img.getAttribute("src").split("/").pop();
+        const data = imageData[src];
+
+        if (data) {
+          zoomImage.src = img.src;
+          zoomDescription.textContent = data.description;
+          zoomThumbnails.innerHTML = "";
+
+          data.group.forEach(name => {
+            const thumb = document.createElement("img");
+            thumb.src = `../img/${name}`;
+            thumb.alt = name;
+            thumb.addEventListener("click", () => {
+              zoomImage.src = thumb.src;
+              zoomDescription.textContent = imageData[name]?.description || "";
+            });
+            zoomThumbnails.appendChild(thumb);
+          });
+
+          zoomOverlay.style.display = "flex";
+        }
+      });
+    });
+
+    zoomOverlay.addEventListener("click", (e) => {
+      if (e.target === zoomOverlay) zoomOverlay.style.display = "none";
+    });
+
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") zoomOverlay.style.display = "none";
+    });
+  </script>
+</body>
+</html>
